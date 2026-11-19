@@ -1,0 +1,4204 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>PRM393 Quiz</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    />
+    <style>
+      :root {
+        --bg: #f4f6fb;
+        --panel: #ffffff;
+        --text: #172033;
+        --muted: #657085;
+        --line: #dce3ef;
+        --brand: #2563eb;
+        --brand-soft: #eaf1ff;
+        --ok: #15803d;
+        --ok-soft: #e9f8ef;
+        --bad: #b91c1c;
+        --bad-soft: #fff0f0;
+        --warn: #a16207;
+        --warn-soft: #fff8df;
+        --shadow: 0 16px 42px rgba(26, 42, 74, 0.09);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Arial, "Segoe UI", system-ui, sans-serif;
+        color: var(--text);
+        background: var(--bg);
+      }
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+      button {
+        border: 0;
+        cursor: pointer;
+      }
+      .back-home {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 9999;
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        padding: 10px 16px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: #fff;
+        color: var(--ink);
+        font-size: 13px;
+        font-weight: 800;
+        text-decoration: none;
+        box-shadow: 0 4px 14px rgba(22, 36, 62, 0.08);
+        transition: all 0.2s ease;
+      }
+      .back-home:hover {
+        color: var(--blue);
+        border-color: var(--blue);
+        transform: translateX(-3px);
+      }
+      .back-home i {
+        font-size: 13px;
+      }
+      @media (max-width: 600px) {
+        .back-home {
+          top: 12px;
+          left: 12px;
+          padding: 9px 12px;
+          font-size: 12px;
+        }
+      }
+      .app {
+        width: min(1120px, calc(100% - 28px));
+        margin: 18px auto 32px;
+      }
+      .controls,
+      .exam-setup,
+      .progress-panel,
+      .question-card,
+      .topbar {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+      }
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        padding: 20px;
+      }
+      .eyebrow {
+        margin: 0 0 4px;
+        color: var(--brand);
+        font-size: 13px;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+      h1,
+      h2,
+      p {
+        margin-top: 0;
+      }
+      h1 {
+        margin-bottom: 0;
+        font-size: 30px;
+        line-height: 1.15;
+      }
+      .summary {
+        display: grid;
+        gap: 4px;
+        min-width: 120px;
+        text-align: right;
+        color: var(--muted);
+      }
+      .summary strong {
+        color: var(--text);
+        font-size: 18px;
+      }
+      .controls {
+        display: grid;
+        grid-template-columns: minmax(0, 6fr) minmax(0, 3fr) minmax(100px, 1fr);
+        gap: 14px;
+        align-items: end;
+        margin-top: 14px;
+        padding: 14px;
+      }
+      .mode-tabs {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+        width: 100%;
+        grid-column: 1/-1;
+      }
+      .actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .mode-tabs button {
+        width: 100%;
+        min-width: 0;
+      }
+      button {
+        cursor: pointer;
+        transition:
+          background-color 0.16s ease,
+          color 0.16s ease,
+          box-shadow 0.16s ease,
+          transform 0.16s ease;
+      }
+      button:hover:not(:disabled) {
+        filter: brightness(0.96);
+        box-shadow: 0 2px 8px rgba(26, 42, 74, 0.12);
+      }
+      button:active:not(:disabled) {
+        transform: translateY(1px);
+      }
+      button:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+      .actions button,
+      .danger,
+      .icon-button,
+      .mode-tabs button,
+      .primary,
+      .submit {
+        min-height: 42px;
+        border-radius: 8px;
+        padding: 10px 14px;
+        color: var(--text);
+        background: #edf1f7;
+        font-weight: 700;
+      }
+      .mode-tabs button.active,
+      .primary,
+      .submit {
+        color: #fff;
+        background: var(--brand);
+      }
+      .mode-tabs button.active {
+        box-shadow:
+          inset 0 0 0 2px rgba(255, 255, 255, 0.28),
+          0 3px 10px rgba(37, 99, 235, 0.22);
+      }
+      .search,
+      .select-wrap {
+        display: grid;
+        gap: 6px;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .search,
+      .select-wrap {
+        min-width: 0;
+      }
+      .search input,
+      .select-wrap select {
+        width: 100%;
+        min-height: 42px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 9px 12px;
+        color: var(--text);
+        background: #fff;
+        outline: 0;
+      }
+      .search input:focus,
+      .select-wrap select:focus {
+        border-color: var(--brand);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+      }
+      .exam-setup {
+        display: grid;
+        grid-template-columns: minmax(250px, 0.9fr) minmax(0, 1.1fr);
+        gap: clamp(18px, 3vw, 34px);
+        align-items: center;
+        margin-top: 14px;
+        padding: 20px 22px;
+        border-left: 4px solid var(--brand);
+      }
+      .exam-setup-copy {
+        min-width: 0;
+      }
+      .exam-setup-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        margin-bottom: 7px;
+        color: var(--brand);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+      }
+      .exam-setup-kicker::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--brand);
+      }
+      .exam-setup h2 {
+        margin-bottom: 6px;
+        font-size: 21px;
+        line-height: 1.25;
+      }
+      .exam-setup p {
+        max-width: 440px;
+        margin-bottom: 0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      .exam-setup-controls {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 14px;
+        align-items: end;
+        min-width: 0;
+      }
+      .exam-setup-controls .select-wrap {
+        min-width: 0;
+        gap: 7px;
+      }
+      .exam-setup-controls .select-wrap select {
+        min-height: 46px;
+      }
+      #startExamBtn {
+        min-height: 46px;
+        min-width: 208px;
+        margin: 0;
+        padding: 11px 17px;
+        border-radius: 9px;
+        white-space: nowrap;
+        box-shadow: 0 3px 8px rgba(37, 99, 235, 0.18);
+      }
+      #startExamBtn:hover:not(:disabled) {
+        filter: none;
+        background: #1d4ed8;
+        box-shadow: 0 5px 12px rgba(37, 99, 235, 0.24);
+        transform: translateY(-1px);
+      }
+      .progress-panel {
+        margin-top: 14px;
+        padding: 14px;
+      }
+      .progress-meta {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        color: var(--muted);
+        font-weight: 700;
+      }
+      .progress-track {
+        height: 10px;
+        margin-top: 10px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: #e8edf5;
+      }
+      #progressBar {
+        width: 0;
+        height: 100%;
+        border-radius: inherit;
+        background: var(--brand);
+        transition: width 0.2s ease;
+      }
+      .quiz {
+        margin-top: 14px;
+      }
+      .question-card {
+        padding: 20px;
+      }
+      .question-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        color: var(--muted);
+        font-weight: 800;
+      }
+      .icon-button {
+        width: 44px;
+        padding: 0;
+        font-size: 24px;
+        line-height: 1;
+      }
+      .icon-button.active {
+        color: #7c2d12;
+        background: #ffedd5;
+      }
+      #questionText {
+        margin: 18px 0 12px;
+        font-size: 24px;
+        line-height: 1.45;
+      }
+      .note {
+        padding: 10px 12px;
+        border-radius: 8px;
+        color: var(--warn);
+        background: var(--warn-soft);
+        line-height: 1.5;
+      }
+      .options {
+        display: grid;
+        gap: 10px;
+        margin-top: 14px;
+      }
+      .option {
+        display: grid;
+        grid-template-columns: 38px 1fr;
+        gap: 10px;
+        align-items: start;
+        width: 100%;
+        min-height: 54px;
+        border: 2px solid var(--line);
+        border-radius: 8px;
+        padding: 12px;
+        color: var(--text);
+        background: #fff;
+        text-align: left;
+      }
+      .option:focus-visible,
+      .option:hover {
+        border-color: #9bb8f5;
+      }
+      .option:focus-visible {
+        outline: 3px solid rgba(37, 99, 235, 0.24);
+        outline-offset: 2px;
+      }
+      .option .key {
+        display: grid;
+        place-items: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        color: var(--brand);
+        background: var(--brand-soft);
+        font-weight: 800;
+      }
+      .option .text {
+        padding-top: 5px;
+        line-height: 1.45;
+      }
+      .option.selected {
+        border-color: var(--brand);
+        background: var(--brand-soft);
+      }
+      .option.correct {
+        border-color: var(--ok);
+        background: var(--ok-soft);
+      }
+      .option.correct .key {
+        color: #fff;
+        background: var(--ok);
+      }
+      .option.wrong {
+        border-color: var(--bad);
+        background: var(--bad-soft);
+      }
+      .option.wrong .key {
+        color: #fff;
+        background: var(--bad);
+      }
+      .feedback {
+        margin-top: 14px;
+        padding: 12px 14px;
+        border-radius: 8px;
+        font-weight: 800;
+        line-height: 1.45;
+      }
+      .feedback.ok {
+        color: var(--ok);
+        background: var(--ok-soft);
+      }
+      .feedback.bad {
+        color: var(--bad);
+        background: var(--bad-soft);
+      }
+      .feedback.info {
+        color: var(--brand);
+        background: var(--brand-soft);
+      }
+      .actions {
+        justify-content: space-between;
+        margin-top: 14px;
+      }
+      .actions button {
+        flex: 1;
+      }
+      .danger,
+      .submit {
+        width: 100%;
+        margin-top: 10px;
+        font-size: 16px;
+      }
+      .danger {
+        color: var(--bad);
+        background: var(--bad-soft);
+      }
+      .side-nav-button {
+        position: fixed;
+        top: 50%;
+        z-index: 20;
+        display: grid;
+        place-items: center;
+        width: 52px;
+        height: 72px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        color: var(--brand);
+        background: rgba(255, 255, 255, 0.94);
+        box-shadow: var(--shadow);
+        font-size: 34px;
+        font-weight: 900;
+        line-height: 1;
+        transform: translateY(-50%);
+      }
+      .side-nav-button:focus-visible,
+      .side-nav-button:hover {
+        border-color: #9bb8f5;
+        background: var(--brand-soft);
+      }
+      .side-nav-button:focus-visible {
+        outline: 3px solid rgba(37, 99, 235, 0.24);
+        outline-offset: 2px;
+      }
+      .side-nav-button:disabled {
+        opacity: 0.35;
+        cursor: not-allowed;
+      }
+      .side-nav-button.left {
+        left: 12px;
+      }
+      .side-nav-button.right {
+        right: 12px;
+      }
+      .shortcut-note {
+        position: fixed;
+        top: 12px;
+        right: 12px;
+        z-index: 18;
+        width: min(240px, calc(100vw - 24px));
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 10px 12px;
+        color: var(--muted);
+        background: rgba(255, 255, 255, 0.96);
+        box-shadow: var(--shadow);
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1.45;
+      }
+      .shortcut-note-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        color: var(--text);
+        font-size: 13px;
+      }
+      .shortcut-note-toggle {
+        min-height: 28px;
+        border-radius: 6px;
+        padding: 4px 8px;
+        color: var(--brand);
+        background: var(--brand-soft);
+        font-size: 12px;
+        font-weight: 800;
+      }
+      .shortcut-note-toggle:focus-visible {
+        outline: 3px solid rgba(37, 99, 235, 0.24);
+        outline-offset: 2px;
+      }
+      .shortcut-note-body {
+        display: grid;
+        gap: 3px;
+        margin-top: 6px;
+      }
+      .shortcut-note.collapsed {
+        width: auto;
+        padding: 8px;
+      }
+      .shortcut-note.collapsed .shortcut-note-body {
+        display: none;
+      }
+      .shortcut-note kbd {
+        display: inline-grid;
+        place-items: center;
+        min-width: 22px;
+        min-height: 20px;
+        margin: 0 2px;
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        padding: 1px 5px;
+        color: var(--brand);
+        background: var(--brand-soft);
+        font: inherit;
+        font-weight: 800;
+      }
+      .empty {
+        padding: 22px;
+        color: var(--muted);
+        text-align: center;
+      }
+      .hidden {
+        display: none !important;
+      }
+      .note {
+        white-space: pre-line;
+      }
+      @media (max-width: 760px) {
+        .app {
+          width: min(100% - 18px, 1120px);
+          margin-top: 10px;
+        }
+        .controls,
+        .exam-setup,
+        .topbar {
+          grid-template-columns: 1fr;
+        }
+        .exam-setup {
+          gap: 18px;
+          padding: 18px;
+        }
+        .exam-setup-controls {
+          grid-template-columns: minmax(0, 1fr) auto;
+        }
+        #startExamBtn {
+          min-width: 190px;
+        }
+        .topbar {
+          display: grid;
+        }
+        .summary {
+          text-align: left;
+        }
+        h1 {
+          font-size: 26px;
+        }
+        #questionText {
+          font-size: 20px;
+        }
+        .mode-tabs button {
+          flex: 1;
+        }
+        .actions {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+        }
+        .side-nav-button {
+          width: 42px;
+          height: 58px;
+          font-size: 28px;
+        }
+        .side-nav-button.left {
+          left: 6px;
+        }
+        .side-nav-button.right {
+          right: 6px;
+        }
+        .shortcut-note {
+          top: auto;
+          right: 6px;
+          bottom: 6px;
+          width: min(230px, calc(100vw - 12px));
+          font-size: 11px;
+        }
+      }
+      @media (max-width: 480px) {
+        .exam-setup-controls {
+          grid-template-columns: 1fr;
+          gap: 10px;
+        }
+        #startExamBtn {
+          width: 100%;
+          min-width: 0;
+        }
+      }
+      @media (max-width: 420px) {
+        .controls,
+        .exam-setup,
+        .progress-panel,
+        .question-card,
+        .topbar {
+          padding: 12px;
+        }
+        .option {
+          grid-template-columns: 34px 1fr;
+          padding: 10px;
+        }
+        .actions {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a href="./index.html" class="back-home">
+      <i class="fa-solid fa-arrow-left"></i> <span>Quay lại</span>
+    </a>
+    <main class="app">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">PRM393</p>
+          <h1>Quiz</h1>
+        </div>
+        <div class="summary">
+          <span id="totalCount">236 câu</span>
+          <strong id="scoreSummary">0 đúng</strong>
+        </div>
+      </header>
+      <section class="controls" aria-label="Điều khiển màn hình">
+        <div class="mode-tabs" role="tablist" aria-label="Chế độ">
+          <button
+            id="practiceModeBtn"
+            class="active"
+            type="button"
+            role="tab"
+            aria-selected="true"
+          >
+            Luyện tập
+          </button>
+          <button
+            id="wrongModeBtn"
+            type="button"
+            role="tab"
+            aria-selected="false"
+          >
+            Câu sai
+          </button>
+          <button
+            id="examModeBtn"
+            type="button"
+            role="tab"
+            aria-selected="false"
+          >
+            Thi thử
+          </button>
+        </div>
+        <label class="search">
+          <span>Tìm kiếm</span>
+          <input
+            id="searchInput"
+            type="search"
+            placeholder="Nhập từ khóa, đáp án, số câu..."
+            autocomplete="off"
+          />
+        </label>
+        <label id="practicePartWrap" class="select-wrap">
+          <span>Part luyện tập</span>
+          <select
+            id="practicePartSelect"
+            aria-label="Chọn part luyện tập"
+          ></select>
+        </label>
+        <label class="select-wrap">
+          <span>Lọc</span>
+          <select id="filterSelect">
+            <option value="all">Tất cả</option>
+            <option value="correct">Câu đúng</option>
+            <option value="wrong">Câu sai</option>
+            <option value="unanswered">Chưa làm</option>
+            <option value="bookmarked">Bookmark</option>
+          </select>
+        </label>
+      </section>
+      <section id="examSetup" class="exam-setup hidden" aria-label="Thi thử">
+        <div class="exam-setup-copy">
+          <span class="exam-setup-kicker">Chế độ kiểm tra</span>
+          <h2>Thi thử</h2>
+          <p>
+            Làm toàn bộ câu hỏi trong Part đã chọn. Part cuối có thể ít hơn 50
+            câu.
+          </p>
+        </div>
+        <div class="exam-setup-controls">
+          <label class="select-wrap">
+            <span>Part thi thử</span>
+            <select id="examPartSelect" aria-label="Chọn part thi thử"></select>
+          </label>
+          <button id="startExamBtn" class="primary" type="button">
+            Bắt đầu thi thử
+          </button>
+        </div>
+      </section>
+      <section class="progress-panel">
+        <div class="progress-meta">
+          <span id="modeLabel">Luyện tập câu</span>
+          <span id="progressText">0/0</span>
+        </div>
+        <div class="progress-track"><div id="progressBar"></div></div>
+      </section>
+      <section class="quiz">
+        <article class="question-card">
+          <div class="question-head">
+            <span id="questionIndex">Câu 1</span>
+            <button
+              id="bookmarkBtn"
+              class="icon-button"
+              type="button"
+              title="Bookmark câu này"
+              aria-label="Bookmark câu này"
+            >
+              ?
+            </button>
+          </div>
+          <h2 id="questionText">Đang tải câu hỏi...</h2>
+          <p id="questionNote" class="note hidden"></p>
+          <div id="options" class="options" aria-label="Các phương án"></div>
+          <button id="checkAnswerBtn" class="submit hidden" type="button">
+            Kiểm tra đáp án
+          </button>
+          <div id="feedback" class="feedback hidden" role="status"></div>
+        </article>
+        <nav class="actions" aria-label="Chuyển câu">
+          <button id="prevBtn" type="button" title="Phím 1">1. Trước</button>
+          <button id="randomBtn" type="button" title="Phím 2">2. Random</button>
+          <button id="showAnswerBtn" type="button" title="Phím 3">
+            3. Hiện đáp án
+          </button>
+          <button id="nextBtn" type="button" title="Phím 4">4. Tiếp</button>
+        </nav>
+        <button id="submitExamBtn" class="submit hidden" type="button">
+          Nộp bài
+        </button>
+        <button id="resetBtn" class="danger" type="button">
+          Reset tiến độ
+        </button>
+      </section>
+    </main>
+    <button
+      id="sidePrevBtn"
+      class="side-nav-button left"
+      type="button"
+      title="Cau truoc"
+      aria-label="Cau truoc"
+    >
+      ‹
+    </button>
+    <button
+      id="sideNextBtn"
+      class="side-nav-button right"
+      type="button"
+      title="Cau tiep"
+      aria-label="Cau tiep"
+    >
+      ›
+    </button>
+    <aside
+      id="shortcutNote"
+      class="shortcut-note"
+      aria-label="Huong dan phim nhanh"
+    >
+      <div class="shortcut-note-head">
+        <strong>Phím nhanh</strong>
+        <button
+          id="shortcutNoteToggle"
+          class="shortcut-note-toggle"
+          type="button"
+          aria-expanded="true"
+        >
+          Thu gọn
+        </button>
+      </div>
+      <div id="shortcutNoteBody" class="shortcut-note-body">
+        <div><kbd>←</kbd> Trước · <kbd>→</kbd> Tiếp</div>
+        <div><kbd>↑</kbd> Random · <kbd>↓</kbd> Hiện đáp án</div>
+        <div>
+          <kbd>1</kbd> Trước · <kbd>2</kbd> Random · <kbd>3</kbd> Đáp án ·
+          <kbd>4</kbd> Tiếp
+        </div>
+        <div>
+          <kbd>Enter</kbd> 1 lần xác nhận chọn đáp án · 2 lần chuyển câu
+        </div>
+        <div>Nhiều đáp án: chọn đủ rồi <kbd>Enter</kbd> xác nhận</div>
+      </div>
+    </aside>
+    <script>
+      const questions = [
+          {
+            q: "Which widget pattern protects authenticated routes?",
+            o: [
+              "A. Navigator",
+              "B. Guard",
+              "C. Route protection",
+              "D. Middleware",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 0,
+          },
+          {
+            q: "Why are tests important for refactoring?",
+            o: [
+              "A. Reduce UI work",
+              "B. Ensure changes don't break functionality",
+              "C. Improve animations",
+              "D. Change layout",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 1,
+          },
+          {
+            q: "What is the role of BuildContext in Flutter?",
+            o: [
+              "A. Store application data",
+              "B. Locate widgets in the widget tree",
+              "C. Manage navigation history",
+              "D. Render UI pixels",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 2,
+          },
+          {
+            q: "What role does the Flutter framework play in application development?",
+            o: [
+              "A. It manages database servers",
+              "B. It provides UI components and rendering logic",
+              "C. It replaces the operating system",
+              "D. It runs backend business logic",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 3,
+          },
+          {
+            q: "How is the Flutter UI constructed internally?",
+            o: [
+              "A. Using XML layout files",
+              "B. Using HTML and CSS",
+              "C. Using a hierarchical widget tree",
+              "D. Using native UI components only",
+            ],
+            a: "C",
+            source: "SP26_BL5",
+            id: 4,
+          },
+          {
+            q: "Which widget enables custom scroll effects in Flutter?",
+            o: [
+              "A. ListView",
+              "B. SingleChildScrollView",
+              "C. CustomScrollView",
+              "D. Column",
+            ],
+            a: "C",
+            source: "SP26_BL5",
+            id: 5,
+          },
+          {
+            q: "Which practice improves rendering performance?",
+            o: [
+              "A. Large widget trees",
+              "B. Splitting widgets",
+              "C. Global state",
+              "D. Frequent rebuilds",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 6,
+          },
+          {
+            q: "What does an integration test verify?",
+            o: [
+              "A. Single function",
+              "B. Widget rendering",
+              "C. End-to-end app behavior",
+              "D. Theme consistency",
+            ],
+            a: "C",
+            source: "SP26_BL5",
+            id: 7,
+          },
+          {
+            q: "Why is separating UI and state logic recommended?",
+            o: [
+              "A. Reduce code size",
+              "B. Improve maintainability",
+              "C. Faster execution",
+              "D. Better animations",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 8,
+          },
+          {
+            q: "When does Flutter rebuild the widget tree?",
+            o: [
+              "A. On every frame",
+              "B. When state changes",
+              "C. Only when app restarts",
+              "D. Only during hot restart",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 9,
+          },
+          {
+            q: "Which concept does BLoC heavily rely on?",
+            o: ["A. Future", "B. Stream", "C. Animation", "D. Theme"],
+            a: "B",
+            source: "SP26_BL5",
+            id: 10,
+          },
+          {
+            q: "Why is version control important?",
+            o: [
+              "A. UI changes",
+              "B. Track and manage code changes",
+              "C. Improve animator",
+              "D. Store data",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 11,
+          },
+          {
+            q: "Why is immutability important in BLoC states?",
+            o: [
+              "A. UI speed",
+              "B. Predictable state changes",
+              "C. Memory usage",
+              "D. Theme control",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 12,
+          },
+          {
+            q: "Which Flutter plugin provides SQLite support?",
+            o: ["A. hive", "B. moor", "C. sqflite", "D. shared_preferences"],
+            a: "C",
+            source: "SP26_BL5",
+            id: 13,
+          },
+          {
+            q: "What is the main benefit of using Maps in Dart?",
+            o: [
+              "A. Storing values without keys",
+              "B. Storing key-value pairs",
+              "C. Rendering UI components",
+              "D. Managing asynchronous tasks",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 14,
+          },
+          {
+            q: "Which tool helps analyze UI performance in Flutter?",
+            o: ["A. Inspector", "B. DevTools", "C. Emulator", "D. Hot reload"],
+            a: "B",
+            source: "SP26_BL5",
+            id: 15,
+          },
+          {
+            q: "What does a Dart class primarily represent?",
+            o: [
+              "A. A UI widget only",
+              "B. A blueprint for creating objects",
+              "C. A database table",
+              "D. A network request",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 16,
+          },
+          {
+            q: "What is the purpose of SliverAppBar?",
+            o: [
+              "A. Static app bar",
+              "B. Scrollable flexible app bar",
+              "C. Bottom navigation",
+              "D. Drawer control",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 17,
+          },
+          {
+            q: "What is Hive mainly used for?",
+            o: [
+              "A. Remote database",
+              "B. Lightweight local NoSQL storage",
+              "C. State management",
+              "D. Routing",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 18,
+          },
+          {
+            q: "Which HTTP header is commonly used for authorization?",
+            o: [
+              "A. Content-Type",
+              "B. Accept",
+              "C. Authorization",
+              "D. Cache-Control",
+            ],
+            a: "C",
+            source: "SP26_BL5",
+            id: 19,
+          },
+          {
+            q: "What does TextEditingController manage?",
+            o: [
+              "A. Theme",
+              "B. Text input value",
+              "C. Validation rules",
+              "D. Layout constraints",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 20,
+          },
+          {
+            q: "Why is Dart considered suitable for Flutter development?",
+            o: [
+              "A. It is only used for backend systems",
+              "B. It supports both UI and application logic efficiently",
+              "C. It replaces native languages",
+              "D. It does not support asynchronous programming",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 21,
+          },
+          {
+            q: "What does the build() method return in a widget?",
+            o: [
+              "A. A screen",
+              "B. A widget tree describing the UI",
+              "C. Application state",
+              "D. Rendered pixels",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 22,
+          },
+          {
+            q: "What represents the output of a BLoC?",
+            o: ["A. Events", "B. Widgets", "C. States", "D. Controllers"],
+            a: "C",
+            source: "SP26_BL5",
+            id: 23,
+          },
+          {
+            q: "What is Cubit in BLoC?",
+            o: [
+              "A. UI widget",
+              "B. Simplified BLoC without events",
+              "C. Database layer",
+              "D. Animation helper",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 24,
+          },
+          {
+            q: "Which activity is typically performed after creating a new Flutter project?",
+            o: [
+              "A. Deploying to app stores",
+              "B. Running the default app on a device",
+              "C. Configuring authentication",
+              "D. Optimizing database queries",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 25,
+          },
+          {
+            q: "Which practice improves deployment security?",
+            o: [
+              "A. Debug builds",
+              "B. Secure signing keys",
+              "C. Hardcoding secrets",
+              "D. Skipping validation",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 26,
+          },
+          {
+            q: "Why is Chapter 14 considered optional (Plus)?",
+            o: [
+              "A. Deployment is UI logic",
+              "B. Apps can be tested without publishing",
+              "C. It replaces authentication",
+              "D. It handles APIs",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 27,
+          },
+          {
+            q: "What is the primary purpose of ThemeData in Flutter?",
+            o: [
+              "A. Manage navigation",
+              "B. Define application-wide visual styles",
+              "C. Handle state changes",
+              "D. Control animations",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 28,
+          },
+          {
+            q: "Which method is used to update the UI when state changes?",
+            o: [
+              "A. build()",
+              "B. setState()",
+              "C. initState()",
+              "D. dispose()",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 29,
+          },
+          {
+            q: "Which Flutter package is commonly used for simple key-value storage?",
+            o: [
+              "A. sqflite",
+              "B. shared_preferences",
+              "C. provider",
+              "D. http",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 30,
+          },
+          {
+            q: "Why should architecture be decided early?",
+            o: [
+              "A. Avoid UI work",
+              "B. Reduce refactoring cost",
+              "C. Improve animations",
+              "D. Change theme",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 31,
+          },
+          {
+            q: "What is pagination used for?",
+            o: [
+              "A. UI animation",
+              "B. Handling large datasets efficiently",
+              "C. Theme management",
+              "D. Authentication",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 32,
+          },
+          {
+            q: "Which widget helps avoid rebuilding unchanged UI parts?",
+            o: [
+              "A. Container",
+              "B. RepaintBoundary",
+              "C. Column",
+              "D. FutureBuilder",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 33,
+          },
+          {
+            q: "Which widget is used to handle asynchronous API responses in UI?",
+            o: ["A. FutureBuilder", "B. ListView", "C. Provider", "D. Form"],
+            a: "A",
+            source: "SP26_BL5",
+            id: 34,
+          },
+          {
+            q: "Which Dart feature helps organize code into reusable libraries?",
+            o: [
+              "A. Widgets",
+              "B. Packages and imports",
+              "C. Hot reload",
+              "D. Layout constraints",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 35,
+          },
+          {
+            q: "What is a refresh token used for?",
+            o: [
+              "A. UI refresh",
+              "B. Extend session without re-login",
+              "C. Theme update",
+              "D. Navigation reset",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 36,
+          },
+          {
+            q: "What is rebuild scope optimization in Flutter?",
+            o: [
+              "A. Reducing widget tree depth",
+              "B. Limiting rebuild to affected widgets",
+              "C. Caching API responses",
+              "D. Using global state",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 37,
+          },
+          {
+            q: "Why is BLoC suitable for large teams?",
+            o: [
+              "A. Less code",
+              "B. Standardized architecture",
+              "C. Faster builds",
+              "D. UI reuse",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 38,
+          },
+          {
+            q: "Which widget reacts to async data from local storage?",
+            o: [
+              "A. FutureBuilder",
+              "B. StreamBuilder",
+              "C. ListView",
+              "D. Provider",
+            ],
+            a: "A",
+            source: "SP26_BL5",
+            id: 39,
+          },
+          {
+            q: "What is a token in authentication systems?",
+            o: [
+              "A. UI key",
+              "B. Temporary access credential",
+              "C. Database ID",
+              "D. Theme value",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 40,
+          },
+          {
+            q: "What does a Tween define?",
+            o: [
+              "A. Animation speed",
+              "B. Value range for animation",
+              "C. UI layout",
+              "D. Save logic",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 41,
+          },
+          {
+            q: "Which Dart feature allows defining reusable, type-safe components?",
+            o: ["A. Mixins", "B. Generics", "C. Futures", "D. Streams"],
+            a: "B",
+            source: "SP26_BL5",
+            id: 42,
+          },
+          {
+            q: "Which widget animates between two widgets?",
+            o: [
+              "A. AnimatedSwitcher",
+              "B. AnimatedOpacity",
+              "C. AnimatedAlign",
+              "D. AnimatedSize",
+            ],
+            a: "A",
+            source: "SP26_BL5",
+            id: 43,
+          },
+          {
+            q: "Why should setState() be called sparingly?",
+            o: [
+              "A. It increases app size",
+              "B. It may trigger unnecessary rebuilds",
+              "C. It blocks UI thread",
+              "D. It causes memory leaks",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 44,
+          },
+          {
+            q: "What is test isolation?",
+            o: [
+              "A. Running all tests together",
+              "B. Independence of test cases",
+              "C. UI separation",
+              "D. Mocking only",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 45,
+          },
+          {
+            q: "What does crossAxisAlignment control?",
+            o: [
+              "A. Vertical alignment in Column",
+              "B. Horizontal alignment in Column",
+              "C. Child order",
+              "D. Widget size",
+            ],
+            a: "B",
+            source: "SP26_BL5",
+            id: 46,
+          },
+          {
+            q: "Which tool is commonly used for version control?",
+            o: ["A. SVN", "B. Git", "C. FTP", "D. ZIP"],
+            a: "B",
+            source: "SP26_BL5",
+            id: 47,
+          },
+          {
+            q: "What is the role of events in BLoC?",
+            o: [
+              "A. Store UI",
+              "B. Trigger state changes",
+              "C. Render widgets",
+              "D. Handle layout",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 48,
+          },
+          {
+            q: "Which method retrieves data from SharedPreferences?",
+            o: ["A. get()", "B. read()", "C. fetch()", "D. load()"],
+            a: "A",
+            source: "SP26",
+            id: 49,
+          },
+          {
+            q: "Which command builds a release APK?",
+            o: [
+              "A. flutter run",
+              "B. flutter build apk",
+              "C. flutter doctor",
+              "D. flutter clean",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 50,
+          },
+          {
+            q: "What is implicit animation?",
+            o: [
+              "A. Manual animation control",
+              "B. Animation without controller",
+              "C. API animation",
+              "D. Navigation animation",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 51,
+          },
+          {
+            q: "Which type of test checks individual functions or classes?",
+            o: [
+              "A. Widget test",
+              "B. Integration test",
+              "C. Unit test",
+              "D. System test",
+            ],
+            a: "C",
+            source: "SP26",
+            id: 52,
+          },
+          {
+            q: "Which approach helps reduce unnecessary widget rebuilds?",
+            o: [
+              "A. Using global variables",
+              "B. Fine-grained state updates",
+              "C. Hot restart",
+              "D. Large widgets",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 53,
+          },
+          {
+            q: "How can data be passed to a new screen?",
+            o: [
+              "A. Using global variables",
+              "B. Via constructor arguments",
+              "C. Using ThemeData",
+              "D. Using Scaffold",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 54,
+          },
+          {
+            q: "Which Flutter test focuses on UI components?",
+            o: [
+              "A. Unit test",
+              "B. Widget test",
+              "C. Integration test",
+              "D. Load test",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 55,
+          },
+          {
+            q: "Why should state be kept as local as possible?",
+            o: [
+              "A. Better animations",
+              "B. Reduce unnecessary rebuilds",
+              "C. Simplify UI",
+              "D. Improve navigation",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 56,
+          },
+          {
+            q: "Which status code indicates server error?",
+            o: ["A. 200", "B. 301", "C. 404", "D. 500"],
+            a: "D",
+            source: "SP26",
+            id: 57,
+          },
+          {
+            q: "Why should animations be disposed properly?",
+            o: [
+              "A. Improve UI",
+              "B. Prevent memory leaks",
+              "C. Speed up builds",
+              "D. Fix layout",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 58,
+          },
+          {
+            q: "Which widget can hide user input text when configured for password entry?",
+            o: [
+              "A. TextField  (via `obscureText`)",
+              "B. ObscureText",
+              "C. SecureInput",
+              "D. PasswordField",
+            ],
+            a: "A",
+            source: "SP26",
+            id: 59,
+          },
+          {
+            q: "What does CurvedAnimation provide?",
+            o: [
+              "A. Layout control",
+              "B. Animation curve behavior",
+              "C. State updates",
+              "D. Navigation",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 60,
+          },
+          {
+            q: "What does golden testing verify?",
+            o: [
+              "A. API responses",
+              "B. UI appearance consistency",
+              "C. Database state",
+              "D. Authentication",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 61,
+          },
+          {
+            q: "Which widget allows overlapping of its child widgets?",
+            o: ["A. Column", "B. Row", "C. Stack", "D. Expanded"],
+            a: "C",
+            source: "SP26",
+            id: 62,
+          },
+          {
+            q: "Which Dart data structure is best suited for storing an ordered collection of items?",
+            o: ["A. Set", "B. Map", "C. List", "D. Queue"],
+            a: "C",
+            source: "SP26",
+            id: 63,
+          },
+          {
+            q: "What is the main risk of improper state management?",
+            o: [
+              "A. UI inconsistency",
+              "B. Longer compile time",
+              "C. Package conflicts",
+              "D. Build errors",
+            ],
+            a: "A",
+            source: "SP26",
+            id: 64,
+          },
+          {
+            q: "What is the main purpose of hot reload in Flutter?",
+            o: [
+              "A. Improve runtime performance",
+              "B. Instantly reflect code changes in UI",
+              "C. Publish apps faster",
+              "D. Reduce memory usage",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 65,
+          },
+          {
+            q: "Which widget applies a theme to an entire Flutter application?",
+            o: ["A. Scaffold", "B. Theme", "C. MaterialApp", "D. Container"],
+            a: "C",
+            source: "SP26",
+            id: 66,
+          },
+          {
+            q: "Which package supports BLoC architecture?",
+            o: ["A. provider", "B. flutter_bloc", "C. sqflite", "D. http"],
+            a: "B",
+            source: "SP26",
+            id: 67,
+          },
+          {
+            q: "Which action best demonstrates Flutter's reactive UI model?",
+            o: [
+              "A. Manually updating UI elements",
+              "B. Rebuilding UI in response to state changes",
+              "C. Editing layout XML",
+              "D. Calling native APIs",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 68,
+          },
+          {
+            q: "What is technical debt?",
+            o: [
+              "A. UI lag",
+              "B. Future cost of poor design decisions",
+              "C. Memory usage",
+              "D. API limit",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 69,
+          },
+          {
+            q: "Which Flutter concept supports reactive UI updates?",
+            o: [
+              "A. Manual refresh",
+              "B. Widget rebuilding",
+              "C. Hot restart",
+              "D. Native callbacks",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 70,
+          },
+          {
+            q: "Which Flutter widget reacts to authentication state changes?",
+            o: [
+              "A. FutureBuilder",
+              "B. StreamBuilder",
+              "C. ListView",
+              "D. Form",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 71,
+          },
+          {
+            q: "Why should database operations be asynchronous?",
+            o: [
+              "A. Simplify syntax",
+              "B. Avoid blocking UI thread",
+              "C. Reduce code",
+              "D. Improve theme",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 72,
+          },
+          {
+            q: "Why is Chapter 13 considered optional (Plus)?",
+            o: [
+              "A. It replaces core concepts",
+              "B. Apps can work without deep optimization",
+              "C. It manages navigation",
+              "D. It handles authentication",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 73,
+          },
+          {
+            q: "What happens after successful login?",
+            o: [
+              "A. App closes",
+              "B. User session starts",
+              "C. Theme changes",
+              "D. Navigation resets",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 74,
+          },
+          {
+            q: "Why is secure authentication critical in mobile apps?",
+            o: [
+              "A. UI quality",
+              "B. Protect user data",
+              "C. Reduce code",
+              "D. Improve speed",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 75,
+          },
+          {
+            q: "What is the main benefit of Flutter's widget-based architecture?",
+            o: [
+              "A. Widgets are only used for layout design",
+              "B. Widgets allow code reuse across platforms",
+              "C. Widgets automatically manage databases",
+              "D. Widgets replace backend services",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 76,
+          },
+          {
+            q: "Which Dart keyword is used to define a constant value at compile time?",
+            o: ["A. final", "B. static", "C. const", "D. var"],
+            a: "C",
+            source: "SP26",
+            id: 77,
+          },
+          {
+            q: "What is Dart primarily designed for in the Flutter ecosystem?",
+            o: [
+              "A. Database management",
+              "B. User interface development",
+              "C. General-purpose programming with UI focus",
+              "D. Network security",
+            ],
+            a: "C",
+            source: "SP26",
+            id: 78,
+          },
+          {
+            q: "What is the benefit of composing widgets in Flutter?",
+            o: [
+              "A. Faster compilation",
+              "B. Better code reuse and UI consistency",
+              "C. Reduced memory usage",
+              "D. Automatic navigation",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 79,
+          },
+          {
+            q: "Which widget is best used to add fixed empty space?",
+            o: ["A. Padding", "B. Expanded", "C. SizedBox", "D. Container"],
+            a: "C",
+            source: "SP26",
+            id: 80,
+          },
+          {
+            q: "What is the purpose of parsing JSON?",
+            o: [
+              "A. Encrypt data",
+              "B. Convert JSON into Dart objects",
+              "C. Send requests",
+              "D. Cache responses",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 81,
+          },
+          {
+            q: "Which platforms can Flutter applications target using a single codebase?",
+            o: [
+              "A. Android only",
+              "B. iOS only",
+              "C. Android, iOS, web, and desktop",
+              "D. Web servers only",
+            ],
+            a: "C",
+            source: "SP26",
+            id: 82,
+          },
+          {
+            q: "Which HTTP method is typically used to retrieve data?",
+            o: ["A. POST", "B. PUT", "C. GET", "D. DELETE"],
+            a: "C",
+            source: "SP26",
+            id: 83,
+          },
+          {
+            q: "Why should authentication state be centralized?",
+            o: [
+              "A. Reduce UI code",
+              "B. Ensure consistent access control",
+              "C. Improve animations",
+              "D. Simplify layout",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 84,
+          },
+          {
+            q: "Which phase involves gathering requirements?",
+            o: ["A. Implementation", "B. Design", "C. Analysis", "D. Testing"],
+            a: "C",
+            source: "SP26",
+            id: 85,
+          },
+          {
+            q: "Which step is required before running a Flutter app for the first time?",
+            o: [
+              "A. Publishing the app",
+              "B. Setting up the Flutter SDK",
+              "C. Configuring a database",
+              "D. Writing backend APIs",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 86,
+          },
+          {
+            q: "Which Flutter tool helps debug network requests?",
+            o: ["A. DevTools", "B. Inspector", "C. Emulator", "D. Hot reload"],
+            a: "A",
+            source: "SP26",
+            id: 87,
+          },
+          {
+            q: "Why are widgets lightweight in Flutter?",
+            o: [
+              "A. They manage system resources",
+              "B. They are immutable descriptions",
+              "C. They store UI state",
+              "D. They handle rendering directly",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 88,
+          },
+          {
+            q: "Which Dart feature supports object-oriented programming?",
+            o: [
+              "A. Widgets",
+              "B. Classes and objects",
+              "C. Hot reload",
+              "D. Layout builders",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 89,
+          },
+          {
+            q: "What is Flutter primarily used for?",
+            o: [
+              "A. Designing databases for mobile apps",
+              "B. Creating native applications from a single codebase",
+              "C. Developing server-side applications only",
+              "D. Building operating systems for mobile devices",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 90,
+          },
+          {
+            q: "Which method resets all form fields?",
+            o: ["A. clear()", "B. reset()", "C. dispose()", "D. remove()"],
+            a: "B",
+            source: "SP26",
+            id: 91,
+          },
+          {
+            q: "Why are const widgets recommended?",
+            o: [
+              "A. They improve readability",
+              "B. They reduce rebuild cost",
+              "C. They add state",
+              "D. They handle navigation",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 92,
+          },
+          {
+            q: "Why is clean architecture beneficial?",
+            o: [
+              "A. Fewer files",
+              "B. Easier maintenance and testing",
+              "C. Better UI",
+              "D. Faster builds",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 93,
+          },
+          {
+            q: "Why are forms important in mobile applications?",
+            o: [
+              "A. UI decoration",
+              "B. User data collection",
+              "C. State management",
+              "D. Navigation",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 94,
+          },
+          {
+            q: "Which widget rebuilds automatically when a `ChangeNotifier` updates?",
+            o: [
+              "A. StatelessWidget",
+              "B. Consumer",
+              "C. Container",
+              "D. Scaffold",
+            ],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 95,
+          },
+          {
+            q: "What is the purpose of `initState()` in a StatefulWidget?",
+            o: [
+              "A. Rebuild the UI",
+              "B. One-time setup when the widget is first created",
+              "C. Dispose resources",
+              "D. Handle navigation",
+            ],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 96,
+          },
+          {
+            q: "Which method is used to remove a widget's resources when it's no longer needed?",
+            o: ["A. build()", "B. dispose()", "C. reset()", "D. clear()"],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 97,
+          },
+          {
+            q: "What does `async`/`await` help manage in Dart?",
+            o: [
+              "A. UI layout",
+              "B. Asynchronous operations",
+              "C. Widget trees",
+              "D. State persistence",
+            ],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 98,
+          },
+          {
+            q: "Which widget is used to build a scrollable list efficiently?",
+            o: ["A. Column", "B. ListView.builder", "C. Stack", "D. Wrap"],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 99,
+          },
+          {
+            q: "What is a `Future` in Dart?",
+            o: [
+              "A. A synchronous value",
+              "B. A value available at some point in the future",
+              "C. A widget type",
+              "D. A layout constraint",
+            ],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 100,
+          },
+          {
+            q: "Which command creates a new Flutter project?",
+            o: [
+              "A. flutter init",
+              "B. flutter create",
+              "C. flutter new",
+              "D. flutter start",
+            ],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 101,
+          },
+          {
+            q: "What is the purpose of the `pubspec.yaml` file?",
+            o: [
+              "A. Store UI state",
+              "B. Manage project dependencies and metadata",
+              "C. Define widget trees",
+              "D. Store user data",
+            ],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 102,
+          },
+          {
+            q: "Which widget provides Material Design visual structure to a screen?",
+            o: ["A. Container", "B. Scaffold", "C. Column", "D. Padding"],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 103,
+          },
+          {
+            q: "What does `Navigator.push()` do?",
+            o: [
+              "A. Removes the current screen",
+              "B. Adds a new screen onto the navigation stack",
+              "C. Resets the app",
+              "D. Rebuilds the widget tree",
+            ],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 104,
+          },
+          {
+            q: "Which BLoC component receives events and emits new states?",
+            o: ["A. Repository", "B. Bloc", "C. Widget", "D. Provider"],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 105,
+          },
+          {
+            q: "What is the main advantage of using `const` constructors for widgets?",
+            o: [
+              "A. Enables animations",
+              "B. Prevents unnecessary rebuilds",
+              "C. Allows async operations",
+              "D. Improves navigation",
+            ],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 106,
+          },
+          {
+            q: "Which Dart type represents a collection of unique values?",
+            o: ["A. List", "B. Map", "C. Set", "D. Queue"],
+            a: "C",
+            source: "FlutterQuiz1",
+            id: 107,
+          },
+          {
+            q: "What does `MediaQuery` provide access to?",
+            o: [
+              "A. Network status",
+              "B. Screen size and device information",
+              "C. Database connection",
+              "D. Authentication state",
+            ],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 108,
+          },
+          {
+            q: "Which widget lays out children in a horizontal direction?",
+            o: ["A. Column", "B. Row", "C. Stack", "D. ListView"],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 109,
+          },
+          {
+            q: "What is the purpose of a `key` in Flutter widgets?",
+            o: [
+              "A. Encrypt data",
+              "B. Preserve widget state and identity across rebuilds",
+              "C. Store API tokens",
+              "D. Define animation curves",
+            ],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 110,
+          },
+          {
+            q: "Which testing type simulates full user interaction across the app?",
+            o: [
+              "A. Unit test",
+              "B. Widget test",
+              "C. Integration test",
+              "D. Static analysis",
+            ],
+            a: "C",
+            source: "FlutterQuiz1",
+            id: 111,
+          },
+          {
+            q: "What is the role of a `Repository` layer in clean architecture?",
+            o: [
+              "A. Render UI",
+              "B. Abstract data sources from business logic",
+              "C. Manage animations",
+              "D. Handle routing",
+            ],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 112,
+          },
+          {
+            q: "Which Dart keyword declares a variable whose value can change?",
+            o: ["A. final", "B. const", "C. var", "D. static"],
+            a: "C",
+            source: "FlutterQuiz1",
+            id: 113,
+          },
+          {
+            q: "What does `flutter pub get` do?",
+            o: [
+              "A. Builds an APK",
+              "B. Downloads and installs project dependencies",
+              "C. Runs unit tests",
+              "D. Publishes the app",
+            ],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 114,
+          },
+          {
+            q: "Which widget wraps content that may overflow and allows it to be scrolled?",
+            o: [
+              "A. SingleChildScrollView",
+              "B. Container",
+              "C. Row",
+              "D. Expanded",
+            ],
+            a: "A",
+            source: "FlutterQuiz1",
+            id: 115,
+          },
+          {
+            q: "What is the purpose of `Provider` in Flutter state management?",
+            o: [
+              "A. Handle animations",
+              "B. Supply and manage shared state across widgets",
+              "C. Build APKs",
+              "D. Perform HTTP requests",
+            ],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 116,
+          },
+          {
+            q: "Which HTTP status code indicates a successful request?",
+            o: ["A. 200", "B. 400", "C. 404", "D. 500"],
+            a: "A",
+            source: "FlutterQuiz1",
+            id: 117,
+          },
+          {
+            q: "What does `try`/`catch` handle in Dart?",
+            o: [
+              "A. Widget layout",
+              "B. Errors and exceptions",
+              "C. State updates",
+              "D. Navigation events",
+            ],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 118,
+          },
+          {
+            q: "Which widget displays an image from the network?",
+            o: [
+              "A. Image.asset",
+              "B. Image.network",
+              "C. Icon",
+              "D. NetworkImage.load",
+            ],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 119,
+          },
+          {
+            q: "What is the purpose of `equatable` package in BLoC apps?",
+            o: [
+              "A. Improve animations",
+              "B. Simplify value comparison between objects/states",
+              "C. Handle routing",
+              "D. Manage themes",
+            ],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 120,
+          },
+          {
+            q: "Which lifecycle method is called just before a StatefulWidget is removed?",
+            o: [
+              "A. build()",
+              "B. dispose()",
+              "C. initState()",
+              "D. didUpdateWidget()",
+            ],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 121,
+          },
+          {
+            q: "What does JSON serialization in Dart typically involve?",
+            o: [
+              "A. Encrypting data",
+              "B. Converting objects to/from JSON strings",
+              "C. Rendering widgets",
+              "D. Managing animations",
+            ],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 122,
+          },
+          {
+            q: "Which Flutter tool visually inspects the widget tree at runtime?",
+            o: [
+              "A. Flutter Inspector",
+              "B. Hot reload",
+              "C. Dart Analyzer",
+              "D. Emulator",
+            ],
+            a: "A",
+            source: "FlutterQuiz1",
+            id: 123,
+          },
+          {
+            q: "What is dependency injection primarily used for?",
+            o: [
+              "A. Speeding up builds",
+              "B. Providing dependencies to classes without hardcoding them",
+              "C. Managing animations",
+              "D. Styling widgets",
+            ],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 124,
+          },
+          {
+            q: "Which widget adds padding around a child widget?",
+            o: ["A. SizedBox", "B. Padding", "C. Container only", "D. Align"],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 125,
+          },
+          {
+            q: "What is the purpose of a mock in unit testing?",
+            o: [
+              "A. Improve UI design",
+              "B. Simulate dependencies for isolated testing",
+              "C. Handle navigation",
+              "D. Manage themes",
+            ],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 126,
+          },
+          {
+            q: "Which Dart operator provides a default value if the left side is null?",
+            o: ["A. ??", "B. ?.", "C. !!", "D. =="],
+            a: "A",
+            source: "FlutterQuiz1",
+            id: 127,
+          },
+          {
+            q: "What does CI/CD stand for in a mobile app pipeline context?",
+            o: [
+              "A. Code Integration / Code Deployment",
+              "B. Continuous Integration / Continuous Deployment",
+              "C. Compile Instructions / Compile Data",
+              "D. Class Interface / Class Definition",
+            ],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 128,
+          },
+          {
+            q: "Which widget is best suited to display a grid of items?",
+            o: ["A. ListView", "B. GridView", "C. Column", "D. Stack"],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 129,
+          },
+          {
+            q: "What is the purpose of `flutter analyze`?",
+            o: [
+              "A. Run the app",
+              "B. Statically analyze code for errors and style issues",
+              "C. Build a release version",
+              "D. Manage packages",
+            ],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 130,
+          },
+          {
+            q: "Which authentication method stores credentials in encrypted device storage?",
+            o: [
+              "A. Plain SharedPreferences",
+              "B. flutter_secure_storage",
+              "C. Global variables",
+              "D. Local files without encryption",
+            ],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 131,
+          },
+          {
+            q: "What is the primary role of `main.dart` in a Flutter project?",
+            o: [
+              "A. Store assets",
+              "B. Serve as the app's entry point",
+              "C. Handle only navigation",
+              "D. Manage the database",
+            ],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 132,
+          },
+          {
+            q: "Which principle suggests each class should have only one reason to change?",
+            o: [
+              "A. Open/Closed Principle",
+              "B. Single Responsibility Principle",
+              "C. Liskov Substitution Principle",
+              "D. Dependency Inversion Principle",
+            ],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 133,
+          },
+          {
+            q: "Why is debouncing useful in search input fields?",
+            o: [
+              "A. Improves animations",
+              "B. Reduces excessive API calls while typing",
+              "C. Improves layout",
+              "D. Manages themes",
+            ],
+            a: "B",
+            source: "FlutterQuiz1",
+            id: 134,
+          },
+          {
+            q: "Which class in `flutter_bloc` is used to build UI based on state changes?",
+            o: [
+              "A. BlocProvider",
+              "B. BlocBuilder",
+              "C. BlocListener",
+              "D. BlocObserver",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 135,
+          },
+          {
+            q: "What is the difference between `BlocBuilder` and `BlocListener`?",
+            o: [
+              "A. There is no difference",
+              "B. BlocBuilder rebuilds UI; BlocListener performs side effects without rebuilding",
+              "C. BlocListener rebuilds UI; BlocBuilder performs side effects",
+              "D. Both only handle navigation",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 136,
+          },
+          {
+            q: "What does `emit()` do inside a Bloc?",
+            o: [
+              "A. Deletes the current state",
+              "B. Sends a new state to listeners",
+              "C. Cancels an event",
+              "D. Restarts the widget tree",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 137,
+          },
+          {
+            q: "Which BLoC component is responsible for business logic transformation of events into states?",
+            o: ["A. Widget", "B. Bloc", "C. Repository", "D. Theme"],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 138,
+          },
+          {
+            q: "Why is `Cubit` considered simpler than `Bloc`?",
+            o: [
+              "A. It uses more boilerplate",
+              "B. It emits states directly without needing defined events",
+              "C. It cannot manage state",
+              "D. It only works with widgets",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 139,
+          },
+          {
+            q: "What is `BlocObserver` used for?",
+            o: [
+              "A. Rendering widgets",
+              "B. Observing and logging state/transition changes globally",
+              "C. Managing themes",
+              "D. Handling navigation",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 140,
+          },
+          {
+            q: "Which package is required to use BLoC in Flutter?",
+            o: ["A. provider", "B. flutter_bloc", "C. sqflite", "D. dio"],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 141,
+          },
+          {
+            q: "What does immutability of state in BLoC help prevent?",
+            o: [
+              "A. Slow animations",
+              "B. Unpredictable side effects from shared mutable state",
+              "C. Large widget trees",
+              "D. Package conflicts",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 142,
+          },
+          {
+            q: "Which Dart feature is commonly used to define BLoC states as sealed classes?",
+            o: [
+              "A. Mixins",
+              "B. Abstract classes / sealed classes",
+              "C. Extensions",
+              "D. Generics",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 143,
+          },
+          {
+            q: "What triggers a state transition in a Bloc?",
+            o: [
+              "A. A rebuild",
+              "B. An event being added",
+              "C. A hot reload",
+              "D. A widget dispose",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 144,
+          },
+          {
+            q: "Which testing package is commonly used to test Bloc logic?",
+            o: [
+              "A. flutter_test only",
+              "B. bloc_test",
+              "C. mockito only",
+              "D. integration_test",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 145,
+          },
+          {
+            q: "What is the purpose of `BlocProvider` in the widget tree?",
+            o: [
+              "A. Build layouts",
+              "B. Supply a Bloc instance to descendant widgets",
+              "C. Handle animations",
+              "D. Manage themes",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 146,
+          },
+          {
+            q: "Which principle does BLoC architecture emphasize between UI and logic?",
+            o: [
+              "A. Tight coupling",
+              "B. Separation of concerns",
+              "C. Shared mutable state",
+              "D. Direct database access",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 147,
+          },
+          {
+            q: "What is a common risk of overusing global Blocs across an app?",
+            o: [
+              "A. Faster performance",
+              "B. Increased coupling and harder testing",
+              "C. Simplified state",
+              "D. Reduced memory usage",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 148,
+          },
+          {
+            q: "Which method in a Bloc is used to react to incoming events?",
+            o: [
+              "A. build()",
+              "B. on<Event>()",
+              "C. initState()",
+              "D. dispose()",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 149,
+          },
+          {
+            q: "What is the purpose of a `Repository` when paired with BLoC?",
+            o: [
+              "A. Render widgets",
+              "B. Provide a data abstraction layer used by the Bloc",
+              "C. Manage animations",
+              "D. Store UI state directly",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 150,
+          },
+          {
+            q: "Why should side effects (like navigation) be handled in `BlocListener` rather than `BlocBuilder`?",
+            o: [
+              "A. BlocBuilder cannot access context",
+              "B. BlocBuilder can rebuild multiple times, causing repeated side effects",
+              "C. BlocListener is deprecated",
+              "D. There is no functional difference",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 151,
+          },
+          {
+            q: "What does `MultiBlocProvider` allow you to do?",
+            o: [
+              "A. Combine multiple themes",
+              "B. Provide multiple Blocs at once in the widget tree",
+              "C. Run multiple animations",
+              "D. Merge multiple databases",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 152,
+          },
+          {
+            q: "In BLoC, what typically represents a user action, like a button tap?",
+            o: ["A. State", "B. Event", "C. Widget", "D. Controller"],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 153,
+          },
+          {
+            q: "Which Flutter widget rebuilds only the parts of UI selected via a state property?",
+            o: [
+              "A. BlocBuilder",
+              "B. BlocSelector",
+              "C. Consumer",
+              "D. ValueListenableBuilder",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 154,
+          },
+          {
+            q: "What is the benefit of using `Equatable` with Bloc states?",
+            o: [
+              "A. Improves animations",
+              "B. Avoids unnecessary rebuilds by comparing state values, not references",
+              "C. Handles routing",
+              "D. Encrypts state data",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 155,
+          },
+          {
+            q: "Which layer should ideally not depend on Flutter widgets in a clean BLoC architecture?",
+            o: [
+              "A. Presentation layer",
+              "B. Business logic/domain layer",
+              "C. UI layer",
+              "D. Widget layer",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 156,
+          },
+          {
+            q: "What happens if an event is added to a Bloc after it has been closed?",
+            o: [
+              "A. It is queued for later",
+              "B. It throws an error/is ignored depending on implementation",
+              "C. It restarts the Bloc",
+              "D. It updates the UI silently",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 157,
+          },
+          {
+            q: "Which tool helps visualize state transitions during debugging?",
+            o: [
+              "A. DevTools",
+              "B. Hot reload",
+              "C. Emulator",
+              "D. Flutter doctor",
+            ],
+            a: "A",
+            source: "FlutterQuiz2",
+            id: 158,
+          },
+          {
+            q: "Why is it recommended to keep Bloc classes free of direct widget references?",
+            o: [
+              "A. To improve testability and reusability",
+              "B. To reduce app size",
+              "C. To speed up builds",
+              "D. To simplify themes",
+            ],
+            a: "A",
+            source: "FlutterQuiz2",
+            id: 159,
+          },
+          {
+            q: "What is the purpose of `close()` in a Bloc?",
+            o: [
+              "A. Build the UI",
+              "B. Release resources like stream controllers when the Bloc is no longer needed",
+              "C. Add a new event",
+              "D. Refresh the state",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 160,
+          },
+          {
+            q: "Which of the following is a valid use case for `Cubit` over `Bloc`?",
+            o: [
+              "A. Complex event-driven flows with multiple event types",
+              "B. Simple state changes without needing distinct events",
+              "C. Handling deep navigation stacks",
+              "D. Managing themes only",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 161,
+          },
+          {
+            q: "What does `context.read<T>()` do in a widget?",
+            o: [
+              "A. Rebuilds the widget on every change",
+              "B. Accesses a provided object without listening for changes",
+              "C. Deletes the state",
+              "D. Triggers navigation",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 162,
+          },
+          {
+            q: "What does `context.watch<T>()` do differently from `context.read<T>()`?",
+            o: [
+              "A. Nothing, they are identical",
+              "B. It subscribes the widget to rebuild on state changes",
+              "C. It only works with Cubits",
+              "D. It disables rebuilds",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 163,
+          },
+          {
+            q: "Why might a large app be split into multiple smaller Blocs instead of one large Bloc?",
+            o: [
+              "A. To reduce code readability",
+              "B. To improve maintainability and separation of concerns",
+              "C. To increase coupling",
+              "D. To slow down testing",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 164,
+          },
+          {
+            q: "Which Dart async construct does Bloc rely on internally to broadcast states?",
+            o: ["A. Future", "B. Stream", "C. Isolate", "D. Timer"],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 165,
+          },
+          {
+            q: "What is a common anti-pattern when using BLoC?",
+            o: [
+              "A. Keeping Blocs stateless internally",
+              "B. Putting UI logic directly inside the Bloc",
+              "C. Testing Blocs in isolation",
+              "D. Using Equatable for states",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 166,
+          },
+          {
+            q: "Which term describes a Bloc that manages authentication status app-wide?",
+            o: [
+              "A. Local Bloc",
+              "B. Global/App-level Bloc",
+              "C. Widget-only Bloc",
+              "D. Static Bloc",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 167,
+          },
+          {
+            q: "What is the recommended way to test a Bloc's sequence of emitted states?",
+            o: [
+              "A. Manually printing values",
+              "B. Using `bloc_test`'s expect-later state sequence matchers",
+              "C. Skipping tests for state",
+              "D. Testing only the UI",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 168,
+          },
+          {
+            q: "Why is dependency injection often used alongside BLoC?",
+            o: [
+              "A. To hardcode dependencies",
+              "B. To make Blocs easily testable and swappable",
+              "C. To increase coupling",
+              "D. To manage themes",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 169,
+          },
+          {
+            q: "What is the purpose of `BlocConsumer`?",
+            o: [
+              "A. Combines the behavior of BlocBuilder and BlocListener",
+              "B. Replaces BlocProvider entirely",
+              "C. Only used for navigation",
+              "D. Manages themes exclusively",
+            ],
+            a: "A",
+            source: "FlutterQuiz2",
+            id: 170,
+          },
+          {
+            q: 'Which of the following best describes "event-driven" architecture in BLoC?',
+            o: [
+              "A. UI directly modifies state",
+              "B. State changes are triggered by well-defined events",
+              "C. State changes happen randomly",
+              "D. Widgets manage their own business logic",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 171,
+          },
+          {
+            q: "What is a potential downside of not disposing Bloc/Cubit instances properly?",
+            o: [
+              "A. Faster app startup",
+              "B. Memory leaks and unexpected behavior",
+              "C. Improved performance",
+              "D. Simplified testing",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 172,
+          },
+          {
+            q: "Which pattern does the Repository layer typically follow to remain testable?",
+            o: [
+              "A. Direct database calls in UI",
+              "B. Interface-based abstraction with concrete implementations",
+              "C. Hardcoded values only",
+              "D. No abstraction needed",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 173,
+          },
+          {
+            q: "Why is version control important when working with BLoC-based projects in a team?",
+            o: [
+              "A. It only manages UI",
+              "B. It tracks and manages changes to code collaboratively",
+              "C. It replaces testing",
+              "D. It manages themes",
+            ],
+            a: "B",
+            source: "FlutterQuiz2",
+            id: 174,
+          },
+          {
+            q: "Which method saves an integer in SharedPreferences?",
+            o: ["A. saveInt()", "B. putInt()", "C. setInt()", "D. writeInt()"],
+            a: "C",
+            source: "SP26",
+            id: 175,
+          },
+          {
+            q: "What is the purpose of the Flutter SDK?",
+            o: [
+              "A. To store application data permanently",
+              "B. To provide tools and libraries for Flutter development",
+              "C. To deploy applications directly to app stores",
+              "D. To replace the operating system of a device",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 176,
+          },
+          {
+            q: "What is the primary role of widgets in Flutter?",
+            o: [
+              "A. Managing databases",
+              "B. Describing the user interface",
+              "C. Handling network requests",
+              "D. Compiling Dart code",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 177,
+          },
+          {
+            q: "Why is logout functionality important?",
+            o: [
+              "A. Free memory",
+              "B. End user session securely",
+              "C. Improve UI",
+              "D. Change theme",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 178,
+          },
+          {
+            q: "Which keyword is used in Dart to pause execution until a Future completes?",
+            o: ["A. async", "B. await", "C. future", "D. delay"],
+            a: "B",
+            source: "SP26",
+            id: 179,
+          },
+          {
+            q: "Which Flutter service simplifies authentication implementation?",
+            o: [
+              "A. sqflite",
+              "B. Firebase Authentication",
+              "C. Provider",
+              "D. http",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 180,
+          },
+          {
+            q: "What is one of the main advantages of Flutter?",
+            o: [
+              "A. Requires separate codebases for Android and iOS",
+              "B. Uses JavaScript as its primary language",
+              "C. Enables building apps from a single codebase for multiple platforms",
+              "D. Only supports mobile platforms",
+            ],
+            a: "C",
+            source: "SP26",
+            id: 181,
+          },
+          {
+            q: "What format is most commonly used in REST APIs?",
+            o: ["A. XML", "B. CSV", "C. JSON", "D. Binary"],
+            a: "C",
+            source: "SP26",
+            id: 182,
+          },
+          {
+            q: "What is the main concept behind navigation in Flutter using the Navigator widget?",
+            o: [
+              "A. Screens are arranged in a grid layout",
+              "B. Screens are managed using a stack (push and pop)",
+              "C. Screens are loaded randomly",
+              "D. Screens are replaced automatically without control",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 183,
+          },
+          {
+            q: "What is the main limitation of SharedPreferences?",
+            o: [
+              "A. Cannot persist data",
+              "B. Only works on web",
+              "C. Not suitable for large or complex data",
+              "D. Requires SQL queries",
+            ],
+            a: "C",
+            source: "SP26",
+            id: 184,
+          },
+          {
+            q: "What design principle improves form usability?",
+            o: [
+              "A. Long forms",
+              "B. Minimal validation",
+              "C. Clear labels and feedback",
+              "D. Hidden errors",
+            ],
+            a: "C",
+            source: "SP26",
+            id: 185,
+          },
+          {
+            q: "Which practice improves authentication security?",
+            o: [
+              "A. Storing passwords locally",
+              "B. Encrypting credentials",
+              "C. Using HTTP",
+              "D. Hardcoding tokens",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 186,
+          },
+          {
+            q: "Why should navigation logic be well-structured?",
+            o: [
+              "A. Reduce UI size",
+              "B. Improve maintainability",
+              "C. Increase speed",
+              "D. Avoid widgets",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 187,
+          },
+          {
+            q: "What is the purpose of onSaved callback?",
+            o: [
+              "A. Validate input",
+              "B. Store form values",
+              "C. Reset form",
+              "D. Display errors",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 188,
+          },
+          {
+            q: "Which feature of Dart helps prevent null reference errors at compile time?",
+            o: [
+              "A. Dynamic typing",
+              "B. Hot reload",
+              "C. Null safety",
+              "D. Asynchronous execution",
+            ],
+            a: "C",
+            source: "SP26",
+            id: 189,
+          },
+          {
+            q: "Which sliver is commonly used to display a scrolling list?",
+            o: [
+              "A. SliverGrid",
+              "B. SliverList",
+              "C. SliverAppBar",
+              "D. SliverFillRemaining",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 190,
+          },
+          {
+            q: "In Flutter architecture, which layer is responsible for rendering and uses C++ with Skia?",
+            o: [
+              "A. Framework Layer",
+              "B. Engine Layer",
+              "C. Embedder Layer",
+              "D. Widget Layer",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 191,
+          },
+          {
+            q: "Which curve creates a bounce effect?",
+            o: ["A. linear", "B. easeIn", "C. bounceOut", "D. decelerate"],
+            a: "C",
+            source: "SP26",
+            id: 192,
+          },
+          {
+            q: "Which programming language is used to develop Flutter applications?",
+            o: ["A. Kotlin", "B. Swift", "C. Dart", "D. JavaScript"],
+            a: "C",
+            source: "SP26",
+            id: 193,
+          },
+          {
+            q: "According to the testing pyramid, which type of test should be used the least?",
+            o: [
+              "A. Unit Tests",
+              "B. Widget Tests",
+              "C. Integration Tests",
+              "D. Debug Tests",
+            ],
+            a: "C",
+            source: "SP26",
+            id: 194,
+          },
+          {
+            q: "Which component is required to run and test Flutter applications on a local machine?",
+            o: [
+              "A. A cloud hosting service",
+              "B. A physical server",
+              "C. An emulator or physical device",
+              "D. A database management system",
+            ],
+            a: "C",
+            source: "SP26",
+            id: 195,
+          },
+          {
+            q: "Which package is commonly used for Flutter testing?",
+            o: ["A. flutter_test", "B. provider", "C. http", "D. sqflite"],
+            a: "A",
+            source: "SP26",
+            id: 196,
+          },
+          {
+            q: "What type of data is SharedPreferences best suited for?",
+            o: [
+              "A. Large datasets",
+              "B. Simple primitive values",
+              "C. Images",
+              "D. Complex objects",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 197,
+          },
+          {
+            q: "What is the main purpose of app architecture?",
+            o: [
+              "A. UI design",
+              "B. Organize code structure",
+              "C. Improve animations",
+              "D. Handle API",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 198,
+          },
+          {
+            q: "What does Navigator.pop() do?",
+            o: [
+              "A. Open a new screen",
+              "B. Close current screen",
+              "C. Restart app",
+              "D. Clear stack",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 199,
+          },
+          {
+            q: "What is the purpose of building a release version of a Flutter app?",
+            o: [
+              "A. Debug code",
+              "B. Prepare app for distribution",
+              "C. Test UI",
+              "D. Change theme",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 200,
+          },
+          {
+            q: "When should you prefer Provider over setState()?",
+            o: [
+              "A. For simple UI updates",
+              "B. For global or shared state",
+              "C. For animations",
+              "D. For navigation",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 201,
+          },
+          {
+            q: "What advantage does a single codebase provide in Flutter development?",
+            o: [
+              "A. Higher memory usage",
+              "B. Simpler UI customization",
+              "C. Reduced development and maintenance effort",
+              "D. Automatic database synchronization",
+            ],
+            a: "C",
+            source: "SP26",
+            id: 202,
+          },
+          {
+            q: "Which widget is commonly used as the root of a Flutter app?",
+            o: ["A. Scaffold", "B. MaterialApp", "C. Container", "D. Column"],
+            a: "B",
+            source: "SP26",
+            id: 203,
+          },
+          {
+            q: "What does BLoC stand for?",
+            o: [
+              "A. Business Logic Component",
+              "B. Backend Logic Controller",
+              "C. Build Logic Component",
+              "D. Basic Logic Controller",
+            ],
+            a: "A",
+            source: "SP26",
+            id: 204,
+          },
+          {
+            q: "What happens if form validation fails?",
+            o: [
+              "A. Form submits",
+              "B. Error messages are shown",
+              "C. App crashes",
+              "D. Data is saved",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 205,
+          },
+          {
+            q: "Which status code indicates resource not found?",
+            o: ["A. 200", "B. 301", "C. 404", "D. 500"],
+            a: "C",
+            source: "SP26",
+            id: 206,
+          },
+          {
+            q: "Which widget is most commonly used to arrange children vertically?",
+            o: ["A. Row", "B. Stack", "C. Column", "D. Expanded"],
+            a: "C",
+            source: "SP26",
+            id: 207,
+          },
+          {
+            q: "Which test runs fastest?",
+            o: [
+              "A. Integration test",
+              "B. Widget test",
+              "C. Unit test",
+              "D. Manual test",
+            ],
+            a: "C",
+            source: "SP26",
+            id: 208,
+          },
+          {
+            q: "Why should API responses be mapped to models?",
+            o: [
+              "A. Reduce JSON size",
+              "B. Ensure type safety",
+              "C. Speed up UI",
+              "D. Improve theme",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 209,
+          },
+          {
+            q: "What is the main goal of performance optimization in Flutter apps?",
+            o: [
+              "A. Improve UI colors",
+              "B. Ensure smooth and responsive UI",
+              "C. Reduce code size",
+              "D. Add features",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 210,
+          },
+          {
+            q: "Which widget is an example of implicit animation?",
+            o: [
+              "A. AnimatedContainer",
+              "B. AnimationController",
+              "C. Tween",
+              "D. Ticker",
+            ],
+            a: "A",
+            source: "SP26",
+            id: 211,
+          },
+          {
+            q: "What causes unnecessary widget rebuilds?",
+            o: [
+              "A. State changes",
+              "B. Overusing setState()",
+              "C. Using Provider",
+              "D. Using const widgets",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 212,
+          },
+          {
+            q: "What happens if a non-nullable variable is not initialized in Dart?",
+            o: [
+              "A. The app runs normally",
+              "B. A runtime exception occurs",
+              "C. A compile-time error occurs",
+              "D. The value becomes null automatically",
+            ],
+            a: "C",
+            source: "SP26",
+            id: 213,
+          },
+          {
+            q: "What problem does state hoisting address?",
+            o: [
+              "A. API delay",
+              "B. State duplication",
+              "C. Theme conflict",
+              "D. Navigation error",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 214,
+          },
+          {
+            q: "Which pattern is commonly used for scalable state management?",
+            o: ["A. MVC", "B. BLoC", "C. Singleton", "D. Factory"],
+            a: "B",
+            source: "SP26",
+            id: 215,
+          },
+          {
+            q: "Which input type improves user experience for email fields?",
+            o: [
+              "A. TextInputType.number",
+              "B. TextInputType.emailAddress",
+              "C. TextInputType.text",
+              "D. TextInputType.url",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 216,
+          },
+          {
+            q: "Which widget allows both scrolling and app bars to interact?",
+            o: [
+              "A. ListView",
+              "B. CustomScrollView",
+              "C. GridView",
+              "D. Stack",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 217,
+          },
+          {
+            q: "Which HTTP method is used to send new data to a server?",
+            o: ["A. GET", "B. DELETE", "C. POST", "D. HEAD"],
+            a: "C",
+            source: "SP26",
+            id: 218,
+          },
+          {
+            q: "What does the final keyword indicate in Dart?",
+            o: [
+              "A. The variable can be reassigned later",
+              "B. The variable value is fixed after assignment",
+              "C. The variable is global",
+              "D. The variable is private",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 219,
+          },
+          {
+            q: "What is the role of v-sync in Flutter?",
+            o: [
+              "A. Sync data",
+              "B. Optimize animation resources",
+              "C. Control layout",
+              "D. Handle navigation",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 220,
+          },
+          {
+            q: "What is the main goal of testing in Flutter apps?",
+            o: [
+              "A. Improve UI design",
+              "B. Ensure app quality and correctness",
+              "C. Speed up builds",
+              "D. Manage state",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 221,
+          },
+          {
+            q: "Why is understanding the widget lifecycle important?",
+            o: [
+              "A. Improve API performance",
+              "B. Manage UI updates correctly",
+              "C. Deploy apps faster",
+              "D. Reduce file size",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 222,
+          },
+          {
+            q: "When is it most appropriate to customize themes in a Flutter app?",
+            o: [
+              "A. After API integration",
+              "B. During UI/UX design phase",
+              "C. Only at deployment",
+              "D. Only for testing",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 223,
+          },
+          {
+            q: "Why is passing context important in navigation?",
+            o: [
+              "A. Access theme",
+              "B. Access Navigator",
+              "C. Access state",
+              "D. Access layout",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 224,
+          },
+          {
+            q: "Which widget rebuilds automatically during animation?",
+            o: [
+              "A. AnimatedBuilder",
+              "B. FutureBuilder",
+              "C. StreamBuilder",
+              "D. LayoutBuilder",
+            ],
+            a: "A",
+            source: "SP26",
+            id: 225,
+          },
+          {
+            q: "What is the main purpose of the Container widget?",
+            o: [
+              "A. Navigation",
+              "B. Layout, styling, and positioning",
+              "C. State management",
+              "D. Network requests",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 226,
+          },
+          {
+            q: "Which practice improves API security?",
+            o: [
+              "A. Hardcoding keys",
+              "B. Using HTTPS",
+              "C. Ignoring errors",
+              "D. Using globals",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 227,
+          },
+          {
+            q: "What happens when setState() is called in a StatefulWidget?",
+            o: [
+              "A. The app restarts",
+              "B. The widget tree is rebuilt",
+              "C. Data is saved permanently",
+              "D. Navigation occurs",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 228,
+          },
+          {
+            q: "Which pattern separates storage logic from UI?",
+            o: [
+              "A. MVC",
+              "B. Repository pattern",
+              "C. Singleton",
+              "D. Factory",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 229,
+          },
+          {
+            q: "Why is the widget tree considered immutable?",
+            o: [
+              "A. Widgets cannot be removed",
+              "B. Widgets are recreated instead of modified",
+              "C. Widgets are stored permanently",
+              "D. Widgets cannot contain data",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 230,
+          },
+          {
+            q: "What triggers a rebuild of a widget?",
+            o: [
+              "A. Navigation only",
+              "B. Calling setState()",
+              "C. Restarting the IDE",
+              "D. Changing the SDK",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 231,
+          },
+          {
+            q: "Which widget is suitable for displaying items in a grid layout?",
+            o: ["A. ListView", "B. Column", "C. GridView", "D. Stack"],
+            a: "C",
+            source: "SP26",
+            id: 232,
+          },
+          {
+            q: "What is the primary responsibility of the setState() method?",
+            o: [
+              "A. Persist data",
+              "B. Trigger widget rebuild",
+              "C. Navigate screens",
+              "D. Handle async tasks",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 233,
+          },
+          {
+            q: "Which widget is primarily used as the structural foundation of a Material Design screen in Flutter?",
+            o: ["A. Container", "B. Scaffold", "C. Column", "D. ListView"],
+            a: "B",
+            source: "SP26",
+            id: 234,
+          },
+          {
+            q: "What does the Padding widget do?",
+            o: [
+              "A. Adds space inside a widget",
+              "B. Adds space between widgets",
+              "C. Aligns widgets",
+              "D. Controls widget size",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 235,
+          },
+          {
+            q: "Which snippet correctly awaits a Future inside an async function?",
+            o: [
+              "A. var data = awaitFuture(fetchData());",
+              "B. var data = fetchData(await);",
+              "C. await var data = fetchData();",
+              "D. var data = await fetchData();",
+            ],
+            a: "D",
+            source: "SP26",
+            id: 236,
+          },
+          {
+            q: "Why is version control critical?",
+            o: [
+              "A. UI changes",
+              "B. Track and manage code changes",
+              "C. Improve animations",
+              "D. Store data",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 237,
+          },
+          {
+            q: "What is refresh token used for?",
+            o: [
+              "A. UI refresh",
+              "B. Extend session without re-login",
+              "C. Theme update",
+              "D. Navigation reset",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 239,
+          },
+          {
+            q: "What does REST stand for?",
+            o: [
+              "A. Remote State Transfer",
+              "B. Representational State Transfer",
+              "C. Reactive Service Transport",
+              "D. Request State Transfer",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 240,
+          },
+          {
+            q: "Which practice improves authentication security?",
+            o: [
+              "A. Storing passwords locally",
+              "B. Encrypting credentials",
+              "C. Using HTTP",
+              "D. Hardcoding tokens",
+            ],
+            a: "B",
+            source: "SP26",
+            id: 241,
+          },
+          {
+            q: "What does status code 200 indicate?",
+            o: [
+              "A. Client error",
+              "B. Server error",
+              "C. Success",
+              "D. Redirect",
+            ],
+            a: "C",
+            source: "SP26",
+            id: 241,
+          },
+        ],
+        STORAGE_KEY = "prm393_quiz_state_v1",
+        SHORTCUT_NOTE_COLLAPSED_KEY = "prm393_shortcut_note_collapsed",
+        rawQuestions =
+          void 0 !== questions && Array.isArray(questions)
+            ? questions
+            : "undefined" != typeof QUESTIONS && Array.isArray(QUESTIONS)
+              ? QUESTIONS
+              : [],
+        source = rawQuestions.map((e, t) => {
+          const a = e.answer ?? e.a ?? "",
+            i = Array.isArray(a) ? a : String(a).split(""),
+            s = Array.isArray(e.options)
+              ? e.options
+              : Array.isArray(e.o)
+                ? e.o.map((e) => {
+                    const t = String(e),
+                      a = t.indexOf(". ");
+                    return a > 0
+                      ? { key: t.slice(0, a).trim(), text: t.slice(a + 2) }
+                      : { key: "", text: t };
+                  })
+                : Object.entries(e.options || {}).map(([e, t]) => ({
+                    key: e,
+                    text: t,
+                  }));
+          return {
+            id: e.id ?? t + 1,
+            question: e.question || e.q || "",
+            options: s,
+            answer: i,
+            type: e.type || (i.length > 1 ? "multiple" : "single"),
+            note: e.note || "",
+            sourcePage: e.sourcePage || "",
+            needsReview: Boolean(e.needsReview),
+          };
+        }),
+        $ = (e) => document.getElementById(e),
+        els = {
+          totalCount: $("totalCount"),
+          scoreSummary: $("scoreSummary"),
+          practiceModeBtn: $("practiceModeBtn"),
+          wrongModeBtn: $("wrongModeBtn"),
+          examModeBtn: $("examModeBtn"),
+          searchInput: $("searchInput"),
+          filterSelect: $("filterSelect"),
+          practicePartWrap: $("practicePartWrap"),
+          practicePartSelect: $("practicePartSelect"),
+          examSetup: $("examSetup"),
+          examPartSelect: $("examPartSelect"),
+          startExamBtn: $("startExamBtn"),
+          progressText: $("progressText"),
+          progressBar: $("progressBar"),
+          modeLabel: $("modeLabel"),
+          questionIndex: $("questionIndex"),
+          bookmarkBtn: $("bookmarkBtn"),
+          questionText: $("questionText"),
+          questionNote: $("questionNote"),
+          options: $("options"),
+          checkAnswerBtn: $("checkAnswerBtn"),
+          feedback: $("feedback"),
+          prevBtn: $("prevBtn"),
+          randomBtn: $("randomBtn"),
+          showAnswerBtn: $("showAnswerBtn"),
+          nextBtn: $("nextBtn"),
+          sidePrevBtn: $("sidePrevBtn"),
+          sideNextBtn: $("sideNextBtn"),
+          shortcutNote: $("shortcutNote"),
+          shortcutNoteToggle: $("shortcutNoteToggle"),
+          shortcutNoteBody: $("shortcutNoteBody"),
+          submitExamBtn: $("submitExamBtn"),
+          resetBtn: $("resetBtn"),
+        },
+        defaultState = {
+          mode: "practice",
+          filter: "all",
+          query: "",
+          index: 0,
+          answers: {},
+          checked: {},
+          bookmarks: [],
+          practicePart: 0,
+          examPart: -1,
+          examIds: [],
+          examSubmitted: !1,
+        };
+      function createDefaultState() {
+        return {
+          ...defaultState,
+          answers: {},
+          checked: {},
+          bookmarks: [],
+          examIds: [],
+        };
+      }
+      let state = loadState(),
+        currentList = [],
+        focusedOptionKey = "";
+      const EXAM_SCOPE_MIGRATION_KEY = `${STORAGE_KEY}_exam_scope_v2`;
+      if (localStorage.getItem(EXAM_SCOPE_MIGRATION_KEY) !== "1") {
+        state.examPart = -1;
+        localStorage.setItem(EXAM_SCOPE_MIGRATION_KEY, "1");
+      }
+      const QUESTIONS_PER_PART = 50;
+      function partCount() {
+        return Math.ceil(source.length / QUESTIONS_PER_PART);
+      }
+      function clampPartIndex(e) {
+        const t = partCount(),
+          a = Number(e);
+        return Number.isFinite(a) && 0 !== t
+          ? Math.min(Math.max(Math.trunc(a), 0), t - 1)
+          : 0;
+      }
+      function loadState() {
+        try {
+          const e = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+          return {
+            ...createDefaultState(),
+            ...e,
+            answers: { ...(e.answers || {}) },
+            checked: { ...(e.checked || {}) },
+            bookmarks: [...(e.bookmarks || [])],
+            examIds: [...(e.examIds || [])],
+          };
+        } catch {
+          return createDefaultState();
+        }
+      }
+      function saveState() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      }
+      function normalizeAnswer(e) {
+        return [...new Set(e || [])].map(String).sort().join("");
+      }
+      function isCorrect(e) {
+        return (
+          normalizeAnswer(state.answers[e.id]) === normalizeAnswer(e.answer)
+        );
+      }
+      function hasAnswered(e) {
+        return (
+          Array.isArray(state.answers[e.id]) && state.answers[e.id].length > 0
+        );
+      }
+      function isChecked(e) {
+        return Boolean(state.checked[e.id]);
+      }
+      function isAttempted(e) {
+        return hasAnswered(e) || isChecked(e);
+      }
+      function isBookmarked(e) {
+        return state.bookmarks.includes(e.id);
+      }
+      function getPartQuestions(e) {
+        const t = clampPartIndex(e) * QUESTIONS_PER_PART;
+        return source.slice(t, t + QUESTIONS_PER_PART);
+      }
+      function populatePartSelects() {
+        [els.practicePartSelect, els.examPartSelect].forEach((e) => {
+          e.innerHTML = "";
+          if (e === els.examPartSelect) {
+            const allOption = document.createElement("option");
+            allOption.value = "-1";
+            allOption.textContent = `Tất cả câu hỏi (${source.length} câu)`;
+            e.appendChild(allOption);
+          }
+          for (let t = 0; t < partCount(); t += 1) {
+            const a = t * QUESTIONS_PER_PART + 1,
+              i = Math.min((t + 1) * QUESTIONS_PER_PART, source.length),
+              s = document.createElement("option");
+            ((s.value = String(t)),
+              (s.textContent = `Part ${t + 1} · Câu ${a}–${i} (${i - a + 1} câu)`),
+              e.appendChild(s));
+          }
+        });
+      }
+      function questionMatches(e, t) {
+        return (
+          !e ||
+          [
+            t.id,
+            t.question,
+            t.note,
+            t.sourcePage,
+            ...t.options.map((e) => `${e.key} ${e.text}`),
+          ]
+            .join(" ")
+            .toLowerCase()
+            .includes(e.toLowerCase().trim())
+        );
+      }
+      function byFilter(e) {
+        return "correct" === state.filter
+          ? isChecked(e) && isCorrect(e)
+          : "wrong" === state.filter
+            ? isChecked(e) && !isCorrect(e)
+            : "unanswered" === state.filter
+              ? !isAttempted(e)
+              : "bookmarked" !== state.filter || isBookmarked(e);
+      }
+      function buildList() {
+        let e =
+          "practice" === state.mode
+            ? state.query.trim()
+              ? [...source]
+              : getPartQuestions(state.practicePart)
+            : [...source];
+        ("wrong" === state.mode &&
+          (e = e.filter((e) => isChecked(e) && !isCorrect(e))),
+          "exam" === state.mode
+            ? (e = state.examIds
+                .map((e) => source.find((t) => t.id === e))
+                .filter(Boolean))
+            : ((e = e.filter((e) => byFilter(e))),
+              (e = e.filter((e) => questionMatches(state.query, e)))),
+          (currentList = e),
+          state.index < 0 && (state.index = 0),
+          state.index >= currentList.length &&
+            (state.index = Math.max(0, currentList.length - 1)));
+      }
+      function currentQuestion() {
+        return currentList[state.index] || null;
+      }
+      function setMode(e) {
+        ((state.mode = e),
+          (state.index = 0),
+          (state.examSubmitted = !1),
+          "exam" === e && makeExam(),
+          saveState(),
+          render());
+      }
+      function makeExam() {
+        const questions =
+          state.examPart === -1
+            ? [...source]
+            : getPartQuestions(state.examPart);
+        const shuffled = shuffle([...questions]);
+        const selected =
+          state.examPart === -1
+            ? shuffled.slice(0, QUESTIONS_PER_PART)
+            : shuffled;
+        state.examIds = selected.map((question) => question.id);
+        state.index = 0;
+        state.examSubmitted = !1;
+      }
+      function shuffle(e) {
+        for (let t = e.length - 1; t > 0; t -= 1) {
+          const a = Math.floor(Math.random() * (t + 1));
+          [e[t], e[a]] = [e[a], e[t]];
+        }
+        return e;
+      }
+      function chooseOption(e) {
+        const t = currentQuestion();
+        if (!t || ("exam" === state.mode && state.examSubmitted)) return;
+        const a = state.answers[t.id] || [];
+        ("multiple" === t.type || t.answer.length > 1
+          ? ((state.answers[t.id] = a.includes(e)
+              ? a.filter((t) => t !== e)
+              : [...a, e]),
+            "exam" !== state.mode &&
+              state.answers[t.id].length >= t.answer.length &&
+              (state.checked[t.id] = !0))
+          : (state.answers[t.id] = [e]),
+          "exam" !== state.mode &&
+            "multiple" !== t.type &&
+            1 === t.answer.length &&
+            (state.checked[t.id] = !0),
+          saveState(),
+          render());
+      }
+      function confirmAnswer() {
+        const e = currentQuestion();
+        return !!e && ((state.checked[e.id] = !0), saveState(), render(), !0);
+      }
+      function showAnswer() {
+        confirmAnswer();
+      }
+      function submitExam() {
+        "exam" === state.mode &&
+          ((state.examSubmitted = !0),
+          currentList.forEach((e) => {
+            state.checked[e.id] = !0;
+          }),
+          saveState(),
+          render());
+      }
+      function resetProgress() {
+        if (
+          !confirm(
+            "Reset toàn bộ tiến độ, câu sai, bookmark và bài thi hiện tại?",
+          )
+        ) {
+          return;
+        }
+
+        const currentMode = state.mode;
+        const currentPart = state.practicePart;
+        const currentExamPart = state.examPart;
+
+        state = createDefaultState();
+
+        state.mode = currentMode;
+        state.practicePart = currentPart;
+        state.examPart = currentExamPart;
+
+        state.index = 0;
+
+        focusedOptionKey = "";
+
+        localStorage.removeItem(STORAGE_KEY);
+
+        els.practicePartSelect.value = String(currentPart);
+        els.examPartSelect.value = String(currentExamPart);
+
+        render();
+      }
+      function toggleBookmark() {
+        const e = currentQuestion();
+        e &&
+          (state.bookmarks.includes(e.id)
+            ? (state.bookmarks = state.bookmarks.filter((t) => t !== e.id))
+            : (state.bookmarks = [...state.bookmarks, e.id]),
+          saveState(),
+          render());
+      }
+      function move(e) {
+        ((focusedOptionKey = ""),
+          (state.index += e),
+          state.index < 0 && (state.index = 0),
+          state.index >= currentList.length &&
+            (state.index = currentList.length - 1),
+          saveState(),
+          render());
+      }
+      function randomQuestion() {
+        const shouldPickUnanswered =
+          "exam" === state.mode ||
+          ("practice" === state.mode &&
+            ("all" === state.filter || "unanswered" === state.filter));
+        const candidates = shouldPickUnanswered
+          ? currentList.filter((question) => !isAttempted(question))
+          : currentList;
+        const current = currentQuestion();
+        const pool = candidates.filter(
+          (question) => !current || question.id !== current.id,
+        );
+
+        if (!pool.length) {
+          if (shouldPickUnanswered) {
+            const currentIsUnanswered =
+              current &&
+              candidates.some((question) => question.id === current.id);
+            alert(
+              currentIsUnanswered
+                ? "Đây là câu chưa làm cuối cùng trong phạm vi hiện tại."
+                : "Bạn đã làm hết các câu hỏi trong phạm vi hiện tại.",
+            );
+          }
+          return;
+        }
+
+        focusedOptionKey = "";
+        const nextQuestion = pool[Math.floor(Math.random() * pool.length)];
+        state.index = currentList.findIndex(
+          (question) => question.id === nextQuestion.id,
+        );
+        saveState();
+        render();
+      }
+      function optionButtons() {
+        return [...els.options.querySelectorAll(".option")];
+      }
+      function focusOption(e) {
+        const t = optionButtons();
+        if (!t.length) return;
+        const a = t[(e + t.length) % t.length];
+        ((focusedOptionKey = a.dataset.optionKey || ""), a.focus());
+      }
+      function moveOptionFocus(e) {
+        const t = optionButtons();
+        if (!t.length) return;
+        const a = t.indexOf(document.activeElement);
+        focusOption(-1 === a ? (e > 0 ? 0 : t.length - 1) : a + e);
+      }
+      function chooseFocusedOption() {
+        const e = currentQuestion(),
+          t = document.activeElement;
+        return (
+          !(!e || !t?.classList?.contains("option")) &&
+          ((focusedOptionKey = t.dataset.optionKey || ""),
+          (state.answers[e.id] || []).includes(focusedOptionKey)
+            ? e.answer.length > 1 && !isChecked(e)
+              ? (confirmAnswer(), !0)
+              : (move(1), !0)
+            : (chooseOption(focusedOptionKey), !0))
+        );
+      }
+      function isTypingTarget(e) {
+        return (
+          e instanceof HTMLInputElement ||
+          e instanceof HTMLTextAreaElement ||
+          e instanceof HTMLSelectElement ||
+          e?.isContentEditable
+        );
+      }
+      function setShortcutNoteCollapsed(e) {
+        (els.shortcutNote.classList.toggle("collapsed", e),
+          (els.shortcutNoteToggle.textContent = e ? "Mở" : "Thu gọn"),
+          els.shortcutNoteToggle.setAttribute("aria-expanded", String(!e)),
+          els.shortcutNoteBody.setAttribute("aria-hidden", String(e)),
+          localStorage.setItem(SHORTCUT_NOTE_COLLAPSED_KEY, JSON.stringify(e)));
+      }
+      function handleKeyboardShortcuts(e) {
+        if (isTypingTarget(e.target) || e.altKey || e.ctrlKey || e.metaKey)
+          return;
+        const t = {
+          ArrowLeft: () => move(-1),
+          ArrowRight: () => move(1),
+          ArrowUp: randomQuestion,
+          ArrowDown: () => {
+            els.showAnswerBtn.classList.contains("hidden") || showAnswer();
+          },
+        }[e.key];
+        if (t) return (e.preventDefault(), void t());
+        if ("Enter" === e.key && chooseFocusedOption())
+          return void e.preventDefault();
+        const a = {
+          1: () => move(-1),
+          2: randomQuestion,
+          3: () => {
+            els.showAnswerBtn.classList.contains("hidden") || showAnswer();
+          },
+          4: () => move(1),
+        }[e.key];
+        a && (e.preventDefault(), a());
+      }
+      function render() {
+        (buildList(), renderShell());
+        const e = currentQuestion();
+        if (!e) return (renderEmpty(), void saveState());
+        (renderQuestion(e), saveState());
+      }
+      function renderShell() {
+        const e = source
+          .filter((e) => isChecked(e))
+          .filter((e) => isCorrect(e)).length;
+        ((els.totalCount.textContent = `${source.length} câu`),
+          (els.scoreSummary.textContent = `${e} đúng`),
+          els.practiceModeBtn.classList.toggle(
+            "active",
+            "practice" === state.mode,
+          ),
+          els.wrongModeBtn.classList.toggle("active", "wrong" === state.mode),
+          els.examModeBtn.classList.toggle("active", "exam" === state.mode),
+          els.practiceModeBtn.setAttribute(
+            "aria-selected",
+            String("practice" === state.mode),
+          ),
+          els.wrongModeBtn.setAttribute(
+            "aria-selected",
+            String("wrong" === state.mode),
+          ),
+          els.examModeBtn.setAttribute(
+            "aria-selected",
+            String("exam" === state.mode),
+          ),
+          els.examSetup.classList.toggle("hidden", "exam" !== state.mode),
+          els.practicePartWrap.classList.toggle(
+            "hidden",
+            "practice" !== state.mode,
+          ),
+          (els.practicePartSelect.value = String(state.practicePart)),
+          (els.examPartSelect.value = String(state.examPart)));
+        const t =
+          state.examPart === -1
+            ? Math.min(QUESTIONS_PER_PART, source.length)
+            : getPartQuestions(state.examPart).length;
+        ((els.startExamBtn.textContent = `Bắt đầu thi thử (${t} câu)`),
+          els.submitExamBtn.classList.toggle(
+            "hidden",
+            "exam" !== state.mode || state.examSubmitted,
+          ),
+          els.showAnswerBtn.classList.toggle(
+            "hidden",
+            "exam" === state.mode && !state.examSubmitted,
+          ));
+        const a = currentQuestion(),
+          i = Boolean(
+            "exam" !== state.mode &&
+            a &&
+            ("multiple" === a.type || a.answer.length > 1) &&
+            hasAnswered(a) &&
+            !isChecked(a),
+          );
+        (els.checkAnswerBtn.classList.toggle("hidden", !i),
+          els.searchInput.value !== state.query &&
+            (els.searchInput.value = state.query),
+          (els.filterSelect.value = state.filter),
+          (els.searchInput.disabled = "exam" === state.mode),
+          (els.filterSelect.disabled = "exam" === state.mode));
+        const s = currentList.filter((e) => hasAnswered(e)).length,
+          o = currentList.length;
+        ((els.progressText.textContent = `${s}/${o}`),
+          (els.progressBar.style.width = o ? (s / o) * 100 + "%" : "0%"),
+          (els.prevBtn.disabled = state.index <= 0 || 0 === o),
+          (els.sidePrevBtn.disabled = els.prevBtn.disabled),
+          (els.nextBtn.disabled = state.index >= o - 1 || 0 === o),
+          (els.sideNextBtn.disabled = els.nextBtn.disabled),
+          "exam" === state.mode
+            ? (els.modeLabel.textContent = state.examSubmitted
+                ? state.examPart === -1
+                  ? `Thi thử · Toàn bộ ngân hàng · Đã nộp bài`
+                  : `Thi thử · Part ${state.examPart + 1} · Đã nộp bài`
+                : state.examPart === -1
+                  ? `Thi thử · Toàn bộ ngân hàng`
+                  : `Thi thử · Part ${state.examPart + 1}`)
+            : "wrong" === state.mode
+              ? (els.modeLabel.textContent =
+                  "Ôn lại câu sai (toàn bộ ngân hàng)")
+              : (els.modeLabel.textContent = state.query.trim()
+                  ? "Luyện tập · Tìm kiếm toàn bộ ngân hàng"
+                  : `Luyện tập · Part ${state.practicePart + 1}`));
+      }
+      function renderEmpty() {
+        ((els.questionIndex.textContent = "Không có câu"),
+          (els.questionText.textContent = "Không có câu hỏi phù hợp."),
+          els.questionNote.classList.add("hidden"),
+          (els.options.innerHTML =
+            '<div class="empty">Đổi bộ lọc hoặc từ khóa để tiếp tục ôn.</div>'),
+          (els.feedback.className = "feedback info"),
+          (els.feedback.textContent =
+            "Không có dữ liệu trong danh sách hiện tại."),
+          els.bookmarkBtn.classList.remove("active"));
+      }
+      function renderQuestion(e) {
+        const t = state.answers[e.id] || [],
+          a = "exam" === state.mode ? state.examSubmitted : isChecked(e),
+          i = isCorrect(e);
+        if (
+          ((els.questionIndex.textContent = `Câu ${state.index + 1}/${currentList.length} · ID ${e.id}`),
+          (els.questionText.textContent = e.question),
+          els.bookmarkBtn.classList.toggle("active", isBookmarked(e)),
+          (els.bookmarkBtn.textContent = isBookmarked(e) ? "★" : "☆"),
+          (els.questionNote.textContent = e.note || ""),
+          els.questionNote.classList.toggle("hidden", !e.note),
+          (els.options.innerHTML = ""),
+          e.options.forEach((i) => {
+            const s = document.createElement("button");
+            ((s.className = "option"),
+              (s.type = "button"),
+              (s.dataset.optionKey = i.key),
+              t.includes(i.key) && s.classList.add("selected"),
+              a && e.answer.includes(i.key) && s.classList.add("correct"),
+              a &&
+                t.includes(i.key) &&
+                !e.answer.includes(i.key) &&
+                s.classList.add("wrong"));
+            const o = document.createElement("span");
+            ((o.className = "key"), (o.textContent = i.key));
+            const n = document.createElement("span");
+            ((n.className = "text"),
+              (n.textContent = i.text),
+              s.append(o, n),
+              s.addEventListener("click", () => {
+                ((focusedOptionKey = i.key), chooseOption(i.key));
+              }),
+              els.options.appendChild(s));
+          }),
+          renderFeedback(e, a, i, t),
+          focusedOptionKey)
+        ) {
+          const e = els.options.querySelector(
+            `.option[data-option-key="${focusedOptionKey}"]`,
+          );
+          e?.focus();
+        }
+      }
+      function renderFeedback(e, t, a, i) {
+        if (!t && "exam" === state.mode)
+          return (
+            (els.feedback.className = "feedback info"),
+            void (els.feedback.textContent =
+              e.answer.length > 1
+                ? "Câu nhiều đáp án. Có thể chọn nhiều lựa chọn."
+                : "Chọn một đáp án.")
+          );
+        if (!t && 0 === i.length)
+          return (
+            (els.feedback.className = "feedback info"),
+            void (els.feedback.textContent =
+              e.answer.length > 1
+                ? "Câu nhiều đáp án. Có thể chọn nhiều lựa chọn."
+                : "Chọn đáp án để kiểm tra ngay.")
+          );
+        if (!t)
+          return (
+            (els.feedback.className = "feedback info"),
+            void ("multiple" === e.type || e.answer.length > 1
+              ? (els.feedback.textContent = `Đã chọn ${i.length}/${e.answer.length} phương án. Chọn tiếp hoặc bấm ‘Kiểm tra đáp án’ để xem đúng/sai.`)
+              : (els.feedback.textContent =
+                  "Đã ghi nhận lựa chọn. Bấm Enter thêm một lần để xác nhận và hiện đáp án."))
+          );
+        const s = `Đáp án đúng: ${e.answer.join(", ")}`;
+        a
+          ? ((els.feedback.className = "feedback ok"),
+            (els.feedback.textContent = `Chính xác. ${s}`))
+          : ((els.feedback.className = "feedback bad"),
+            (els.feedback.textContent = `${i.length ? "Chưa đúng." : "Chưa chọn đáp án."} ${s}`));
+      }
+      function renderExamResult() {
+        const e = currentList.length,
+          t = currentList.filter((e) => isCorrect(e)).length;
+        ((els.feedback.className = "feedback ok"),
+          (els.feedback.textContent = `Kết quả thi thử: ${t}/${e} câu đúng.`));
+      }
+      if (
+        ((state.practicePart = clampPartIndex(state.practicePart)),
+        (state.examPart =
+          Number(state.examPart) === -1 ? -1 : clampPartIndex(state.examPart)),
+        els.practiceModeBtn.addEventListener("click", () =>
+          setMode("practice"),
+        ),
+        els.wrongModeBtn.addEventListener("click", () => setMode("wrong")),
+        els.examModeBtn.addEventListener("click", () => setMode("exam")),
+        els.practicePartSelect.addEventListener("change", (e) => {
+          ((state.practicePart = clampPartIndex(e.target.value)),
+            (state.index = 0),
+            saveState(),
+            render());
+        }),
+        els.examPartSelect.addEventListener("change", (e) => {
+          ((state.examPart =
+            Number(e.target.value) === -1
+              ? -1
+              : clampPartIndex(e.target.value)),
+            makeExam(),
+            saveState(),
+            render());
+        }),
+        els.searchInput.addEventListener("input", (e) => {
+          ((focusedOptionKey = ""),
+            (state.query = e.target.value),
+            (state.index = 0),
+            saveState(),
+            render());
+        }),
+        els.filterSelect.addEventListener("change", (e) => {
+          ((state.filter = e.target.value),
+            (state.index = 0),
+            saveState(),
+            render());
+        }),
+        els.startExamBtn.addEventListener("click", () => {
+          setMode("exam");
+        }),
+        els.prevBtn.addEventListener("click", () => move(-1)),
+        els.nextBtn.addEventListener("click", () => move(1)),
+        els.sidePrevBtn.addEventListener("click", () => move(-1)),
+        els.sideNextBtn.addEventListener("click", () => move(1)),
+        els.randomBtn.addEventListener("click", randomQuestion),
+        els.showAnswerBtn.addEventListener("click", showAnswer),
+        els.checkAnswerBtn.addEventListener("click", confirmAnswer),
+        els.submitExamBtn.addEventListener("click", () => {
+          (submitExam(), renderExamResult());
+        }),
+        els.resetBtn.addEventListener("click", resetProgress),
+        els.bookmarkBtn.addEventListener("click", toggleBookmark),
+        els.shortcutNoteToggle.addEventListener("click", () => {
+          setShortcutNoteCollapsed(
+            !els.shortcutNote.classList.contains("collapsed"),
+          );
+        }),
+        document.addEventListener("keydown", handleKeyboardShortcuts),
+        populatePartSelects(),
+        setShortcutNoteCollapsed(
+          JSON.parse(
+            localStorage.getItem(SHORTCUT_NOTE_COLLAPSED_KEY) || "false",
+          ),
+        ),
+        render(),
+        "exam" === state.mode)
+      ) {
+        const e = (
+            state.examPart === -1 ? source : getPartQuestions(state.examPart)
+          ).map((e) => e.id),
+          t = state.examIds || [];
+        (t.length ===
+          Math.min(
+            state.examPart === -1 ? QUESTIONS_PER_PART : e.length,
+            e.length,
+          ) &&
+          t.every((t) => e.includes(t)) &&
+          new Set(t).size === e.length) ||
+          (makeExam(), saveState());
+      }
+      render();
+    </script>
+  </body>
+</html>

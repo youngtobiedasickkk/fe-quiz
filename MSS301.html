@@ -1,0 +1,2991 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>MSS301 Quiz</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    />
+    <style>
+      :root {
+        --bg: #f4f6fb;
+        --panel: #ffffff;
+        --text: #172033;
+        --muted: #657085;
+        --line: #dce3ef;
+        --brand: #2563eb;
+        --brand-soft: #eaf1ff;
+        --ok: #15803d;
+        --ok-soft: #e9f8ef;
+        --bad: #b91c1c;
+        --bad-soft: #fff0f0;
+        --warn: #a16207;
+        --warn-soft: #fff8df;
+        --shadow: 0 16px 42px rgba(26, 42, 74, 0.09);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Arial, "Segoe UI", system-ui, sans-serif;
+        color: var(--text);
+        background: var(--bg);
+      }
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+      button {
+        border: 0;
+        cursor: pointer;
+      }
+      .app {
+        width: min(1120px, calc(100% - 28px));
+        margin: 18px auto 32px;
+      }
+      .back-home {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 9999;
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        padding: 10px 16px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: #fff;
+        color: var(--text);
+        font-size: 13px;
+        font-weight: 800;
+        text-decoration: none;
+        box-shadow: 0 4px 14px rgba(22, 36, 62, 0.08);
+        transition: all 0.2s ease;
+      }
+      .back-home:hover {
+        color: var(--brand);
+        border-color: var(--brand);
+        transform: translateX(-3px);
+      }
+      .back-home i {
+        font-size: 13px;
+      }
+      @media (max-width: 600px) {
+        .back-home {
+          top: 12px;
+          left: 12px;
+          padding: 9px 12px;
+          font-size: 12px;
+        }
+      }
+      .controls,
+      .exam-setup,
+      .progress-panel,
+      .question-card,
+      .topbar {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+      }
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        padding: 20px;
+      }
+      .eyebrow {
+        margin: 0 0 4px;
+        color: var(--brand);
+        font-size: 13px;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+      h1,
+      h2,
+      p {
+        margin-top: 0;
+      }
+      h1 {
+        margin-bottom: 0;
+        font-size: 30px;
+        line-height: 1.15;
+      }
+      .summary {
+        display: grid;
+        gap: 4px;
+        min-width: 120px;
+        text-align: right;
+        color: var(--muted);
+      }
+      .summary strong {
+        color: var(--text);
+        font-size: 18px;
+      }
+      .controls {
+        display: grid;
+        grid-template-columns: minmax(0, 6fr) minmax(0, 3fr) minmax(100px, 1fr);
+        gap: 14px;
+        align-items: end;
+        margin-top: 14px;
+        padding: 14px;
+      }
+      .mode-tabs {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+        width: 100%;
+        grid-column: 1/-1;
+      }
+      .actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .mode-tabs button {
+        width: 100%;
+        min-width: 0;
+      }
+      button {
+        cursor: pointer;
+        transition:
+          background-color 0.16s ease,
+          color 0.16s ease,
+          box-shadow 0.16s ease,
+          transform 0.16s ease;
+      }
+      button:hover:not(:disabled) {
+        filter: brightness(0.96);
+        box-shadow: 0 2px 8px rgba(26, 42, 74, 0.12);
+      }
+      button:active:not(:disabled) {
+        transform: translateY(1px);
+      }
+      button:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+      .actions button,
+      .danger,
+      .icon-button,
+      .mode-tabs button,
+      .primary,
+      .submit {
+        min-height: 42px;
+        border-radius: 8px;
+        padding: 10px 14px;
+        color: var(--text);
+        background: #edf1f7;
+        font-weight: 700;
+      }
+      .mode-tabs button.active,
+      .primary,
+      .submit {
+        color: #fff;
+        background: var(--brand);
+      }
+      .mode-tabs button.active {
+        box-shadow:
+          inset 0 0 0 2px rgba(255, 255, 255, 0.28),
+          0 3px 10px rgba(37, 99, 235, 0.22);
+      }
+      .search,
+      .select-wrap {
+        display: grid;
+        gap: 6px;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .search,
+      .select-wrap {
+        min-width: 0;
+      }
+      .search input,
+      .select-wrap select {
+        width: 100%;
+        min-height: 42px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 9px 12px;
+        color: var(--text);
+        background: #fff;
+        outline: 0;
+      }
+      .search input:focus,
+      .select-wrap select:focus {
+        border-color: var(--brand);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+      }
+      .exam-setup {
+        display: grid;
+        grid-template-columns: minmax(250px, 0.9fr) minmax(0, 1.1fr);
+        gap: clamp(18px, 3vw, 34px);
+        align-items: center;
+        margin-top: 14px;
+        padding: 20px 22px;
+        border-left: 4px solid var(--brand);
+      }
+      .exam-setup-copy {
+        min-width: 0;
+      }
+      .exam-setup-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        margin-bottom: 7px;
+        color: var(--brand);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+      }
+      .exam-setup-kicker::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--brand);
+      }
+      .exam-setup h2 {
+        margin-bottom: 6px;
+        font-size: 21px;
+        line-height: 1.25;
+      }
+      .exam-setup p {
+        max-width: 440px;
+        margin-bottom: 0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      .exam-setup-controls {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 14px;
+        align-items: end;
+        min-width: 0;
+      }
+      .exam-setup-controls .select-wrap {
+        min-width: 0;
+        gap: 7px;
+      }
+      .exam-setup-controls .select-wrap select {
+        min-height: 46px;
+      }
+      #startExamBtn {
+        min-height: 46px;
+        min-width: 208px;
+        margin: 0;
+        padding: 11px 17px;
+        border-radius: 9px;
+        white-space: nowrap;
+        box-shadow: 0 3px 8px rgba(37, 99, 235, 0.18);
+      }
+      #startExamBtn:hover:not(:disabled) {
+        filter: none;
+        background: #1d4ed8;
+        box-shadow: 0 5px 12px rgba(37, 99, 235, 0.24);
+        transform: translateY(-1px);
+      }
+      .progress-panel {
+        margin-top: 14px;
+        padding: 14px;
+      }
+      .progress-meta {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        color: var(--muted);
+        font-weight: 700;
+      }
+      .progress-track {
+        height: 10px;
+        margin-top: 10px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: #e8edf5;
+      }
+      #progressBar {
+        width: 0;
+        height: 100%;
+        border-radius: inherit;
+        background: var(--brand);
+        transition: width 0.2s ease;
+      }
+      .quiz {
+        margin-top: 14px;
+      }
+      .question-card {
+        padding: 20px;
+      }
+      .question-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        color: var(--muted);
+        font-weight: 800;
+      }
+      .icon-button {
+        width: 44px;
+        padding: 0;
+        font-size: 24px;
+        line-height: 1;
+      }
+      .icon-button.active {
+        color: #7c2d12;
+        background: #ffedd5;
+      }
+      #questionText {
+        margin: 18px 0 12px;
+        font-size: 24px;
+        line-height: 1.45;
+
+        white-space: pre-wrap;
+        tab-size: 4;
+      }
+      .note {
+        padding: 10px 12px;
+        border-radius: 8px;
+        color: var(--warn);
+        background: var(--warn-soft);
+        line-height: 1.5;
+      }
+      .options {
+        display: grid;
+        gap: 10px;
+        margin-top: 14px;
+      }
+      .option {
+        display: grid;
+        grid-template-columns: 38px 1fr;
+        gap: 10px;
+        align-items: start;
+        width: 100%;
+        min-height: 54px;
+        border: 2px solid var(--line);
+        border-radius: 8px;
+        padding: 12px;
+        color: var(--text);
+        background: #fff;
+        text-align: left;
+      }
+      .option:focus-visible,
+      .option:hover {
+        border-color: #9bb8f5;
+      }
+      .option:focus-visible {
+        outline: 3px solid rgba(37, 99, 235, 0.24);
+        outline-offset: 2px;
+      }
+      .option .key {
+        display: grid;
+        place-items: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        color: var(--brand);
+        background: var(--brand-soft);
+        font-weight: 800;
+      }
+      .option .text {
+        padding-top: 5px;
+        line-height: 1.45;
+      }
+      .option.selected {
+        border-color: var(--brand);
+        background: var(--brand-soft);
+      }
+      .option.correct {
+        border-color: var(--ok);
+        background: var(--ok-soft);
+      }
+      .option.correct .key {
+        color: #fff;
+        background: var(--ok);
+      }
+      .option.wrong {
+        border-color: var(--bad);
+        background: var(--bad-soft);
+      }
+      .option.wrong .key {
+        color: #fff;
+        background: var(--bad);
+      }
+      .feedback {
+        margin-top: 14px;
+        padding: 12px 14px;
+        border-radius: 8px;
+        font-weight: 800;
+        line-height: 1.45;
+      }
+      .feedback.ok {
+        color: var(--ok);
+        background: var(--ok-soft);
+      }
+      .feedback.bad {
+        color: var(--bad);
+        background: var(--bad-soft);
+      }
+      .feedback.info {
+        color: var(--brand);
+        background: var(--brand-soft);
+      }
+      .actions {
+        justify-content: space-between;
+        margin-top: 14px;
+      }
+      .actions button {
+        flex: 1;
+      }
+      .danger,
+      .submit {
+        width: 100%;
+        margin-top: 10px;
+        font-size: 16px;
+      }
+      .danger {
+        color: var(--bad);
+        background: var(--bad-soft);
+      }
+      .side-nav-button {
+        position: fixed;
+        top: 50%;
+        z-index: 20;
+        display: grid;
+        place-items: center;
+        width: 52px;
+        height: 72px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        color: var(--brand);
+        background: rgba(255, 255, 255, 0.94);
+        box-shadow: var(--shadow);
+        font-size: 34px;
+        font-weight: 900;
+        line-height: 1;
+        transform: translateY(-50%);
+      }
+      .side-nav-button:focus-visible,
+      .side-nav-button:hover {
+        border-color: #9bb8f5;
+        background: var(--brand-soft);
+      }
+      .side-nav-button:focus-visible {
+        outline: 3px solid rgba(37, 99, 235, 0.24);
+        outline-offset: 2px;
+      }
+      .side-nav-button:disabled {
+        opacity: 0.35;
+        cursor: not-allowed;
+      }
+      .side-nav-button.left {
+        left: 12px;
+      }
+      .side-nav-button.right {
+        right: 12px;
+      }
+      .shortcut-note {
+        position: fixed;
+        top: 12px;
+        right: 12px;
+        z-index: 18;
+        width: min(240px, calc(100vw - 24px));
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 10px 12px;
+        color: var(--muted);
+        background: rgba(255, 255, 255, 0.96);
+        box-shadow: var(--shadow);
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1.45;
+      }
+      .shortcut-note-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        color: var(--text);
+        font-size: 13px;
+      }
+      .shortcut-note-toggle {
+        min-height: 28px;
+        border-radius: 6px;
+        padding: 4px 8px;
+        color: var(--brand);
+        background: var(--brand-soft);
+        font-size: 12px;
+        font-weight: 800;
+      }
+      .shortcut-note-toggle:focus-visible {
+        outline: 3px solid rgba(37, 99, 235, 0.24);
+        outline-offset: 2px;
+      }
+      .shortcut-note-body {
+        display: grid;
+        gap: 3px;
+        margin-top: 6px;
+      }
+      .shortcut-note.collapsed {
+        width: auto;
+        padding: 8px;
+      }
+      .shortcut-note.collapsed .shortcut-note-body {
+        display: none;
+      }
+      .shortcut-note kbd {
+        display: inline-grid;
+        place-items: center;
+        min-width: 22px;
+        min-height: 20px;
+        margin: 0 2px;
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        padding: 1px 5px;
+        color: var(--brand);
+        background: var(--brand-soft);
+        font: inherit;
+        font-weight: 800;
+      }
+      .empty {
+        padding: 22px;
+        color: var(--muted);
+        text-align: center;
+      }
+      .hidden {
+        display: none !important;
+      }
+      .note {
+        white-space: pre-line;
+      }
+      @media (max-width: 760px) {
+        .app {
+          width: min(100% - 18px, 1120px);
+          margin-top: 10px;
+        }
+        .controls,
+        .exam-setup,
+        .topbar {
+          grid-template-columns: 1fr;
+        }
+        .exam-setup {
+          gap: 18px;
+          padding: 18px;
+        }
+        .exam-setup-controls {
+          grid-template-columns: minmax(0, 1fr) auto;
+        }
+        #startExamBtn {
+          min-width: 190px;
+        }
+        .topbar {
+          display: grid;
+        }
+        .summary {
+          text-align: left;
+        }
+        h1 {
+          font-size: 26px;
+        }
+        #questionText {
+          font-size: 20px;
+        }
+        .mode-tabs button {
+          flex: 1;
+        }
+        .actions {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+        }
+        .side-nav-button {
+          width: 42px;
+          height: 58px;
+          font-size: 28px;
+        }
+        .side-nav-button.left {
+          left: 6px;
+        }
+        .side-nav-button.right {
+          right: 6px;
+        }
+        .shortcut-note {
+          top: auto;
+          right: 6px;
+          bottom: 6px;
+          width: min(230px, calc(100vw - 12px));
+          font-size: 11px;
+        }
+      }
+      @media (max-width: 480px) {
+        .exam-setup-controls {
+          grid-template-columns: 1fr;
+          gap: 10px;
+        }
+        #startExamBtn {
+          width: 100%;
+          min-width: 0;
+        }
+      }
+      @media (max-width: 420px) {
+        .controls,
+        .exam-setup,
+        .progress-panel,
+        .question-card,
+        .topbar {
+          padding: 12px;
+        }
+        .option {
+          grid-template-columns: 34px 1fr;
+          padding: 10px;
+        }
+        .actions {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a href="./index.html" class="back-home">
+      <i class="fa-solid fa-arrow-left"></i> <span>Quay lại</span>
+    </a>
+    <main class="app">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">MSS301</p>
+          <h1>Quiz</h1>
+        </div>
+        <div class="summary">
+          <span id="totalCount">150 câu</span>
+          <strong id="scoreSummary">0 đúng</strong>
+        </div>
+      </header>
+      <section class="controls" aria-label="Điều khiển màn hình">
+        <div class="mode-tabs" role="tablist" aria-label="Chế độ">
+          <button
+            id="practiceModeBtn"
+            class="active"
+            type="button"
+            role="tab"
+            aria-selected="true"
+          >
+            Luyện tập
+          </button>
+          <button
+            id="wrongModeBtn"
+            type="button"
+            role="tab"
+            aria-selected="false"
+          >
+            Câu sai
+          </button>
+          <button
+            id="examModeBtn"
+            type="button"
+            role="tab"
+            aria-selected="false"
+          >
+            Thi thử
+          </button>
+        </div>
+        <label class="search">
+          <span>Tìm kiếm</span>
+          <input
+            id="searchInput"
+            type="search"
+            placeholder="Nhập từ khóa, đáp án, số câu..."
+            autocomplete="off"
+          />
+        </label>
+        <label id="practicePartWrap" class="select-wrap">
+          <span>Part luyện tập</span>
+          <select
+            id="practicePartSelect"
+            aria-label="Chọn part luyện tập"
+          ></select>
+        </label>
+        <label class="select-wrap">
+          <span>Lọc</span>
+          <select id="filterSelect">
+            <option value="all">Tất cả</option>
+            <option value="correct">Câu đúng</option>
+            <option value="wrong">Câu sai</option>
+            <option value="unanswered">Chưa làm</option>
+            <option value="bookmarked">Bookmark</option>
+          </select>
+        </label>
+      </section>
+      <section id="examSetup" class="exam-setup hidden" aria-label="Thi thử">
+        <div class="exam-setup-copy">
+          <span class="exam-setup-kicker">Chế độ kiểm tra</span>
+          <h2>Thi thử</h2>
+          <p>
+            Làm toàn bộ câu hỏi trong Part đã chọn. Part cuối có thể ít hơn 50
+            câu.
+          </p>
+        </div>
+        <div class="exam-setup-controls">
+          <label class="select-wrap">
+            <span>Part thi thử</span>
+            <select id="examPartSelect" aria-label="Chọn part thi thử"></select>
+          </label>
+          <button id="startExamBtn" class="primary" type="button">
+            Bắt đầu thi thử
+          </button>
+        </div>
+      </section>
+      <section class="progress-panel">
+        <div class="progress-meta">
+          <span id="modeLabel">Luyện tập câu</span>
+          <span id="progressText">0/0</span>
+        </div>
+        <div class="progress-track"><div id="progressBar"></div></div>
+      </section>
+      <section class="quiz">
+        <article class="question-card">
+          <div class="question-head">
+            <span id="questionIndex">Câu 1</span>
+            <button
+              id="bookmarkBtn"
+              class="icon-button"
+              type="button"
+              title="Bookmark câu này"
+              aria-label="Bookmark câu này"
+            >
+              ?
+            </button>
+          </div>
+          <h2 id="questionText">Đang tải câu hỏi...</h2>
+          <p id="questionNote" class="note hidden"></p>
+          <div id="options" class="options" aria-label="Các phương án"></div>
+          <button id="checkAnswerBtn" class="submit hidden" type="button">
+            Kiểm tra đáp án
+          </button>
+          <div id="feedback" class="feedback hidden" role="status"></div>
+        </article>
+        <nav class="actions" aria-label="Chuyển câu">
+          <button id="prevBtn" type="button" title="Phím 1">1. Trước</button>
+          <button id="randomBtn" type="button" title="Phím 2">2. Random</button>
+          <button id="showAnswerBtn" type="button" title="Phím 3">
+            3. Hiện đáp án
+          </button>
+          <button id="nextBtn" type="button" title="Phím 4">4. Tiếp</button>
+        </nav>
+        <button id="submitExamBtn" class="submit hidden" type="button">
+          Nộp bài
+        </button>
+        <button id="resetBtn" class="danger" type="button">
+          Reset tiến độ
+        </button>
+      </section>
+    </main>
+    <button
+      id="sidePrevBtn"
+      class="side-nav-button left"
+      type="button"
+      title="Cau truoc"
+      aria-label="Cau truoc"
+    >
+      ‹
+    </button>
+    <button
+      id="sideNextBtn"
+      class="side-nav-button right"
+      type="button"
+      title="Cau tiep"
+      aria-label="Cau tiep"
+    >
+      ›
+    </button>
+    <aside
+      id="shortcutNote"
+      class="shortcut-note"
+      aria-label="Huong dan phim nhanh"
+    >
+      <div class="shortcut-note-head">
+        <strong>Phím nhanh</strong>
+        <button
+          id="shortcutNoteToggle"
+          class="shortcut-note-toggle"
+          type="button"
+          aria-expanded="true"
+        >
+          Thu gọn
+        </button>
+      </div>
+      <div id="shortcutNoteBody" class="shortcut-note-body">
+        <div><kbd>←</kbd> Trước · <kbd>→</kbd> Tiếp</div>
+        <div><kbd>↑</kbd> Random · <kbd>↓</kbd> Hiện đáp án</div>
+        <div>
+          <kbd>1</kbd> Trước · <kbd>2</kbd> Random · <kbd>3</kbd> Đáp án ·
+          <kbd>4</kbd> Tiếp
+        </div>
+        <div>
+          <kbd>Enter</kbd> 1 lần xác nhận chọn đáp án · 2 lần chuyển câu
+        </div>
+        <div>Nhiều đáp án: chọn đủ rồi <kbd>Enter</kbd> xác nhận</div>
+      </div>
+    </aside>
+    <script>
+      const questions = [
+          {
+            q: 'In an OAuth 2.0 flow for "Login with Google" on your e-commerce site, what is the purpose of defining scopes like email and profile?',
+            o: [
+              "A. To define the scope of variables in your Java code.",
+              "B. To request specific permissions from the user to access their Google email and profile information.",
+              "C. To limit the number of users who can access the application.",
+              "D. To define the security packages to import.",
+            ],
+            a: "B",
+          },
+          {
+            q: 'What is the role of a "refresh token" in a secure e-commerce application?',
+            o: [
+              "A. It is a short-lived token used for every API request.",
+              "B. It is a long-lived token used to securely obtain a new, short-lived access token without requiring the user to log in again.",
+              "C. It is used to refresh the product catalog page.",
+              "D. It is an alternative to a user's password.",
+            ],
+            a: "B",
+          },
+          {
+            q: "Which of the following is a primary characteristic of cloud computing, allowing users to rapidly provision and release resources?",
+            o: [
+              "A. Low latency",
+              "B. Physical security",
+              "C. Rapid elasticity",
+              "D. Static capacity",
+            ],
+            a: "C",
+          },
+          {
+            q: "Which GCP service is a fully managed, serverless platform for running containerized applications?",
+            o: [
+              "A. Google Compute Engine (GCE)",
+              "B. Google Cloud Storage (GCS)",
+              "C. Google Cloud Run",
+              "D. Google BigQuery",
+            ],
+            a: "C",
+          },
+          {
+            q: "Which Google Cloud Platform GCP service is ideal for deploying a simple Spring Boot microservice that needs to scale to zero when not in use, making it very cost-effective?",
+            o: [
+              "A. Google Compute Engine (GCE)",
+              "B. Google Kubernetes Engine (GKE)",
+              "C. Google Cloud Functions",
+              "D. Google App Engine Standard Environment",
+            ],
+            a: "D",
+          },
+          {
+            q: "In Google Cloud Platform GCP, what is the primary purpose of Google Cloud Storage (GCS)?",
+            o: [
+              "A. To run containerized applications.",
+              "B. To provide a scalable and durable object storage service for unstructured data like images, videos, and backups.",
+              "C. To manage and query large datasets with SQL.",
+              "D. To host virtual machine instances.",
+            ],
+            a: "B",
+          },
+          {
+            q: "To deploy a Spring Boot application packaged as a container image to GCP, what is the first step you must typically perform?",
+            o: [
+              "A. Push the container image to a container registry, such as Google Artifact Registry.",
+              "B. Create a new virtual machine manually.",
+              "C. Order a physical server from Google.",
+              "D. Rewrite the application in a different programming language.",
+            ],
+            a: "A",
+          },
+          {
+            q: "What problem does containerization, as implemented by Docker, primarily solve?",
+            o: [
+              'A. The "it works on my machine" problem by packaging an application with all its dependencies.',
+              "B. Slow internet connections for developers.",
+              "C. The need for writing code in multiple programming languages.",
+              "D. The high cost of physical hardware",
+            ],
+            a: "A",
+          },
+          {
+            q: "Which feature of Docker ensures that an application runs the same way regardless of the underlying environment?",
+            o: [
+              "A. Portability",
+              "B. High Availability",
+              "C. Automatic Scaling",
+              "D. Data Encryption",
+            ],
+            a: "A",
+          },
+          {
+            q: "What is a Docker Registry, such as Docker Hub?",
+            o: [
+              "A. A service that runs containers in production.",
+              "B. A local storage area for Docker images on a developer's machine.",
+              "C. A server-side application for storing and distributing Docker images.",
+              "D. A tool for monitoring the performance of containers.",
+            ],
+            a: "C",
+          },
+          {
+            q: "How does Docker benefit a microservices architecture?",
+            o: [
+              "A. By forcing all microservices to be written in the same language.",
+              "B. By allowing each microservice and its dependencies to be isolated and packaged independently.",
+              "C. By combining all microservices into a single, large container.",
+              "D. By eliminating the need for network communication between services.",
+            ],
+            a: "B",
+          },
+          {
+            q: "To build a Docker image from a Dockerfile in the current directory, what is the correct command?",
+            o: [
+              "A. docker run.",
+              "B. docker build -t my-app:latest.",
+              "C. docker push my-app",
+              "D. docker create-image my-app.",
+            ],
+            a: "B",
+          },
+          {
+            q: "You would choose Cloud Run over Google Kubernetes Engine (GKE) when:",
+            o: [
+              "A. You need fine-grained control over the networking and node infrastructure.",
+              "B. You have a simple, stateless web application or API and want the platform to manage all infrastructure and scaling for you.",
+              "C. You need to run stateful workloads that require persistent disk attachments.",
+              "D. Your application is not containerized.",
+            ],
+            a: "B",
+          },
+          {
+            q: "When would you choose GKE over Cloud Run?",
+            o: [
+              "A. When you have a simple web app and want to minimize operational overhead.",
+              "B. When you need to orchestrate a complex system of multiple microservices with specific networking rules, stateful workloads, and fine-grained control.",
+              "C. When you want nt your application to scale to zero automatically.",
+              "D. When you do not want to use containers.",
+            ],
+            a: "B",
+          },
+          {
+            q: "What is the primary function of Google Container Registry (GCR) or its successor, Artifact Registry?",
+            o: [
+              "A. To run and scale containers.",
+              "B. To provide a private, secure repository for storing, managing, and distributing Docker container images.",
+              "C. To monitor the performance of running applications.",
+              "D. To write the code for a Spring Boot application.",
+            ],
+            a: "B",
+          },
+          {
+            q: "Your Spring Boot application requires a database password, which you don't want to bake into the container image. What is the recommended way to provide this secret to a Cloud Run service?",
+            o: [
+              "A. Pass it as a command-line argument in the deployment command.",
+              "B. Store it in a public text file in Cloud Storage.",
+              "C. Use Google Secret Manager and mount the secret as an environment variable or a volume in the Cloud Run service.",
+              "D. Hardcode it directly in the application.properties file.",
+            ],
+            a: "C",
+          },
+          {
+            q: "What is the purpose of a Kubernetes Deployment object in a GKE cluster?",
+            o: [
+              "A. To expose a running application to the network.",
+              "B. To provide persistent storage for an application.",
+              "C. To declaratively manage a set of identical Pods, ensuring a specified number of them are running and handling updates.",
+              "D. To store application secrets and configuration.",
+            ],
+            a: "C",
+          },
+          {
+            q: "A primary goal of using microservices is to:",
+            o: [
+              "A. Simplify the development of small, simple applications.",
+              "B. Increase the complexity of the deployment process.",
+              "C. Improve the scalability and agility of large, complex applications.",
+              "D. Enforce the use of a single technology stack across the organization.",
+            ],
+            a: "C",
+          },
+          {
+            q: "How do microservices typically communicate with each other?",
+            o: [
+              "A. By directly accessing each other's databases.",
+              "B. Through well-defined APIs, often using HTTP/REST or messaging queues.",
+              "C. By sharing the same memory space.",
+              "D. Through a centralized monolithic server.",
+            ],
+            a: "B",
+          },
+          {
+            q: "What is a significant challenge when adopting microservices compared to a monolith?",
+            o: [
+              "A. Reduced complexity in testing and monitoring.",
+              "B. The codebase is easier to understand in its entirety.",
+              "C. The team can stick to a single, familiar technology.",
+              "D. Increased operational complexity and the need for robust DevOps practices.",
+            ],
+            a: "D",
+          },
+          {
+            q: "Which component acts as the single entry point for all incoming requests from clients?",
+            o: [
+              "A. Service Registry",
+              "B. Message Broker",
+              "C. API Gateway",
+              "D. Container",
+            ],
+            a: "C",
+          },
+          {
+            q: "Which Java framework is most popular for building microservices due to its convention-over-configuration approach and embedded servers?",
+            o: [
+              "A. Spring Boot",
+              "B. Apache Struts",
+              "C. Hibernate",
+              "D. JavaFX",
+            ],
+            a: "A",
+          },
+          {
+            q: 'When modeling, the goal is "high cohesion" and "low coupling." What does "low coupling" mean?',
+            o: [
+              "A. Services should have many strong dependencies on each other.",
+              "B. Changes in one service should have minimal impact on other services.",
+              "C. All services should be deployed together.",
+              "D. All services should share a common data model and database.",
+            ],
+            a: "B",
+          },
+          {
+            q: "The Saga pattern is used to manage data consistency across services in the absence of distributed transactions. How does it work?",
+            o: [
+              "A. By locking all databases involved in a transaction simultaneously.",
+              "B. By breaking a transaction into a sequence of local transactions, with compensating transactions to undo changes if a step fails.",
+              "C. By using a single, monolithic database for all transactions.",
+              "D. By allowing services to directly update each other's databases.",
+            ],
+            a: "B",
+          },
+          {
+            q: "What is a key characteristic of synchronous communication, such as a REST API call?",
+            o: [
+              "A. The client sends a request and immediately continues with other work, without waiting for a response.",
+              "B. The client is blocked and waits for a response from the server before continuing.",
+              "C. It is primarily used for broadcasting events to multiple services.",
+              "D. It improves the resilience of the system by decoupling services.",
+            ],
+            a: "B",
+          },
+          {
+            q: "What is the primary role of an API Gateway in a microservices architecture?",
+            o: [
+              "A. To store data for all upstream services.",
+              "B. To act as a single entry point for all client requests, handling routing, composition, and authentication.",
+              "C. To manage the deployment and scaling of individual microservices.",
+              "D. To facilitate direct communication between internal microservices.",
+            ],
+            a: "B",
+          },
+          {
+            q: "The Database per Service pattern dictates that:",
+            o: [
+              "A. All microservices must share a single, centralized database.",
+              "B. Each microservice is responsible for its own private data store.",
+              "C. Services are not allowed to use a database and must be stateless.",
+              "D. A single database server hosts separate schemas for each microservice.",
+            ],
+            a: "B",
+          },
+          {
+            q: 'What triggers the transition from the "Closed" to the "Open" state in a Circuit Breaker?',
+            o: [
+              "A. A predefined period of inactivity.",
+              "B. The number of consecutive or recent failures exceeding a configured threshold.",
+              "C. A successful response from the downstream service.",
+              "D. A manual command from an administrator.",
+            ],
+            a: "B",
+          },
+          {
+            q: "There are two main types of service discovery: client-side and server-side. What is a characteristic of client-side discovery?",
+            o: [
+              "A. The client queries the service registry to get a list of service locations and then chooses one.",
+              "B. A router or load balancer queries the service registry and routes the client's request.",
+              "C. The client has hardcoded IP addresses for all services.",
+              "D. The service registry pushes updates directly to the client.",
+            ],
+            a: "A",
+          },
+          {
+            q: "A major benefit of applying CQRS is that it allows you to:",
+            o: [
+              "A. Simplify the overall architecture by using one data model.",
+              "B. Optimize the data schema and scaling characteristics independently for reads and writes.",
+              "C. Eliminate the need for a database.",
+              "D. Enforce strong transactional consistency across multiple services.",
+            ],
+            a: "B",
+          },
+          {
+            q: "The Strangler Fig pattern is primarily used for what purpose?",
+            o: [
+              "A. To manage distributed transactions.",
+              "B. To incrementally migrate a legacy monolithic application to a microservices architecture.",
+              "C. To monitor the health of running services.",
+              "D. To secure communication between services.",
+            ],
+            a: "B",
+          },
+          {
+            q: "Which of the following best describes Spring Cloud?",
+            o: [
+              "A. A framework for building monolithic Spring applications.",
+              "B. A project that provides tools for developers to quickly build common patterns in distributed systems.",
+              "C. A cloud platform for hosting Java applications.",
+              "D. A replacement for the core Spring Framework.",
+            ],
+            a: "B",
+          },
+          {
+            q: "Which Spring Cloud project provides a centralized, externalized configuration management for distributed systems?",
+            o: [
+              "A. Spring Cloud Gateway",
+              "B. Spring Cloud Config",
+              "C. Spring Cloud Sleuth",
+              "D. Spring Cloud Stream",
+            ],
+            a: "B",
+          },
+          {
+            q: "How does Spring Cloud enhance the resilience of a microservices architecture?",
+            o: [
+              "A. By forcing all services to share a single database.",
+              "B. By providing patterns like Circuit Breaker to handle service failures gracefully.",
+              "C. By ensuring all network connections are 100% reliable.",
+              "D. By removing the need for inter-service communication.",
+            ],
+            a: "B",
+          },
+          {
+            q: "What is a Predicate in the context of Spring Cloud Gateway?",
+            o: [
+              "A. A component that modifies the downstream request or response.",
+              "B. A rule that must be matched for a route to be applied, often based on the path, host, or headers.",
+              "C. A component that discovers other services.",
+              "D. A component that provides a fallback response.",
+            ],
+            a: "B",
+          },
+          {
+            q: 'Consider the following Java configuration for a route in Spring Cloud Gateway:\n@Bean\npublic RouteLocator custom RouteLocator (RouteLocatorBuilder builder) {\n\treturn builder.routes()\n\t\t.route("user_service_route", r -> r.path("/users/**")\n\t\t\t.uri("http://localhost:8081"))\n\t\t.build();\n}\nWhat does this configuration do?',
+            o: [
+              "A. It routes all traffic to http://localhost:8081.",
+              "B. It routes any request whose path starts with/users/ to a service at http://localhost:8081.",
+              "C. It adds a header to all requests for/users/.",
+              "D. It defines a fallback for the user service.",
+            ],
+            a: "B",
+          },
+          {
+            q: "In a distributed system, externalizing configuration helps to:",
+            o: [
+              "A. Tightly couple the application code with specific deployment environments.",
+              "B. Make it harder to manage different configurations for development, staging, and production.",
+              "C. Improve security by removing sensitive data like database passwords from the codebase.",
+              "D. Ensure that configuration can only be changed by recompiling the application.",
+            ],
+            a: "C",
+          },
+          {
+            q: 'The "Environment" abstraction in Spring Cloud Config represents:',
+            o: [
+              "A. The physical server hardware.",
+              "B. A collection of property sources for a specific application and profile.",
+              "C. The network location of the Config Server.",
+              "D. The operating system of the client.",
+            ],
+            a: "B",
+          },
+          {
+            q: "By default, the Config Server exposes its API over HTTP. What would be the standard URL for a client named user-service with a dev profile to fetch its configuration?",
+            o: [
+              "A. http://localhost:8888/user-service/dev",
+              "B. http://localhost:8888/dev/user-service",
+              "C. http://localhost:8888/config/user-service-dev",
+              "D. http://localhost:8888/user-service-dev.json",
+            ],
+            a: "A",
+          },
+          {
+            q: "Which of the following are considered the four key (ACID) properties of a transaction?",
+            o: [
+              "A. Atomicity, Concurrency, Integrity, Durability",
+              "B. Availability, Consistency, Isolation, Durability",
+              "C. Atomicity, Consistency, Isolation, Durability",
+              "D. Atomicity, Concurrency, Infallibility, Delegation",
+            ],
+            a: "C",
+          },
+          {
+            q: "What is the primary reason that managing transactions is more complex in a microservices architecture?",
+            o: [
+              "A. Microservices are always written in different programming languages.",
+              "B. A single business transaction often spans multiple services, each with its own private database.",
+              "C. Network communication between services is always 100% reliable.",
+              "D. Monolithic applications have better tools for transaction management.",
+            ],
+            a: "B",
+          },
+          {
+            q: "The CAP theorem states that a distributed system can only provide two out of three guarantees: Consistency, Availability, and Partition Tolerance. Which guarantee is typically prioritized in microservices, leading to challenges with transactions?",
+            o: [
+              "A. Consistency",
+              "B. Availability",
+              "C. Partition Tolerance",
+              "D. Durability",
+            ],
+            a: "B",
+          },
+          {
+            q: "The Two-Phase Commit (2PC) pattern provides strong consistency but is often avoided in microservices because:",
+            o: [
+              "A. It is too simple to implement.",
+              'B. It is a "chatty" protocol that requires locking resources, which reduces availability and performance.',
+              "C. It does not guarantee data consistency.",
+              "D. It only works with NoSQL databases.",
+            ],
+            a: "B",
+          },
+          {
+            q: 'In a "Choreography" based saga, how do services coordinate?',
+            o: [
+              "A. A central orchestrator service tells each service what to do.",
+              "B. Each service communicates directly with every other service in a synchronous manner.",
+              "C. Services coordinate by publishing and subscribing to events from a message broker, without a central controller.",
+              "D. All services update a shared state in a centralized database.",
+            ],
+            a: "C",
+          },
+          {
+            q: "Why is securing microservices fundamentally different from securing a traditional monolith?",
+            o: [
+              "A. Monoliths do not require any security measures.",
+              "B. Microservices have a much larger attack surface due to their distributed nature and numerous network endpoints.",
+              "C. Microservices run on a single server, making them easier to protect.",
+              "D. Security is handled automatically by container orchestration platforms.",
+            ],
+            a: "B",
+          },
+          {
+            q: 'The security goal of "Confidentiality" ensures that:',
+            o: [
+              "A. Data is accurate and has not been tampered with.",
+              "B. The system is available and operational when needed.",
+              "C. Information is not disclosed to unauthorized individuals, Jals, entities, entites, or or processes.",
+              "D. A user or service cannot deny having performed an action.",
+            ],
+            a: "C",
+          },
+          {
+            q: 'What is the purpose of the "Client Secret" in the OAuth 2.0 flow?',
+            o: [
+              "A. It is a public identifier shared with users.",
+              "B. It is a secret known only to the application and the authorization server, used to authenticate the application itself.",
+              "C. It is an access token used to call APIs on behalf of the user.",
+              "D. It is used to encrypt the user's password.",
+            ],
+            a: "B",
+          },
+          {
+            q: 'When creating an "OAuth 2.0 Client ID" in the Google Cloud Console, a developer must choose an "Application type". Which type should be selected for a traditional server-side application that will handle the OAuth flow on its backend?',
+            o: [
+              "A. TV and Limited Input devices",
+              "B. iOS",
+              "C. Web application",
+              "D. Android",
+            ],
+            a: "C",
+          },
+          {
+            q: 'To implement the "Read" (R in CRU operation for a user\'s order history, the Order service receives a GET /orders?userId=123 request. What is the most important security check the service must perform before returning the data?',
+            o: [
+              "A. Verify that the format of the userld is a valid number.",
+              "B. Ensure the authenticated user making the request is user 123 or an administrator with permission to view all orders.",
+              "C. Check if the database has an index on the userld column for faster reads.",
+              "D. Make sure the HTTP response code is 200 ΟΚ.",
+            ],
+            a: "B",
+          },
+          {
+            q: 'In an OAuth 2.0 "Login with Google" flow for your e-commerce site, what is the role of the "scope" parameter?',
+            o: [
+              "A. To define the CSS styles for the login button.",
+              "B. To specify which parts of the user's Google account (e.g., email, profile) the application is requesting permission to access.",
+              "C. To limit how many times a user can log in per day.",
+              "D. To tell Google which microservice the user should be redirected to.",
+            ],
+            a: "B",
+          },
+          {
+            q: "Which of the following is NOT a characteristic of a Monolithic application?",
+            o: [
+              "A. Single codebase",
+              "B. Tightly coupled components",
+              "C. Each service has its own database",
+              "D. Single executable/deployable unit",
+            ],
+            a: "C",
+          },
+          {
+            q: "Which of the following is a disadvantage of Monolithic architecture?",
+            o: [
+              "A. You must scale the entire application even if only one part is under high load",
+              "B. High operational cost due to distribution",
+              "C. Difficult to test end-to-end",
+              "D. Requires many containers for each component",
+            ],
+            a: "A",
+          },
+          {
+            q: "What are Microservices?",
+            o: [
+              "A. An architectural style where a large application is broken into small, independent, loosely coupled services",
+              "B. A type of distributed database",
+              "C. A CI/CD tool",
+              "D. A new programming language",
+            ],
+            a: "A",
+          },
+          {
+            q: "What is the main goal of splitting a Monolith into Microservices?",
+            o: [
+              "A. Faster development (continuous deployment) and easier scaling",
+              "B. Reducing the number of databases to manage",
+              "C. Completely eliminating APIs",
+              "D. Using only one programming language",
+            ],
+            a: "A",
+          },
+          {
+            q: "Which component acts as the central entry point for clients in a Microservices architecture?",
+            o: [
+              "A. API Gateway",
+              "B. Service Registry",
+              "C. Load Balancer",
+              "D. Message Broker",
+            ],
+            a: "A",
+          },
+          {
+            q: "Which component helps microservices locate each other dynamically to communicate?",
+            o: [
+              "A. Service Registry and Discovery",
+              "B. API Gateway",
+              "C. Circuit Breaker",
+              "D. Event Bus",
+            ],
+            a: "A",
+          },
+          {
+            q: "Compared to SOA (Service-Oriented Architecture), how does Microservices architecture differ?",
+            o: [
+              "A. Microservices use small, single-purpose services and lightweight protocols like REST",
+              "B. SOA always uses REST while Microservices always use SOAP",
+              "C. Microservices always share a common database",
+              "D. SOA is always faster than Microservices",
+            ],
+            a: "A",
+          },
+          {
+            q: "Which of the following is a challenge of Microservices mentioned in the slides?",
+            o: [
+              "A. Keeping the configuration up to date for many small components is challenging",
+              "B. Each service cannot be scaled independently",
+              "C. Services cannot use different technology stacks",
+              "D. All services must share one database",
+            ],
+            a: "A",
+          },
+          {
+            q: "Why do Microservices often lead to higher operational costs than a Monolith?",
+            o: [
+              "A. Each service runs in its own container, requiring extra RAM/disk and network bandwidth",
+              "B. Because Microservices don't support containerization",
+              "C. Because Microservices always require expensive licensing",
+              "D. Because Microservices cannot be deployed to the cloud",
+            ],
+            a: "A",
+          },
+          {
+            q: "When should you CHOOSE Monolithic architecture over Microservices?",
+            o: [
+              "A. When building a small application/proof-of-concept, with a small team, needing fast time-to-market",
+              "B. When you have multiple teams that can work independently",
+              "C. When you need to scale different parts of the application independently",
+              "D. When you need different technologies for different features",
+            ],
+            a: "A",
+          },
+          {
+            q: "Which tool is considered the most important when setting up a Microservices development environment (per the slides)?",
+            o: [
+              "A. Docker Desktop",
+              "B. Notepad++",
+              "C. Microsoft Excel",
+              "D. Photoshop",
+            ],
+            a: "A",
+          },
+          {
+            q: "What does the 'Single Responsibility - High Cohesion' principle mean when modeling microservices?",
+            o: [
+              "A. Each microservice should be responsible for one well-defined business capability",
+              "B. Each microservice must have at least 5 different functions",
+              "C. Each microservice must share a database with other services",
+              "D. Each microservice must be written in the same programming language",
+            ],
+            a: "A",
+          },
+          {
+            q: "How is Loose Coupling achieved in Microservices?",
+            o: [
+              "A. By hiding implementation details, avoiding shared libraries, and avoiding shared databases",
+              "B. By exposing all entity data between services",
+              "C. By using one shared database for all services",
+              "D. By calling directly into another service's database",
+            ],
+            a: "A",
+          },
+          {
+            q: "In Domain-Driven Design (DDD), what is an 'Aggregate'?",
+            o: [
+              "A. A cluster of related entities and value objects treated as a single unit of consistency",
+              "B. A type of NoSQL database",
+              "C. A single API endpoint",
+              "D. A testing tool",
+            ],
+            a: "A",
+          },
+          {
+            q: "In DDD, which object type has no distinct identity and is typically immutable?",
+            o: [
+              "A. Value Object",
+              "B. Entity",
+              "C. Aggregate Root",
+              "D. Repository",
+            ],
+            a: "A",
+          },
+          {
+            q: "What is the main benefit of the 'Database per Service' principle?",
+            o: [
+              "A. Data autonomy — each service manages and scales its own database independently",
+              "B. Reducing the number of services to deploy",
+              "C. Making it easy to join data across services",
+              "D. Eliminating the need for APIs entirely",
+            ],
+            a: "A",
+          },
+          {
+            q: "What is a disadvantage of Synchronous communication between microservices?",
+            o: [
+              "A. It can cause tight runtime coupling; the client is blocked if the service is slow/down",
+              "B. It cannot use HTTP/HTTPS",
+              "C. It is always faster than Asynchronous communication",
+              "D. It doesn't need a request-response pattern",
+            ],
+            a: "A",
+          },
+          {
+            q: "Which mechanisms are commonly used for Asynchronous communication?",
+            o: [
+              "A. Message Queue (RabbitMQ, Kafka) and Publish/Subscribe",
+              "B. Always synchronous gRPC",
+              "C. Never uses events",
+              "D. Only used when there is a single service",
+            ],
+            a: "A",
+          },
+          {
+            q: "Which function is NOT typically part of an API Gateway?",
+            o: [
+              "A. Long-term business data persistence",
+              "B. Request Routing",
+              "C. API Composition/Aggregation",
+              "D. Cross-cutting concerns like authentication and rate limiting",
+            ],
+            a: "A",
+          },
+          {
+            q: "What is a Backend for Frontend (BFF)?",
+            o: [
+              "A. A specialized type of API Gateway tailored to a specific client application",
+              "B. A database dedicated to the frontend",
+              "C. A CI/CD tool",
+              "D. A pattern for storing sessions",
+            ],
+            a: "A",
+          },
+          {
+            q: "What problem does the Saga Pattern solve in Microservices?",
+            o: [
+              "A. Managing data consistency for a business transaction that spans multiple services",
+              "B. Speeding up database queries",
+              "C. Completely replacing the API Gateway",
+              "D. Encrypting data in transit",
+            ],
+            a: "A",
+          },
+          {
+            q: "What are the two main ways to implement the Saga Pattern?",
+            o: [
+              "A. Choreography (services react to events) and Orchestration (a central coordinator)",
+              "B. Vertical and Horizontal",
+              "C. Public and Private",
+              "D. Sync and Batch",
+            ],
+            a: "A",
+          },
+          {
+            q: "In Testing Microservices, which type of test mocks/stubs external dependencies and tests a single component in isolation?",
+            o: [
+              "A. Unit Test",
+              "B. Integration Test",
+              "C. Contract Test",
+              "D. End-to-End Test",
+            ],
+            a: "A",
+          },
+          {
+            q: "What is the purpose of Contract Testing in Microservices?",
+            o: [
+              "A. To ensure the consumer and provider can communicate correctly according to an agreed API schema/message format",
+              "B. To measure the performance of the whole system",
+              "C. To test the user interface",
+              "D. To test network security",
+            ],
+            a: "A",
+          },
+          {
+            q: "In the Orchid Store demo application, what technology do the services use to communicate with each other?",
+            o: [
+              "A. Spring Cloud OpenFeign",
+              "B. Apache Kafka",
+              "C. GraphQL",
+              "D. SOAP",
+            ],
+            a: "A",
+          },
+          {
+            q: "How many main states does the Circuit Breaker have?",
+            o: [
+              "A. 3 (Closed, Open, Half-Open)",
+              "B. 2 (On, Off)",
+              "C. 4 (Init, Wait, Commit, Abort)",
+              "D. 5 (Created, Running, Paused, Stopped, Deleted)",
+            ],
+            a: "A",
+          },
+          {
+            q: "In the 'Open' state of a Circuit Breaker, what happens?",
+            o: [
+              "A. All requests to the remote service are blocked immediately and a fallback response is returned ('fail fast')",
+              "B. Requests are still sent normally to the remote service",
+              "C. Only one trial request is sent",
+              "D. The Circuit Breaker is fully disabled",
+            ],
+            a: "A",
+          },
+          {
+            q: "In the 'Half-Open' state, what does the Circuit Breaker do?",
+            o: [
+              "A. It allows a single trial request through to check if the service has recovered",
+              "B. It blocks all requests permanently",
+              "C. It allows all requests through normally",
+              "D. It clears all error logs",
+            ],
+            a: "A",
+          },
+          {
+            q: "In Spring Cloud, which library is most recommended today for implementing Circuit Breaker?",
+            o: [
+              "A. Resilience4j",
+              "B. Netflix Hystrix",
+              "C. Alibaba Sentinel",
+              "D. Apache Camel",
+            ],
+            a: "A",
+          },
+          {
+            q: "What are the two main parts of Service Discovery?",
+            o: [
+              "A. Service Registry and the Registration & Discovery mechanism",
+              "B. Load Balancer and Firewall",
+              "C. API Gateway and Database",
+              "D. Circuit Breaker and Bulkhead",
+            ],
+            a: "A",
+          },
+          {
+            q: "In Client-Side Service Discovery, who is responsible for selecting an instance and load balancing?",
+            o: [
+              "A. The client itself (based on the list obtained from the service registry)",
+              "B. An intermediary router/load balancer",
+              "C. The database server",
+              "D. A single central API Gateway",
+            ],
+            a: "A",
+          },
+          {
+            q: "In Server-Side Service Discovery, what does the client communicate with directly?",
+            o: [
+              "A. An intermediary router/load balancer/API Gateway, unaware of the service registry",
+              "B. The service registry directly",
+              "C. Each service instance directly",
+              "D. The database directly",
+            ],
+            a: "A",
+          },
+          {
+            q: "What role does Netflix Eureka play in Spring Cloud?",
+            o: [
+              "A. Service Registry for Service Discovery — services register and send periodic heartbeats",
+              "B. An API Gateway",
+              "C. A Circuit Breaker library",
+              "D. A container management tool",
+            ],
+            a: "A",
+          },
+          {
+            q: "What does CQRS stand for?",
+            o: [
+              "A. Command Query Responsibility Segregation",
+              "B. Central Query Routing System",
+              "C. Client Query Resource Service",
+              "D. Consistent Queue Replication Strategy",
+            ],
+            a: "A",
+          },
+          {
+            q: "In CQRS, which component is responsible for creating/updating/deleting data?",
+            o: [
+              "A. Command (and Command Handler)",
+              "B. Query (and Query Handler)",
+              "C. Read Model",
+              "D. Event Store",
+            ],
+            a: "A",
+          },
+          {
+            q: "How does the Event Sourcing Pattern store data?",
+            o: [
+              "A. It stores a sequence of events instead of just the current state",
+              "B. It stores only the final state and discards history",
+              "C. It doesn't store any data",
+              "D. It stores a single snapshot only",
+            ],
+            a: "A",
+          },
+          {
+            q: "What is the main benefit of Event Sourcing in a distributed system?",
+            o: [
+              "A. It provides a full audit trail and allows reconstructing past states",
+              "B. It reduces the number of services needed",
+              "C. It completely eliminates the need for a database",
+              "D. It speeds up writes without needing to store events",
+            ],
+            a: "A",
+          },
+          {
+            q: "What is the Strangler Fig Pattern used for?",
+            o: [
+              "A. Incrementally replacing a legacy Monolith with Microservices instead of a big-bang rewrite",
+              "B. Increasing network speed between services",
+              "C. Encrypting sensitive data",
+              "D. Reducing the number of API endpoints",
+            ],
+            a: "A",
+          },
+          {
+            q: "What are the three main phases of the Strangler Fig Pattern?",
+            o: [
+              "A. Intercept (Transform), Reroute (Co-exist), Eliminate",
+              "B. Create, Update, Delete",
+              "C. Open, Half-Open, Closed",
+              "D. Design, Build, Deploy",
+            ],
+            a: "A",
+          },
+          {
+            q: "How does the Bulkhead Pattern help a Microservices system?",
+            o: [
+              "A. It isolates resources between components so a failure in one part doesn't affect others",
+              "B. It speeds up database queries",
+              "C. It completely eliminates the need for Circuit Breaker",
+              "D. It merges all services into a single service",
+            ],
+            a: "A",
+          },
+          {
+            q: "What is a disadvantage of the Bulkhead Pattern?",
+            o: [
+              "A. It can cause resource underutilization (fragmentation) due to static partitioning",
+              "B. It cannot be used together with Circuit Breaker",
+              "C. It only works with NoSQL databases",
+              "D. It cannot be configured",
+            ],
+            a: "A",
+          },
+          {
+            q: "What is the Access Token Pattern (e.g., JWT) used for in Security Patterns for microservices?",
+            o: [
+              "A. Authenticating and authorizing requests between clients and microservices without repeatedly querying the auth server",
+              "B. Encrypting the entire database",
+              "C. Replacing the API Gateway",
+              "D. Speeding up the network",
+            ],
+            a: "A",
+          },
+          {
+            q: "What is Spring Cloud, fundamentally?",
+            o: [
+              "A. A set of libraries integrated with Spring Boot to build distributed systems, not a runtime platform",
+              "B. An operating system dedicated to cloud computing",
+              "C. A type of NoSQL database",
+              "D. A new programming language",
+            ],
+            a: "A",
+          },
+          {
+            q: "Which Spring Cloud component solves the Service Discovery problem?",
+            o: [
+              "A. Eureka",
+              "B. Config Server",
+              "C. Gateway",
+              "D. Resilience4j",
+            ],
+            a: "A",
+          },
+          {
+            q: "Which Spring Cloud component is responsible for centralized/externalized configuration?",
+            o: ["A. Config Server", "B. Eureka", "C. Zuul", "D. Sleuth"],
+            a: "A",
+          },
+          {
+            q: "What is Spring Cloud Gateway built on, enabling non-blocking and scalable behavior?",
+            o: [
+              "A. Spring WebFlux (Project Reactor)",
+              "B. Traditional Spring MVC",
+              "C. Synchronous Servlet API",
+              "D. JDBC",
+            ],
+            a: "A",
+          },
+          {
+            q: "What is Spring Cloud OpenFeign used for?",
+            o: [
+              "A. Simplifying HTTP calls to other microservices using a declarative REST client",
+              "B. Centralized configuration management",
+              "C. Providing a UI to test APIs",
+              "D. Completely replacing the database",
+            ],
+            a: "A",
+          },
+          {
+            q: "What capability does Spring Cloud Sleuth provide?",
+            o: [
+              "A. Distributed tracing to track the flow of requests across microservices",
+              "B. Circuit breaking",
+              "C. Service discovery",
+              "D. Centralized configuration storage",
+            ],
+            a: "A",
+          },
+          {
+            q: "In the Spring Cloud Netflix stack, which component is the (legacy) API Gateway/reverse proxy?",
+            o: ["A. Zuul", "B. Ribbon", "C. Hystrix", "D. Eureka"],
+            a: "A",
+          },
+          {
+            q: "What is the function of Ribbon in Spring Cloud Netflix?",
+            o: [
+              "A. Client-side load balancer that distributes requests across instances",
+              "B. Circuit breaker",
+              "C. Service registry",
+              "D. API Gateway",
+            ],
+            a: "A",
+          },
+          {
+            q: "What is the main advantage of using Spring Cloud API Gateway?",
+            o: [
+              "A. It simplifies client interaction and centralizes cross-cutting concerns",
+              "B. It completely removes the need for security",
+              "C. It doesn't require routing configuration",
+              "D. It reduces the number of microservices needed",
+            ],
+            a: "A",
+          },
+          {
+            q: "What is the biggest disadvantage of an API Gateway?",
+            o: [
+              "A. It can become a Single Point of Failure if not designed for high availability",
+              "B. It cannot handle routing",
+              "C. It doesn't support load balancing",
+              "D. It is incompatible with Spring Boot",
+            ],
+            a: "A",
+          },
+          {
+            q: "What are the two main components of Spring Cloud Config?",
+            o: [
+              "A. Config Server and Config Client",
+              "B. Eureka Server and Eureka Client",
+              "C. API Gateway and Load Balancer",
+              "D. Producer and Consumer",
+            ],
+            a: "A",
+          },
+          {
+            q: "Which annotation enables the Config Server in a Spring Boot application?",
+            o: [
+              "A. @EnableConfigServer",
+              "B. @EnableEurekaServer",
+              "C. @EnableDiscoveryClient",
+              "D. @EnableConfigClient",
+            ],
+            a: "A",
+          },
+          {
+            q: "Where does the Config Server typically fetch configuration files from?",
+            o: [
+              "A. A Git repository (or Subversion, file system)",
+              "B. Only from RAM memory",
+              "C. Only from Redis",
+              "D. Only from Kafka",
+            ],
+            a: "A",
+          },
+          {
+            q: "Which annotation is required on a bean for Spring Cloud Config's 'Dynamic Configuration Update' feature?",
+            o: [
+              "A. @RefreshScope",
+              "B. @Transactional",
+              "C. @EnableEurekaClient",
+              "D. @Bean",
+            ],
+            a: "A",
+          },
+          {
+            q: "Which property specifies the Config Server's URL in a Config Client?",
+            o: [
+              "A. spring.cloud.config.uri",
+              "B. spring.datasource.url",
+              "C. server.port",
+              "D. eureka.client.serviceUrl",
+            ],
+            a: "A",
+          },
+          {
+            q: "Which annotation is used to enable a Eureka Server?",
+            o: [
+              "A. @EnableEurekaServer",
+              "B. @EnableConfigServer",
+              "C. @EnableDiscoveryClient",
+              "D. @EnableFeignClients",
+            ],
+            a: "A",
+          },
+          {
+            q: "Which annotation/dependency allows a microservice to register with the Eureka Server?",
+            o: [
+              "A. @EnableDiscoveryClient with the spring-cloud-starter-netflix-eureka-client dependency",
+              "B. @EnableConfigServer",
+              "C. @EnableCircuitBreaker",
+              "D. @RestController",
+            ],
+            a: "A",
+          },
+          {
+            q: "What is the default port for the Eureka Server?",
+            o: ["A. 8761", "B. 8080", "C. 8888", "D. 9090"],
+            a: "A",
+          },
+          {
+            q: "What does ACID stand for?",
+            o: [
+              "A. Atomicity, Consistency, Isolation, Durability",
+              "B. Availability, Consistency, Integrity, Durability",
+              "C. Atomicity, Consensus, Integration, Discovery",
+              "D. Authentication, Confidentiality, Integrity, Deployment",
+            ],
+            a: "A",
+          },
+          {
+            q: "According to the CAP Theorem, a distributed system can guarantee at most how many of Consistency, Availability, and Partition Tolerance?",
+            o: ["A. 2 out of 3", "B. All 3", "C. Only 1", "D. None"],
+            a: "A",
+          },
+          {
+            q: "What does the 'REQUIRES_NEW' transaction propagation mean in Spring?",
+            o: [
+              "A. Always creates a new transaction, independent of any existing transaction",
+              "B. Joins the existing transaction if one exists, otherwise creates a new one",
+              "C. Throws an exception if a transaction already exists",
+              "D. Runs without a transaction",
+            ],
+            a: "A",
+          },
+          {
+            q: "Which transaction isolation level allows 'dirty reads'?",
+            o: [
+              "A. READ_UNCOMMITTED",
+              "B. READ_COMMITTED",
+              "C. REPEATABLE_READ",
+              "D. SERIALIZABLE",
+            ],
+            a: "A",
+          },
+          {
+            q: "What is the main drawback of Two-Phase Commit (2PC) in Microservices?",
+            o: [
+              "A. It is a blocking protocol with a single point of failure (the coordinator) and poor performance",
+              "B. It doesn't guarantee atomicity",
+              "C. It only works with NoSQL databases",
+              "D. It cannot be implemented in Spring Boot",
+            ],
+            a: "A",
+          },
+          {
+            q: "What happens during Phase 1 (Prepare Phase) of 2PC?",
+            o: [
+              "A. The coordinator sends PREPARE; participants lock resources and reply VOTE-COMMIT or VOTE-ABORT",
+              "B. The coordinator commits immediately without asking anyone",
+              "C. Participants automatically roll back without notifying anyone",
+              "D. There is no communication between coordinator and participants",
+            ],
+            a: "A",
+          },
+          {
+            q: "Why is the Saga Pattern preferred over 2PC in Microservices?",
+            o: [
+              "A. Saga avoids blocking and long-held locks, making it more suitable for large-scale distributed systems",
+              "B. Saga guarantees strong consistency exactly like 2PC",
+              "C. Saga doesn't require compensating transactions",
+              "D. Saga only works with a single service",
+            ],
+            a: "A",
+          },
+          {
+            q: "In Saga Choreography, how do services communicate?",
+            o: [
+              "A. Through events — each service listens and decides its own action, with no central coordinator",
+              "B. Through a central orchestrator that controls the whole flow",
+              "C. They don't communicate at all",
+              "D. Only through a shared database",
+            ],
+            a: "A",
+          },
+          {
+            q: "In Saga Orchestration, who manages the workflow?",
+            o: [
+              "A. A central orchestrator that sends commands to each service",
+              "B. No one — services decide on their own",
+              "C. The database manages the entire flow",
+              "D. The API Gateway manages the business flow",
+            ],
+            a: "A",
+          },
+          {
+            q: "What properties should a Compensating Transaction in the Saga Pattern have?",
+            o: [
+              "A. Idempotent, Reversible, Reliable",
+              "B. It should only ever run once and never be repeated",
+              "C. It doesn't need to guarantee consistency",
+              "D. It must always be strictly synchronous",
+            ],
+            a: "A",
+          },
+          {
+            q: "In CQRS, how is the Read Model typically designed?",
+            o: [
+              "A. Denormalized and optimized for queries",
+              "B. Fully normalized to 3NF",
+              "C. It doesn't store any data",
+              "D. Identical to the Write Model",
+            ],
+            a: "A",
+          },
+          {
+            q: "What characterizes the Event Store in the Event Sourcing Pattern?",
+            o: [
+              "A. It is append-only storage that holds all events",
+              "B. It allows editing/deleting events at any time",
+              "C. It stores only the final state, not events",
+              "D. It doesn't need to persist any data",
+            ],
+            a: "A",
+          },
+          {
+            q: "Which of the following is NOT a valid Saga lifecycle state mentioned in the slides?",
+            o: [
+              "A. ROLLING_BACK",
+              "B. PENDING",
+              "C. EXECUTING",
+              "D. COMPENSATING",
+            ],
+            a: "A",
+          },
+          {
+            q: "What does the 'Principle of Least Privilege' mean in Microservices security?",
+            o: [
+              "A. Grant each microservice only the minimum permissions it needs to function",
+              "B. Grant full privileges to every service for convenience",
+              "C. No authorization is needed at all",
+              "D. It only applies to databases, not services",
+            ],
+            a: "A",
+          },
+          {
+            q: "What does Zero Trust Security mean in Microservices?",
+            o: [
+              "A. Never assume any service/user is trustworthy by default; verify every request",
+              "B. Fully trust all internal network requests",
+              "C. Only authenticate external requests, skip internal ones",
+              "D. Service-to-service communication doesn't need authentication",
+            ],
+            a: "A",
+          },
+          {
+            q: "What is the difference between Authentication and Authorization?",
+            o: [
+              "A. Authentication verifies identity (who), Authorization determines permissions (what)",
+              "B. They are exactly the same thing",
+              "C. Authorization verifies identity, Authentication determines permissions",
+              "D. Only Authentication exists in Microservices, not Authorization",
+            ],
+            a: "A",
+          },
+          {
+            q: "Which authentication method is considered the strongest for service-to-service communication?",
+            o: [
+              "A. Mutual TLS (mTLS)",
+              "B. A simple API Key",
+              "C. Basic Auth",
+              "D. No authentication needed",
+            ],
+            a: "A",
+          },
+          {
+            q: "What principle does RBAC (Role-Based Access Control) operate on?",
+            o: [
+              "A. Permissions are assigned based on the role of the user/service, e.g., admin, user",
+              "B. Permissions are assigned based on geographic location",
+              "C. Permissions are assigned randomly",
+              "D. No permission assignment is needed; everyone is equal",
+            ],
+            a: "A",
+          },
+          {
+            q: "How does ABAC (Attribute-Based Access Control) differ from RBAC?",
+            o: [
+              "A. ABAC is based on attributes like location, department — more flexible but more complex",
+              "B. ABAC is only used for databases, not APIs",
+              "C. ABAC and RBAC are exactly the same",
+              "D. ABAC doesn't require policy management",
+            ],
+            a: "A",
+          },
+          {
+            q: "What is OAuth 2.0 primarily used for?",
+            o: [
+              "A. A framework for delegated authorization",
+              "B. Encrypting databases",
+              "C. Managing containers",
+              "D. Load balancing",
+            ],
+            a: "A",
+          },
+          {
+            q: "How does OpenID Connect (OIDC) extend OAuth 2.0?",
+            o: [
+              "A. It adds user identity information on top of OAuth 2.0",
+              "B. It completely replaces OAuth 2.0",
+              "C. It is only used for data encryption",
+              "D. It has nothing to do with OAuth 2.0",
+            ],
+            a: "A",
+          },
+          {
+            q: "What is a JWT (JSON Web Token)?",
+            o: [
+              "A. A compact, self-contained token representing claims about a user",
+              "B. A type of NoSQL database",
+              "C. A network protocol that replaces TLS",
+              "D. A containerization tool",
+            ],
+            a: "A",
+          },
+          {
+            q: "In Microservices security, what does 'Secrets Management' refer to?",
+            o: [
+              "A. Securely storing sensitive information like passwords and API keys using tools like HashiCorp Vault",
+              "B. Managing the number of running services",
+              "C. Logging user access",
+              "D. Routing requests to the appropriate microservice",
+            ],
+            a: "A",
+          },
+          {
+            q: "In the E-Commerce demo application (Chapter 8), which security mechanism was applied?",
+            o: [
+              "A. OAuth2 with Gmail (Google OAuth)",
+              "B. Only Basic Authentication",
+              "C. No security was applied",
+              "D. Manual AES encryption only",
+            ],
+            a: "A",
+          },
+          {
+            q: "On the client side (ReactJS) of the Chapter 8 demo, which library is used to send HTTP requests?",
+            o: [
+              "A. Axios",
+              "B. jQuery Ajax",
+              "C. Only the Fetch API, no library",
+              "D. WebSocket",
+            ],
+            a: "A",
+          },
+          {
+            q: "Which database management system does the Chapter 8 demo application use?",
+            o: ["A. MS SQL Server", "B. MongoDB", "C. Oracle", "D. Cassandra"],
+            a: "A",
+          },
+          {
+            q: "Which technology is used for the React Client to navigate between pages?",
+            o: [
+              "A. React Router",
+              "B. Redux",
+              "C. Vue Router",
+              "D. Angular Router",
+            ],
+            a: "A",
+          },
+          {
+            q: "Which technology does the backend of the Chapter 8 E-Commerce application use for data access?",
+            o: [
+              "A. Spring Data JPA",
+              "B. Plain Hibernate without Spring",
+              "C. Entity Framework",
+              "D. Sequelize",
+            ],
+            a: "A",
+          },
+          {
+            q: "What is Google Cloud Platform (GCP)?",
+            o: [
+              "A. Google's comprehensive suite of cloud computing services, providing infrastructure and platform for developers",
+              "B. A Spring framework",
+              "C. An IDE for Java programming",
+              "D. A single relational database type",
+            ],
+            a: "A",
+          },
+          {
+            q: "Why is GCP well-suited for Microservices?",
+            o: [
+              "A. It is container-native (built on Kubernetes), offers serverless options like Cloud Run, and is easy to manage",
+              "B. It only supports monolithic applications",
+              "C. It doesn't support CI/CD",
+              "D. It has no built-in security features",
+            ],
+            a: "A",
+          },
+          {
+            q: "Which GCP service is a managed Kubernetes service for container orchestration?",
+            o: [
+              "A. Google Kubernetes Engine (GKE)",
+              "B. Cloud SQL",
+              "C. Cloud Storage",
+              "D. Cloud Pub/Sub",
+            ],
+            a: "A",
+          },
+          {
+            q: "What is Cloud Run?",
+            o: [
+              "A. A serverless platform for running containers that automatically scales, even down to zero",
+              "B. A static file hosting service",
+              "C. A source control management tool",
+              "D. A fixed virtual machine type",
+            ],
+            a: "A",
+          },
+          {
+            q: "Which GCP service provides a managed relational database (e.g., PostgreSQL, MSSQL)?",
+            o: [
+              "A. Cloud SQL",
+              "B. Firestore",
+              "C. Cloud Storage",
+              "D. BigQuery",
+            ],
+            a: "A",
+          },
+          {
+            q: "Which GCP service provides asynchronous messaging between services?",
+            o: [
+              "A. Cloud Pub/Sub",
+              "B. Cloud CDN",
+              "C. Cloud Build",
+              "D. Cloud KMS",
+            ],
+            a: "A",
+          },
+          {
+            q: "What does IAM stand for in GCP, and what is it used for?",
+            o: [
+              "A. Identity and Access Management — manages access permissions based on roles",
+              "B. Internal Application Monitoring — tracks application performance",
+              "C. Internet Access Manager — manages network bandwidth",
+              "D. Instance Auto Migration — automatically migrates VMs",
+            ],
+            a: "A",
+          },
+          {
+            q: "Which GCP service is used for CI/CD (continuous integration/deployment)?",
+            o: [
+              "A. Cloud Build",
+              "B. Cloud Spanner",
+              "C. Cloud Endpoints",
+              "D. Memorystore",
+            ],
+            a: "A",
+          },
+          {
+            q: "What is Docker?",
+            o: [
+              "A. An open-source platform that automates packaging and deploying applications using containerization",
+              "B. A NoSQL database management system",
+              "C. A Java framework for writing REST APIs",
+              "D. A version control management tool",
+            ],
+            a: "A",
+          },
+          {
+            q: "Why are containers more resource-efficient than Virtual Machines?",
+            o: [
+              "A. Containers share the host OS kernel instead of emulating an entire separate operating system",
+              "B. Containers don't need CPU to run",
+              "C. Containers are always larger than Virtual Machines",
+              "D. Containers cannot run multiple applications simultaneously",
+            ],
+            a: "A",
+          },
+          {
+            q: "What are the main components of the Docker Engine?",
+            o: [
+              "A. Docker CLI, Docker Daemon (dockerd), Docker API",
+              "B. Docker Volume, Docker Network, Docker Registry",
+              "C. Only Docker CLI",
+              "D. Only Docker Daemon",
+            ],
+            a: "A",
+          },
+          {
+            q: "What is the role of the Docker Daemon (dockerd)?",
+            o: [
+              "A. A background service that manages containers, images, and resources (CPU, memory, storage)",
+              "B. It's just a command-line interface for users",
+              "C. It only stores images in a registry",
+              "D. It has no significant role in Docker",
+            ],
+            a: "A",
+          },
+        ],
+        STORAGE_KEY = "mss301_quiz_state_v1",
+        SHORTCUT_NOTE_COLLAPSED_KEY = "mss301_shortcut_note_collapsed",
+        rawQuestions =
+          void 0 !== questions && Array.isArray(questions)
+            ? questions
+            : "undefined" != typeof QUESTIONS && Array.isArray(QUESTIONS)
+              ? QUESTIONS
+              : [],
+        source = rawQuestions.map((n, h) => {
+          const t = n.answer ?? n.a ?? "",
+            c = Array.isArray(t) ? t : String(t).split(""),
+            i = Array.isArray(n.options)
+              ? n.options
+              : Array.isArray(n.o)
+                ? n.o.map((n) => {
+                    const h = String(n),
+                      t = h.indexOf(". ");
+                    return t > 0
+                      ? { key: h.slice(0, t).trim(), text: h.slice(t + 2) }
+                      : { key: "", text: h };
+                  })
+                : Object.entries(n.options || {}).map(([n, h]) => ({
+                    key: n,
+                    text: h,
+                  }));
+          return {
+            id: n.id ?? h + 1,
+            question: n.question || n.q || "",
+            options: i,
+            answer: c,
+            type: n.type || (c.length > 1 ? "multiple" : "single"),
+            note: n.note || "",
+            sourcePage: n.sourcePage || "",
+            needsReview: Boolean(n.needsReview),
+          };
+        }),
+        $ = (n) => document.getElementById(n),
+        els = {
+          totalCount: $("totalCount"),
+          scoreSummary: $("scoreSummary"),
+          practiceModeBtn: $("practiceModeBtn"),
+          wrongModeBtn: $("wrongModeBtn"),
+          examModeBtn: $("examModeBtn"),
+          searchInput: $("searchInput"),
+          filterSelect: $("filterSelect"),
+          practicePartWrap: $("practicePartWrap"),
+          practicePartSelect: $("practicePartSelect"),
+          examSetup: $("examSetup"),
+          examPartSelect: $("examPartSelect"),
+          startExamBtn: $("startExamBtn"),
+          progressText: $("progressText"),
+          progressBar: $("progressBar"),
+          modeLabel: $("modeLabel"),
+          questionIndex: $("questionIndex"),
+          bookmarkBtn: $("bookmarkBtn"),
+          questionText: $("questionText"),
+          questionNote: $("questionNote"),
+          options: $("options"),
+          checkAnswerBtn: $("checkAnswerBtn"),
+          feedback: $("feedback"),
+          prevBtn: $("prevBtn"),
+          randomBtn: $("randomBtn"),
+          showAnswerBtn: $("showAnswerBtn"),
+          nextBtn: $("nextBtn"),
+          sidePrevBtn: $("sidePrevBtn"),
+          sideNextBtn: $("sideNextBtn"),
+          shortcutNote: $("shortcutNote"),
+          shortcutNoteToggle: $("shortcutNoteToggle"),
+          shortcutNoteBody: $("shortcutNoteBody"),
+          submitExamBtn: $("submitExamBtn"),
+          resetBtn: $("resetBtn"),
+        },
+        defaultState = {
+          mode: "practice",
+          filter: "all",
+          query: "",
+          index: 0,
+          answers: {},
+          checked: {},
+          bookmarks: [],
+          practicePart: 0,
+          examPart: -1,
+          examIds: [],
+          examSubmitted: !1,
+        };
+      function createDefaultState() {
+        return {
+          ...defaultState,
+          answers: {},
+          checked: {},
+          bookmarks: [],
+          examIds: [],
+        };
+      }
+      let state = loadState(),
+        currentList = [],
+        focusedOptionKey = "";
+      const EXAM_SCOPE_MIGRATION_KEY = `${STORAGE_KEY}_exam_scope_v2`;
+      if (localStorage.getItem(EXAM_SCOPE_MIGRATION_KEY) !== "1") {
+        state.examPart = -1;
+        localStorage.setItem(EXAM_SCOPE_MIGRATION_KEY, "1");
+      }
+      const QUESTIONS_PER_PART = 50;
+      function partCount() {
+        return Math.ceil(source.length / QUESTIONS_PER_PART);
+      }
+      function clampPartIndex(n) {
+        const h = partCount(),
+          t = Number(n);
+        return Number.isFinite(t) && 0 !== h
+          ? Math.min(Math.max(Math.trunc(t), 0), h - 1)
+          : 0;
+      }
+      function loadState() {
+        try {
+          const n = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+          return {
+            ...createDefaultState(),
+            ...n,
+            answers: { ...(n.answers || {}) },
+            checked: { ...(n.checked || {}) },
+            bookmarks: [...(n.bookmarks || [])],
+            examIds: [...(n.examIds || [])],
+          };
+        } catch {
+          return createDefaultState();
+        }
+      }
+      function saveState() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      }
+      function normalizeAnswer(n) {
+        return [...new Set(n || [])].map(String).sort().join("");
+      }
+      function isCorrect(n) {
+        return (
+          normalizeAnswer(state.answers[n.id]) === normalizeAnswer(n.answer)
+        );
+      }
+      function hasAnswered(n) {
+        return (
+          Array.isArray(state.answers[n.id]) && state.answers[n.id].length > 0
+        );
+      }
+      function isChecked(n) {
+        return Boolean(state.checked[n.id]);
+      }
+      function isAttempted(n) {
+        return hasAnswered(n) || isChecked(n);
+      }
+      function isBookmarked(n) {
+        return state.bookmarks.includes(n.id);
+      }
+      function getPartQuestions(n) {
+        const h = clampPartIndex(n) * QUESTIONS_PER_PART;
+        return source.slice(h, h + QUESTIONS_PER_PART);
+      }
+      function populatePartSelects() {
+        [els.practicePartSelect, els.examPartSelect].forEach((n) => {
+          n.innerHTML = "";
+          if (n === els.examPartSelect) {
+            const allOption = document.createElement("option");
+            allOption.value = "-1";
+            allOption.textContent = `Tất cả câu hỏi (${source.length} câu)`;
+            n.appendChild(allOption);
+          }
+          for (let h = 0; h < partCount(); h += 1) {
+            const t = h * QUESTIONS_PER_PART + 1,
+              c = Math.min((h + 1) * QUESTIONS_PER_PART, source.length),
+              i = document.createElement("option");
+            ((i.value = String(h)),
+              (i.textContent = `Part ${h + 1} · Câu ${t}–${c} (${c - t + 1} câu)`),
+              n.appendChild(i));
+          }
+        });
+      }
+      function questionMatches(n, h) {
+        if (!n) return !0;
+        return [
+          h.id,
+          h.question,
+          h.note,
+          h.sourcePage,
+          ...h.options.map((n) => `${n.key} ${n.text}`),
+        ]
+          .join(" ")
+          .toLowerCase()
+          .includes(n.toLowerCase().trim());
+      }
+      function byFilter(n) {
+        return "correct" === state.filter
+          ? isChecked(n) && isCorrect(n)
+          : "wrong" === state.filter
+            ? isChecked(n) && !isCorrect(n)
+            : "unanswered" === state.filter
+              ? !isAttempted(n)
+              : "bookmarked" !== state.filter || isBookmarked(n);
+      }
+      function buildList() {
+        let n =
+          "practice" === state.mode
+            ? (state.query.trim() ? [...source] : getPartQuestions(state.practicePart))
+            : [...source];
+        ("wrong" === state.mode &&
+          (n = n.filter((n) => isChecked(n) && !isCorrect(n))),
+          "exam" === state.mode
+            ? (n = state.examIds
+                .map((n) => source.find((h) => h.id === n))
+                .filter(Boolean))
+            : ((n = n.filter((n) => byFilter(n))),
+              (n = n.filter((n) => questionMatches(state.query, n)))),
+          (currentList = n),
+          state.index < 0 && (state.index = 0),
+          state.index >= currentList.length &&
+            (state.index = Math.max(0, currentList.length - 1)));
+      }
+      function currentQuestion() {
+        return currentList[state.index] || null;
+      }
+      function setMode(n) {
+        ((state.mode = n),
+          (state.index = 0),
+          (state.examSubmitted = !1),
+          "exam" === n && makeExam(),
+          saveState(),
+          render());
+      }
+      function makeExam() {
+        const questions = state.examPart === -1
+          ? [...source]
+          : getPartQuestions(state.examPart);
+        const shuffled = shuffle([...questions]);
+        const selected = state.examPart === -1
+          ? shuffled.slice(0, QUESTIONS_PER_PART)
+          : shuffled;
+        state.examIds = selected.map((question) => question.id);
+        state.index = 0;
+        state.examSubmitted = !1;
+      }
+      function shuffle(n) {
+        for (let h = n.length - 1; h > 0; h -= 1) {
+          const t = Math.floor(Math.random() * (h + 1));
+          [n[h], n[t]] = [n[t], n[h]];
+        }
+        return n;
+      }
+      function chooseOption(n) {
+        const h = currentQuestion();
+        if (!h || ("exam" === state.mode && state.examSubmitted)) return;
+        const t = state.answers[h.id] || [];
+        ("multiple" === h.type || h.answer.length > 1
+          ? ((state.answers[h.id] = t.includes(n)
+              ? t.filter((h) => h !== n)
+              : [...t, n]),
+            "exam" !== state.mode &&
+              state.answers[h.id].length >= h.answer.length &&
+              (state.checked[h.id] = !0))
+          : (state.answers[h.id] = [n]),
+          "exam" !== state.mode &&
+            "multiple" !== h.type &&
+            1 === h.answer.length &&
+            (state.checked[h.id] = !0),
+          saveState(),
+          render());
+      }
+      function confirmAnswer() {
+        const n = currentQuestion();
+        return !!n && ((state.checked[n.id] = !0), saveState(), render(), !0);
+      }
+      function showAnswer() {
+        confirmAnswer();
+      }
+      function submitExam() {
+        "exam" === state.mode &&
+          ((state.examSubmitted = !0),
+          currentList.forEach((n) => {
+            state.checked[n.id] = !0;
+          }),
+          saveState(),
+          render());
+      }
+      function resetProgress() {
+        if (
+          !confirm(
+            "Reset toàn bộ tiến độ, câu sai, bookmark và bài thi hiện tại?",
+          )
+        ) {
+          return;
+        }
+
+        const currentMode = state.mode;
+        const currentPart = state.practicePart;
+        const currentExamPart = state.examPart;
+
+        state = createDefaultState();
+
+        state.mode = currentMode;
+        state.practicePart = currentPart;
+        state.examPart = currentExamPart;
+
+        state.index = 0;
+
+        focusedOptionKey = "";
+
+        localStorage.removeItem(STORAGE_KEY);
+
+        els.practicePartSelect.value = String(currentPart);
+        els.examPartSelect.value = String(currentExamPart);
+
+        render();
+      }
+      function toggleBookmark() {
+        const n = currentQuestion();
+        n &&
+          (state.bookmarks.includes(n.id)
+            ? (state.bookmarks = state.bookmarks.filter((h) => h !== n.id))
+            : (state.bookmarks = [...state.bookmarks, n.id]),
+          saveState(),
+          render());
+      }
+      function move(n) {
+        ((focusedOptionKey = ""),
+          (state.index += n),
+          state.index < 0 && (state.index = 0),
+          state.index >= currentList.length &&
+            (state.index = currentList.length - 1),
+          saveState(),
+          render());
+      }
+      function randomQuestion() {
+        const shouldPickUnanswered =
+          "exam" === state.mode ||
+          ("practice" === state.mode &&
+            ("all" === state.filter || "unanswered" === state.filter));
+        const candidates = shouldPickUnanswered
+          ? currentList.filter((question) => !isAttempted(question))
+          : currentList;
+        const current = currentQuestion();
+        const pool = candidates.filter(
+          (question) => !current || question.id !== current.id,
+        );
+
+        if (!pool.length) {
+          if (shouldPickUnanswered) {
+            const currentIsUnanswered =
+              current && candidates.some((question) => question.id === current.id);
+            alert(
+              currentIsUnanswered
+                ? "Đây là câu chưa làm cuối cùng trong phạm vi hiện tại."
+                : "Bạn đã làm hết các câu hỏi trong phạm vi hiện tại.",
+            );
+          }
+          return;
+        }
+
+        focusedOptionKey = "";
+        const nextQuestion = pool[Math.floor(Math.random() * pool.length)];
+        state.index = currentList.findIndex(
+          (question) => question.id === nextQuestion.id,
+        );
+        saveState();
+        render();
+      }
+      function optionButtons() {
+        return [...els.options.querySelectorAll(".option")];
+      }
+      function focusOption(n) {
+        const h = optionButtons();
+        if (!h.length) return;
+        const t = h[(n + h.length) % h.length];
+        ((focusedOptionKey = t.dataset.optionKey || ""), t.focus());
+      }
+      function moveOptionFocus(n) {
+        const h = optionButtons();
+        if (!h.length) return;
+        const t = h.indexOf(document.activeElement);
+        focusOption(-1 === t ? (n > 0 ? 0 : h.length - 1) : t + n);
+      }
+      function chooseFocusedOption() {
+        const n = currentQuestion(),
+          h = document.activeElement;
+        if (!n || !h?.classList?.contains("option")) return !1;
+        focusedOptionKey = h.dataset.optionKey || "";
+        return (state.answers[n.id] || []).includes(focusedOptionKey)
+          ? n.answer.length > 1 && !isChecked(n)
+            ? (confirmAnswer(), !0)
+            : (move(1), !0)
+          : (chooseOption(focusedOptionKey), !0);
+      }
+      function isTypingTarget(n) {
+        return (
+          n instanceof HTMLInputElement ||
+          n instanceof HTMLTextAreaElement ||
+          n instanceof HTMLSelectElement ||
+          n?.isContentEditable
+        );
+      }
+      function setShortcutNoteCollapsed(n) {
+        (els.shortcutNote.classList.toggle("collapsed", n),
+          (els.shortcutNoteToggle.textContent = n ? "Mở" : "Thu gọn"),
+          els.shortcutNoteToggle.setAttribute("aria-expanded", String(!n)),
+          els.shortcutNoteBody.setAttribute("aria-hidden", String(n)),
+          localStorage.setItem(SHORTCUT_NOTE_COLLAPSED_KEY, JSON.stringify(n)));
+      }
+      function handleKeyboardShortcuts(n) {
+        if (isTypingTarget(n.target) || n.altKey || n.ctrlKey || n.metaKey)
+          return;
+        const h = {
+          ArrowLeft: () => move(-1),
+          ArrowRight: () => move(1),
+          ArrowUp: randomQuestion,
+          ArrowDown: () => {
+            els.showAnswerBtn.classList.contains("hidden") || showAnswer();
+          },
+        }[n.key];
+        if (h) return (n.preventDefault(), void h());
+        if ("Enter" === n.key && chooseFocusedOption())
+          return void n.preventDefault();
+        const t = {
+          1: () => move(-1),
+          2: randomQuestion,
+          3: () => {
+            els.showAnswerBtn.classList.contains("hidden") || showAnswer();
+          },
+          4: () => move(1),
+        }[n.key];
+        t && (n.preventDefault(), t());
+      }
+      function render() {
+        (buildList(), renderShell());
+        const n = currentQuestion();
+        if (!n) return (renderEmpty(), void saveState());
+        (renderQuestion(n), saveState());
+      }
+      function renderShell() {
+        const n = source
+          .filter((n) => isChecked(n))
+          .filter((n) => isCorrect(n)).length;
+        ((els.totalCount.textContent = `${source.length} câu`),
+          (els.scoreSummary.textContent = `${n} đúng`),
+          els.practiceModeBtn.classList.toggle(
+            "active",
+            "practice" === state.mode,
+          ),
+          els.wrongModeBtn.classList.toggle("active", "wrong" === state.mode),
+          els.examModeBtn.classList.toggle("active", "exam" === state.mode),
+          els.practiceModeBtn.setAttribute(
+            "aria-selected",
+            String("practice" === state.mode),
+          ),
+          els.wrongModeBtn.setAttribute(
+            "aria-selected",
+            String("wrong" === state.mode),
+          ),
+          els.examModeBtn.setAttribute(
+            "aria-selected",
+            String("exam" === state.mode),
+          ),
+          els.examSetup.classList.toggle("hidden", "exam" !== state.mode),
+          els.practicePartWrap.classList.toggle(
+            "hidden",
+            "practice" !== state.mode,
+          ),
+          (els.practicePartSelect.value = String(state.practicePart)),
+          (els.examPartSelect.value = String(state.examPart)));
+        const h = state.examPart === -1 ? Math.min(QUESTIONS_PER_PART, source.length) : getPartQuestions(state.examPart).length;
+        ((els.startExamBtn.textContent = `Bắt đầu thi thử (${h} câu)`),
+          els.submitExamBtn.classList.toggle(
+            "hidden",
+            "exam" !== state.mode || state.examSubmitted,
+          ),
+          els.showAnswerBtn.classList.toggle(
+            "hidden",
+            "exam" === state.mode && !state.examSubmitted,
+          ));
+        const t = currentQuestion(),
+          c = Boolean(
+            "exam" !== state.mode &&
+            t &&
+            ("multiple" === t.type || t.answer.length > 1) &&
+            hasAnswered(t) &&
+            !isChecked(t),
+          );
+        (els.checkAnswerBtn.classList.toggle("hidden", !c),
+          els.searchInput.value !== state.query &&
+            (els.searchInput.value = state.query),
+          (els.filterSelect.value = state.filter),
+          (els.searchInput.disabled = "exam" === state.mode),
+          (els.filterSelect.disabled = "exam" === state.mode));
+        const i = currentList.filter((n) => hasAnswered(n)).length,
+          g = currentList.length;
+        ((els.progressText.textContent = `${i}/${g}`),
+          (els.progressBar.style.width = g ? (i / g) * 100 + "%" : "0%"),
+          (els.prevBtn.disabled = state.index <= 0 || 0 === g),
+          (els.sidePrevBtn.disabled = els.prevBtn.disabled),
+          (els.nextBtn.disabled = state.index >= g - 1 || 0 === g),
+          (els.sideNextBtn.disabled = els.nextBtn.disabled),
+          "exam" === state.mode
+            ? (els.modeLabel.textContent = state.examSubmitted
+                ? (state.examPart === -1
+                    ? `Thi thử · Toàn bộ ngân hàng · Đã nộp bài`
+                    : `Thi thử · Part ${state.examPart + 1} · Đã nộp bài`)
+                : (state.examPart === -1
+                    ? `Thi thử · Toàn bộ ngân hàng`
+                    : `Thi thử · Part ${state.examPart + 1}`))
+            : "wrong" === state.mode
+              ? (els.modeLabel.textContent =
+                  "Ôn lại câu sai (toàn bộ ngân hàng)")
+              : (els.modeLabel.textContent = state.query.trim()
+                ? "Luyện tập · Tìm kiếm toàn bộ ngân hàng"
+                : `Luyện tập · Part ${state.practicePart + 1}`));
+      }
+      function renderEmpty() {
+        ((els.questionIndex.textContent = "Không có câu"),
+          (els.questionText.textContent = "Không có câu hỏi phù hợp."),
+          els.questionNote.classList.add("hidden"),
+          (els.options.innerHTML =
+            '<div class="empty">Đổi bộ lọc hoặc từ khóa để tiếp tục ôn.</div>'),
+          (els.feedback.className = "feedback info"),
+          (els.feedback.textContent =
+            "Không có dữ liệu trong danh sách hiện tại."),
+          els.bookmarkBtn.classList.remove("active"));
+      }
+      function renderQuestion(n) {
+        const h = state.answers[n.id] || [],
+          t = "exam" === state.mode ? state.examSubmitted : isChecked(n),
+          c = isCorrect(n);
+        if (
+          ((els.questionIndex.textContent = `Câu ${state.index + 1}/${currentList.length} · ID ${n.id}`),
+          (els.questionText.textContent = n.question),
+          els.bookmarkBtn.classList.toggle("active", isBookmarked(n)),
+          (els.bookmarkBtn.textContent = isBookmarked(n) ? "★" : "☆"),
+          (els.questionNote.textContent = n.note || ""),
+          els.questionNote.classList.toggle("hidden", !n.note),
+          (els.options.innerHTML = ""),
+          n.options.forEach((c) => {
+            const i = document.createElement("button");
+            ((i.className = "option"),
+              (i.type = "button"),
+              (i.dataset.optionKey = c.key),
+              h.includes(c.key) && i.classList.add("selected"),
+              t && n.answer.includes(c.key) && i.classList.add("correct"),
+              t &&
+                h.includes(c.key) &&
+                !n.answer.includes(c.key) &&
+                i.classList.add("wrong"));
+            const g = document.createElement("span");
+            ((g.className = "key"), (g.textContent = c.key));
+            const a = document.createElement("span");
+            ((a.className = "text"),
+              (a.textContent = c.text),
+              i.append(g, a),
+              i.addEventListener("click", () => {
+                ((focusedOptionKey = c.key), chooseOption(c.key));
+              }),
+              els.options.appendChild(i));
+          }),
+          renderFeedback(n, t, c, h),
+          focusedOptionKey)
+        ) {
+          const n = els.options.querySelector(
+            `.option[data-option-key="${focusedOptionKey}"]`,
+          );
+          n?.focus();
+        }
+      }
+      function renderFeedback(n, h, t, c) {
+        if (!h && "exam" === state.mode)
+          return (
+            (els.feedback.className = "feedback info"),
+            void (els.feedback.textContent =
+              n.answer.length > 1
+                ? "Câu nhiều đáp án. Có thể chọn nhiều lựa chọn."
+                : "Chọn một đáp án.")
+          );
+        if (!h && 0 === c.length)
+          return (
+            (els.feedback.className = "feedback info"),
+            void (els.feedback.textContent =
+              n.answer.length > 1
+                ? "Câu nhiều đáp án. Có thể chọn nhiều lựa chọn."
+                : "Chọn đáp án để kiểm tra ngay.")
+          );
+        if (!h)
+          return (
+            (els.feedback.className = "feedback info"),
+            void ("multiple" === n.type || n.answer.length > 1
+              ? (els.feedback.textContent = `Đã chọn ${c.length}/${n.answer.length} phương án. Chọn tiếp hoặc bấm ‘Kiểm tra đáp án’ để xem đúng/sai.`)
+              : (els.feedback.textContent =
+                  "Đã ghi nhận lựa chọn. Bấm Enter thêm một lần để xác nhận và hiện đáp án."))
+          );
+        const i = `Đáp án đúng: ${n.answer.join(", ")}`;
+        t
+          ? ((els.feedback.className = "feedback ok"),
+            (els.feedback.textContent = `Chính xác. ${i}`))
+          : ((els.feedback.className = "feedback bad"),
+            (els.feedback.textContent = `${c.length ? "Chưa đúng." : "Chưa chọn đáp án."} ${i}`));
+      }
+      function renderExamResult() {
+        const n = currentList.length,
+          h = currentList.filter((n) => isCorrect(n)).length;
+        ((els.feedback.className = "feedback ok"),
+          (els.feedback.textContent = `Kết quả thi thử: ${h}/${n} câu đúng.`));
+      }
+      if (
+        ((state.practicePart = clampPartIndex(state.practicePart)),
+        (state.examPart = Number(state.examPart) === -1 ? -1 : clampPartIndex(state.examPart)),
+        els.practiceModeBtn.addEventListener("click", () =>
+          setMode("practice"),
+        ),
+        els.wrongModeBtn.addEventListener("click", () => setMode("wrong")),
+        els.examModeBtn.addEventListener("click", () => setMode("exam")),
+        els.practicePartSelect.addEventListener("change", (n) => {
+          ((state.practicePart = clampPartIndex(n.target.value)),
+            (state.index = 0),
+            saveState(),
+            render());
+        }),
+        els.examPartSelect.addEventListener("change", (n) => {
+          ((state.examPart = Number(n.target.value) === -1 ? -1 : clampPartIndex(n.target.value)),
+            makeExam(),
+            saveState(),
+            render());
+        }),
+        els.searchInput.addEventListener("input", (n) => {
+          ((focusedOptionKey = ""),
+            (state.query = n.target.value),
+            (state.index = 0),
+            saveState(),
+            render());
+        }),
+        els.filterSelect.addEventListener("change", (n) => {
+          ((state.filter = n.target.value),
+            (state.index = 0),
+            saveState(),
+            render());
+        }),
+        els.startExamBtn.addEventListener("click", () => {
+          setMode("exam");
+        }),
+        els.prevBtn.addEventListener("click", () => move(-1)),
+        els.nextBtn.addEventListener("click", () => move(1)),
+        els.sidePrevBtn.addEventListener("click", () => move(-1)),
+        els.sideNextBtn.addEventListener("click", () => move(1)),
+        els.randomBtn.addEventListener("click", randomQuestion),
+        els.showAnswerBtn.addEventListener("click", showAnswer),
+        els.checkAnswerBtn.addEventListener("click", confirmAnswer),
+        els.submitExamBtn.addEventListener("click", () => {
+          (submitExam(), renderExamResult());
+        }),
+        els.resetBtn.addEventListener("click", resetProgress),
+        els.bookmarkBtn.addEventListener("click", toggleBookmark),
+        els.shortcutNoteToggle.addEventListener("click", () => {
+          setShortcutNoteCollapsed(
+            !els.shortcutNote.classList.contains("collapsed"),
+          );
+        }),
+        document.addEventListener("keydown", handleKeyboardShortcuts),
+        populatePartSelects(),
+        setShortcutNoteCollapsed(
+          JSON.parse(
+            localStorage.getItem(SHORTCUT_NOTE_COLLAPSED_KEY) || "false",
+          ),
+        ),
+        render(),
+        "exam" === state.mode)
+      ) {
+        const n = (state.examPart === -1 ? source : getPartQuestions(state.examPart)).map((n) => n.id),
+          h = state.examIds || [];
+        (h.length === Math.min(state.examPart === -1 ? QUESTIONS_PER_PART : n.length, n.length) &&
+          h.every((h) => n.includes(h)) &&
+          new Set(h).size === n.length) ||
+          (makeExam(), saveState());
+      }
+      render();
+    </script>
+  </body>
+</html>
