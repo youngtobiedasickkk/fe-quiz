@@ -345,7 +345,7 @@
       }
       #questionText {
         margin: 18px 0 12px;
-        font-size: 24px;
+        font-size: 22px;
         line-height: 1.45;
 
         white-space: pre-wrap;
@@ -398,6 +398,7 @@
       .option .text {
         padding-top: 5px;
         line-height: 1.45;
+        white-space: pre-wrap;
       }
       .option.selected {
         border-color: var(--brand);
@@ -2309,6 +2310,506 @@
               "D. It has no significant role in Docker",
             ],
             a: "A",
+          },
+          {
+            q: 'In an OrderController, the following logic is used before placing an order:\n@PostMapping("/api/order")\npublic String placeOrder(@RequestBody OrderRequest request) {\n\tboolean inStock = inventoryClient.checkStock(request.getSkuCode(), request.getQuantity());\n\tif (!inStock) {\n\t\tthrow new IllegalArgumentException("Product is not in stock");\n\t}\n\torderService.placeOrder(request);\n\treturn "Order Placed Successfully";\n}\nHere, inventoryClient makes an HTTP call to Inventory Service and the OrderController waits for the response before proceeding. Which type of inter-service communication is being used?',
+            o: [
+              "A. Asynchronous communication via an Event Bus",
+              "B. Synchronous communication",
+              "C. Shared-database communication",
+              "D. File-based batch communication",
+            ],
+            a: "B",
+          },
+          {
+            q: "A real-world microservices implementation, like that of Spotify, allows for:",
+            o: [
+              "A. The entire application to be updated at once, simplifying deployment.",
+              "B. Different teams to work autonomously on separate services, like search, recommendations, or playlists.",
+              "C. A complete elimination of the need for operational monitoring.",
+              "D. A system that is less resilient to individual service failures.",
+            ],
+            a: "B",
+          },
+          {
+            q: "What is the core idea of the Bulkhead pattern, inspired by the partitions in a ship's hull?",
+            o: [
+              "A. To combine all microservice instances into a single process.",
+              "B. To isolate elements of an application into pools so that if one fails, the others will continue to function.",
+              "C. To ensure all requests are processed in a first-in, first-out order.",
+              "D. To route all traffic through a central gateway.",
+            ],
+            a: "B",
+          },
+          {
+            q: "What is the purpose of the Two-Phase Commit (2PC) protocol?",
+            o: [
+              "A. To speed up individual local database queries",
+              "B. To act as a distributed coordination protocol that ensures atomicity across a distributed transaction",
+              "C. To replace the need for any database transaction manager",
+              "D. To allow each participant to independently decide to commit without any coordination",
+            ],
+            a: "B",
+          },
+          {
+            q: 'What is a "mock" used for in testing?',
+            o: [
+              "A. A real, live implementation of a dependency.",
+              "B. A test double that simulates the behavior of a real dependency, allowing a component to be tested in isolation.",
+              "C. A tool for deploying services.",
+              "D. A performance testing script.",
+            ],
+            a: "B",
+          },
+          {
+            q: 'Given this Resilience4j annotation used in a Spring Boot service:\n@CircuitBreaker(name = "inventory Service", fallbackMethod = "fallbackCheckStock")\npublic boolean checkStock(String skuCode, int quantity) {\n\treturn inventoryClient.checkStock(skuCode, quantity);\n}\n\npublic boolean fallbackCheckStock(String skuCode, int quantity, Throwable t) {\n\treturn false; // assume out of stock rather than blocking the caller\n}\nWhich Circuit Breaker implementation requirement does the fallbackCheckStock method satisfy?',
+            o: [
+              "A. Step 4: Define Failure Thresholds",
+              "B. Step 5: Implement Fallback Mechanisms",
+              "C. Step 6: Monitor Circuit Breaker Metrics",
+              "D. Step 2: Choose a Circuit Breaker Library",
+            ],
+            a: "B",
+          },
+          {
+            q: 'Given this Feign client used inside Order Service:\n@FeignClient(name = "inventory-service")\npublic interface InventoryClient {\n\t@GetMapping("/api/inventory")\n\tboolean checkStock(@RequestParam String skuCode, @RequestParam int quantity);\n}\nOrderService calls checkStock(...) and waits for the boolean result before proceeding. What kind of inter-service communication is this?',
+            o: [
+              "A. Synchronous communication via a declarative REST client (OpenFeign)",
+              "B. Asynchronous, event-driven communication",
+              "C. Shared-database communication",
+              "D. Batch file-based communication",
+            ],
+            a: "A",
+          },
+          {
+            q: 'A service method is annotated as follows to gracefully handle a downstream failure:\n@CircuitBreaker(name = "inventory Service", fallbackMethod = "fallback")\n@Retry(name = "inventoryService")\npublic boolean checkStock(String skuCode, int quantity) {\n\treturn inventoryClient.checkStock(skuCode, quantity);\n}\nWhich Spring Cloud feature category does this combination of circuit breaking and retry belong to?',
+            o: [
+              "A. Resilience Patterns",
+              "B. Distributed messaging",
+              "C. Contract testing",
+              "D. Service registration and discovery",
+            ],
+            a: "A",
+          },
+          {
+            q: "Consider the following application.properties for a Config Server:\n\nserver.port=8888\nspring.cloud.config.server.git.uri=https://github.com/my-org/my-config-repo\n\nWhat does this configuration achieve?",
+            o: [
+              "A. It sets up a Config Client to fetch configuration from a server at port 8888.",
+              "B. It configures a Config Server to run on port 8888 and serve properties from a Git repository.",
+              "C. It registers a service named config-server with a Eureka server.  ",
+              "D. It enables security for the Config Server.",
+            ],
+            a: "B",
+          },
+          {
+            q: "The account-service's application.properties includes:\nspring.application.name=account-service\nserver.port=8081\nspring.datasource.driver-class-name=com.microsoft.sqlserver.jdbc.SQLServerDriver\nspring.jpa.hibernate.ddl-auto-update\nWhat does spring.jpa.hibernate.ddl-auto-update do?",
+            o: [
+              "A. It drops and recreates every table on each application restart",
+              "B. It has Hibernate automatically update the database schema to match the current JPA entity classes, without dropping existing data",
+              "C. It disables schema validation completely, allowing any mismatched entity to run silently",
+              "D. It only affects test databases, never the configured spring.datasource.url",
+            ],
+            a: "B",
+          },
+          {
+            q: '@Entity\n@Table(name = "roles")\npublic class Role {\n\t@Id\n\t@GeneratedValue(strategy = GenerationType. IDENTITY)\n\t@Column(name = "role_id")\n\tprivate int roleld;\n\n\t@Column(name = "role_name")\n\tprivate String roleName;\n\t...\n}\nWhat does @GeneratedValue(strategy = Generation Type IDENTITY) do?',
+            o: [
+              "A. It marks roleld as a foreign key referencing another table",
+              "B. It tells JPA/Hibernate to let the database auto-generate the primary key value whenever a new Role row is inserted",
+              "C. It tells JPA to generate a random UUID string for roleld in application code before saving",
+              "D. It disables persistence of the roleld field entirely",
+            ],
+            a: "B",
+          },
+          {
+            q: 'secret.yaml defines:\napiVersion: v1\nkind: Secret\nmetadata:\n\tname: db-credentials\ntype: Opaque\nstringData:\n\tdb-host: "34.69.18.106"\n\tusername: "sqlserver"\n\tpassword: "1234"\n\tdb-name: "sum25_k8_db"\nWhat kind of Kubernetes object is this, and why use it instead of putting these same values directly as plain environment variables in the Deployment manifest?',
+            o: [
+              "A. It's a ConfigMap, used interchangeably with a Secret with no real distinction",
+              "B. It's a Secret - Kubernetes' dedicated object type intended for sensitive values like credentials - kept as a separate object so access to it can be more tightly controlled/audited than ordinary configuration",
+              "C. It's a Deployment manifest that directly starts a database container",
+              "D. It's a Service definition used to expose the database externally",
+            ],
+            a: "B",
+          },
+          {
+            q: "In a monolithic application, the UI, business logic, and data access layer are described as:",
+            o: [
+              "A. Deployed as independent services with their own database",
+              "B. Tightly coupled and run together as a single service",
+              "C. Distributed across multiple containers orchestrated by Kubernetes",
+              "D. Communicating exclusively through an event bus",
+            ],
+            a: "B",
+          },
+          {
+            q: "What are the three states of a Circuit Breaker, and what does each do?",
+            o: [
+              "A. Open, Closed, Half-Closed",
+              "B. Closed, Open, Half-Open",
+              "C. Active, Inactive, Paused",
+              "D. Start, Stop, Restart",
+            ],
+            a: "B",
+          },
+          {
+            q: "In the Spring Cloud Netflix stack, what role does Eureka play?",
+            o: [
+              "A. API gateway and reverse proxy",
+              "B. Service discovery server for locating microservices and enabling client-side load balancing",
+              "C. Circuit breaker library with fallback methods",
+              "D. Distributed configuration repository",
+            ],
+            a: "B",
+          },
+          {
+            q: "What is the fundamental principle behind Microservices Architecture?",
+            o: [
+              "A. To build a single, large application that is easy to deploy.",
+              "B. To structure an application as a collection of small, autonomous, and independently deployable services.",
+              "C. To ensure all components of an application share the same database for consistency.",
+              "D. To enforce a single programming language across all development teams for uniformity.",
+            ],
+            a: "B",
+          },
+          {
+            q: '"Shared Static Data" in a microservices data strategy typically refers to:',
+            o: [
+              "A. Frequently changing transactional data like current stock levels",
+              "B. Rarely changing reference data that multiple services may hold local copies of instead of calling another service for it every time",
+              "C. Data that only the API Gateway is allowed to read",
+              "D. Data that must always be queried live from a central service, never cached or replicated",
+            ],
+            a: "B",
+          },
+          {
+            q: "What is the purpose of spring.application.name in a Config Client's configuration?",
+            o: [
+              "A. It specifies the name of the application, which the Config Server uses to locate matching configuration files",
+              "B. It sets the port the Config Server listens on",
+              "C. It defines which Git branch the Eureka Server uses",
+              "D. It is unrelated to Spring Cloud Config",
+            ],
+            a: "A",
+          },
+          {
+            q: "What is the fundamental principle of the CQRS pattern?",
+            o: [
+              "A. To use a single, unified model for both updating and reading application data.",
+              "B. To separate the models used for reading data (Queries) from the models used for updating data (Commands).",
+              "C. To ensure that every service uses the same database schema.",
+              "D. To combine all services into a single deployable unit.",
+            ],
+            a: "B",
+          },
+          {
+            q: "What is the main role of the Spring Cloud Config Server?",
+            o: [
+              "A. To discover running instances of other microservices.",
+              "B. To provide an API gateway for incoming client requests.",
+              "C. To serve configuration properties from a backend repository to client applications.",
+              "D. To trace requests as they travel through multiple services.",
+            ],
+            a: "C",
+          },
+          {
+            q: "What is the relationship between Spring Boot and Spring Cloud?",
+            o: [
+              "A. Spring Cloud is a prerequisite for using Spring Boot.",
+              "B. They are competing frameworks for the same purpose.",
+              "C. Spring Cloud builds upon Spring Boot and simplifies the use of its components in a distributed environment.",
+              "D. Spring Boot is a component within Spring Cloud for building web Uls.",
+            ],
+            a: "C",
+          },
+          {
+            q: "What does the Principle of Least Privilege mean?",
+            o: [
+              "A. Grant each microservice only the permissions it needs to function, reducing the impact of a breach",
+              "B. Grant every microservice full administrative access to every resource, for convenience",
+              "C. Only apply security to the most privileged (admin) users",
+              "D. Give the API Gateway unlimited access to every database directly",
+            ],
+            a: "A",
+          },
+          {
+            q: 'What does the "Integrity" goal protect against?',
+            o: [
+              "A. Unauthorized reading of data",
+              "B. Unauthorized modification of data",
+              "C. Service downtime",
+              "D. Slow network latency",
+            ],
+            a: "B",
+          },
+          {
+            q: "Which of the following best defines cloud computing?",
+            o: [
+              "A. A method of storing files on a personal computer's hard drive.",
+              "B. The on-demand delivery of IT resources over the Internet with pay-as-you-go pricing.",
+              "C. A network of private servers for internal data processing.",
+              "D. The practice of building applications that do not require an internet connection.",
+            ],
+            a: "B",
+          },
+          {
+            q: "Google Compute Engine (GCE) provides which type of cloud service?",
+            o: [
+              "A. Software as a Service (SaaS)",
+              "B. Platform as a Service (PaaS)",
+              "C. Infrastructure as a Service (laaS)",
+              "D. Function as a Service (FaaS)",
+            ],
+            a: "C",
+          },
+          {
+            q: '"Serverless Options: Cloud Functions, Cloud Run" as a reason to use GCP for microservices. What do these serverless options offer?',
+            o: [
+              "A. A requirement that developers must manually manage every virtual machine",
+              "B. A tool exclusively for storing files, unrelated to running code",
+              "C. A way to run individual functions or containerized services without managing the underlying servers yourself",
+              "D. A billing model where you must pay a flat fee even when the function isn't running",
+            ],
+            a: "C",
+          },
+          {
+            q: "Compared to a traditional distributed transaction using Two-Phase Commit (2PC), why does the Saga pattern generally offer better performance and scalability?",
+            o: [
+              "A. Because Sagas hold long-lived database locks across all participating services, ensuring perfect consistency",
+              "B. Because each service commits its local transaction immediately and releases resources quickly, avoiding the blocking bottlenecks typical of 2PC, while relying on compensating transactions for rollback if needed",
+              "C. Because Sagas require a single shared database, removing network calls entirely",
+              "D. Because 2PC is always faster and Sagas are only used when performance doesn't matter",
+            ],
+            a: "B",
+          },
+          {
+            q: 'Why is Spring Cloud described as "ideal" for applications built on a Microservices Architecture specifically?',
+            o: [
+              "A. Because it forces all services to share a single database",
+              "B. Because it enables easy management, discovery, and resilience of many independently deployed services",
+              "C. Because it removes the need for any service-to-service communication",
+              "D. Because it only works with a single microservice, never many",
+            ],
+            a: "B",
+          },
+          {
+            q: "What is the recommended best practice regarding the four Core Principles (Least Privilege, Defense in Depth, Zero Trust, Secure by Design)?",
+            o: [
+              "A. Apply all four principles together as complementary layers of a holistic security strategy",
+              "B. Apply only one principle and ignore the other three, since they are redundant",
+              "C. Apply these principles only after a breach has already occurred",
+              "D. These principles apply only to monolithic applications, never microservices",
+            ],
+            a: "A",
+          },
+          {
+            q: "What is the direct business/team benefit of running the same container image across development, testing, and production?",
+            o: [
+              "A. It guarantees the application's business logic is completely bug-free",
+              "B. It reduces the number of bugs caused specifically by environment differences between stages, since the same packaged environment is used at every stage",
+              "C. It eliminates the need for any testing before production release",
+              "D. It has no measurable benefit over manually configuring each environment identically by hand",
+            ],
+            a: "B",
+          },
+          {
+            q: 'In the Google Cloud Console\'s OAuth 2.0 consent screen setup, what is an "Authorized redirect URI"?',
+            o: [
+              "A. The URL of the Google API you want to call.",
+              "B. The URL in your application where Google will send the user back to after they have authorized your app.",
+              "C. The URL where your application's source code is stored.",
+              "D. The URL of Google's login page.",
+            ],
+            a: "B",
+          },
+          {
+            q: 'A key feature of Cloud Run is its ability to "scale to zero." What does this mean?',
+            o: [
+              "A. The service is always running on at least one instance.",
+              "B. If the service is not receiving any traffic, Cloud Run automatically scales the number of running container instances down to zero, incurring no cost.",
+              "C. The service can handle zero traffic without crashing.",
+              "D. You must manually scale the service down to zero instances.",
+            ],
+            a: "B",
+          },
+          {
+            q: 'Evaluate this claim: "Docker containers are basically the same thing as virtual machines - just with a different name." Is this accurate?',
+            o: [
+              "A. Yes, completely accurate - there is no meaningful difference between a container and a VM",
+              "B. Not accurate, because containers cannot run any Linux-based application",
+              "C. Not accurate - while both provide isolated environments for running applications, a container is a lightweight, portable unit built around an application and its dependencies, and containers share the host's OS kernel",
+              "D. Not accurate, because virtual machines are always faster than containers",
+            ],
+            a: "C",
+          },
+          {
+            q: "In a Spring Boot application implementing a saga, which technology is commonly used to facilitate event-driven communication for a Choreography-based saga?",
+            o: [
+              "A. JDBC",
+              "B. REST Template",
+              "C. Apache Kafka or RabbitMQ",
+              "D. Spring Data JPA",
+            ],
+            a: "C",
+          },
+          {
+            q: "A team needs to: (1) run the actual instance of their application, (2) keep database files intact even if that instance is removed, and (3) let their web container and database container talk to each other by name. Which three core Docker concepts, respectively, address these three needs?",
+            o: [
+              "A. Docker Registry, Docker Engine, Docker Image",
+              "B. Docker Container, Docker Volume, Docker Network",
+              "C. Docker Image, Docker Registry, Docker Engine",
+              "D. Docker Engine, Docker Network, Docker Volume",
+            ],
+            a: "B",
+          },
+          {
+            q: 'OrderController.java includes:\n@PostMapping("/create")\n@PreAuthorize("hasRole(\'ROLE_ADMIN\')")\npublic ResponseEntity<Order> createOrder(@RequestBody OrderDTO orderRequest) { ... }\nWhat does @PreAuthorize("hasRole(\'ROLE_ADMIN\')") enforce?',
+            o: [
+              "A. It logs every call to createOrder without restricting who can call it",
+              "B. It restricts this endpoint so that only an authenticated user whose granted authorities include ROLE_ADMIN can successfully invoke it",
+              "C. It requires the caller to provide an API key named ROLE_ADMIN in the request headers",
+              "D. It automatically assigns the ROLE_ADMIN role to whoever calls this endpoint",
+            ],
+            a: "B",
+          },
+          {
+            q: "The order-service's application.properties includes:\nspring.mvc.cors.allowed-origins=http://localhost:8083\nspring.mvc.cors.allowed-methods=GET, POST, PUT, DELETE, OPTIONS\nspring.mvc.cors.allowed-headers=*\nspring.mvc.cors.allow-credentials=true\nWhat problem does this CORS configuration solve?",
+            o: [
+              "A. It encrypts all traffic between the React client and the backend",
+              "B. It allows a browser-based frontend running on a different origin (protocol/host/port) to make cross-origin requests to this API",
+              "C. It prevents any cross-origin requests from ever succeeding",
+              "D. It replaces the need for OAuth2 login entirely",
+            ],
+            a: "B",
+          },
+          {
+            q: "To deploy a containerized Spring Boot microservice to Google Cloud Run from the command line, which gcloud command would you use?",
+            o: [
+              "A. gcloud app deploy",
+              "B. gcloud functions deploy",
+              "C. gcloud run deploy",
+              "D. gcloud compute instances create",
+            ],
+            a: "C",
+          },
+          {
+            q: "Your Spring Boot microservice needs to connect to a Cloud SQL database from within a GKE cluster. What is the recommended and most secure method to handle authentication?",
+            o: [
+              "A. Store the database password in the Deployment YAML file as plain text.",
+              "B. Use a Kubernetes Secret to store the credentials and mount them into the Pod.",
+              "C. Allow public, passwordless access to the Cloud SQL instance.",
+              "D. Run the database inside the same Pod as the application.",
+            ],
+            a: "B",
+          },
+          {
+            q: "What is Google Kubernetes Engine (GKE)?",
+            o: [
+              "A. A serverless platform for running functions.",
+              "B. A managed environment on Google Cloud for deploying, managing, and scaling containerized applications using Kubernetes.",
+              "C. An object storage service for Docker images.",
+              "D. A fully managed relational database service.",
+            ],
+            a: "B",
+          },
+          {
+            q: "The Dockerfile also includes the line EXPOSE 8080. What does this instruction actually do - and not do?",
+            o: [
+              "A. It automatically opens port 8080 on the host machine's firewall with no further steps needed",
+              "B. It documents that the containerized application listens on port 8080, but by itself it does not publish/map that port to the host machine - actually exposing the port to the outside still requires the -p flag on docker run",
+              "C. It changes the port the Spring Boot application listens on internally, from whatever was configured in application.properties",
+              "D. It permanently reserves port 8080 across every container on the host, including unrelated ones",
+            ],
+            a: "B",
+          },
+          {
+            q: "What is the purpose of the Access Token Pattern (e.g., using JWTs)?",
+            o: [
+              "A. To authenticate and authorize requests between clients and microservices using tokens",
+              "B. To store the entire user database inside every microservice",
+              "C. To replace the need for HTTPS",
+              "D. To eliminate the need for an API Gateway",
+            ],
+            a: "A",
+          },
+          {
+            q: '"Containers can run on any system with Docker installed, from local machines to cloud servers." What does this feature enable?',
+            o: [
+              "A. Containers can only run on the exact machine they were originally built on",
+              "B. The same container can be moved and run across very different environments as long as Docker is present, without needing to be rebuilt for each one",
+              "C. Portability means containers can run without Docker installed anywhere",
+              "D. Portability refers only to moving files between folders on the same machine",
+            ],
+            a: "B",
+          },
+          {
+            q: "A bank transfer debits Account A and then credits Account B. A power failure occurs after the debit is written to disk but before the credit happens. If the system does not properly guarantee ACID behavior, which property has effectively been violated, and what should the system guarantee instead?",
+            o: [
+              "A. Isolation; the system should prevent any two transactions from running concurrently",
+              "B. Atomicity; the system should guarantee that either both the debit and credit complete, or neither does",
+              "C. Consistency; the system should allow the accounts to temporarily hold negative balances indefinitely",
+              "D. Durability; the system should guarantee that the debit is never written to disk",
+            ],
+            a: "B",
+          },
+          {
+            q: "Which of the following correctly lists Saga state-management states, in a plausible progression for a step that fails and must be compensated?",
+            o: [
+              "A. COMPLETED → PENDING → EXECUTING",
+              "B. PENDING → EXECUTING → FAILED → COMPENSATING → COMPENSATED",
+              "C. COMPENSATED → COMPENSATING → FAILED",
+              "D. EXECUTING → COMPLETED → PENDING",
+            ],
+            a: "B",
+          },
+          {
+            q: 'What is a "Project" in the context of Google Cloud Platform?',
+            o: [
+              "A. A single virtual machine.",
+              "B. The top-level organizing entity for all the GCP resources your application uses, including billing and permissions.",
+              "C. A specific version of a deployed application.",
+              "D. A managed database instance.",
+            ],
+            a: "B",
+          },
+          {
+            q: 'What does the "Single Responsibility - High Cohesion" principle mean when modeling a microservice?',
+            o: [
+              "A. Each service should handle as many unrelated business capabilities as possible",
+              "B. Each service should be responsible for a specific business capability or a well-defined, cohesive piece of functionality",
+              "C. Each service must share its codebase with at least one other service",
+              "D. Each service must expose its entire database schema to other services",
+            ],
+            a: "B",
+          },
+          {
+            q: "Regarding resource utilization, how do microservices compare to monolithic applications?",
+            o: [
+              "A. Microservices always use fewer total resources than a monolith",
+              "B. Microservices can scale and allocate resources efficiently per service; monolith allocates resources based on the whole application's needs",
+              "C. Monolithic applications automatically optimize resource usage per module",
+              "D. There is no difference in resource utilization between the two styles",
+            ],
+            a: "B",
+          },
+          {
+            q: "A container running one compromised microservice is prevented, by network segmentation and isolated runtime boundaries, from directly reaching or compromising other services' containers or databases. Which key aspect does this scenario best illustrate?",
+            o: [
+              "A. API Security",
+              "B. Service Isolation",
+              "C. Authentication and Authorization",
+              "D. Data Security",
+            ],
+            a: "B",
+          },
+          {
+            q: 'Which benefit is described by "Spring Cloud projects can easily be integrated with existing Spring Projects"?',
+            o: [
+              "A. Robust ecosystem and community support",
+              "B. Easy to use",
+              "C. Improved scalability and performance",
+              "D. Developers focus on business logic",
+            ],
+            a: "B",
           },
         ],
         STORAGE_KEY = "mss301_quiz_state_v1",
