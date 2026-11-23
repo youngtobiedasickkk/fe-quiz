@@ -5252,7 +5252,9 @@
       function buildList() {
         let n =
           "practice" === state.mode
-            ? (state.query.trim() ? [...source] : getPartQuestions(state.practicePart))
+            ? state.query.trim()
+              ? [...source]
+              : getPartQuestions(state.practicePart)
             : [...source];
         ("wrong" === state.mode &&
           (n = n.filter((n) => isChecked(n) && !isCorrect(n))),
@@ -5279,13 +5281,15 @@
           render());
       }
       function makeExam() {
-        const questions = state.examPart === -1
-          ? [...source]
-          : getPartQuestions(state.examPart);
+        const questions =
+          state.examPart === -1
+            ? [...source]
+            : getPartQuestions(state.examPart);
         const shuffled = shuffle([...questions]);
-        const selected = state.examPart === -1
-          ? shuffled.slice(0, QUESTIONS_PER_PART)
-          : shuffled;
+        const selected =
+          state.examPart === -1
+            ? shuffled.slice(0, QUESTIONS_PER_PART)
+            : shuffled;
         state.examIds = selected.map((question) => question.id);
         state.index = 0;
         state.examSubmitted = !1;
@@ -5396,7 +5400,8 @@
         if (!pool.length) {
           if (shouldPickUnanswered) {
             const currentIsUnanswered =
-              current && candidates.some((question) => question.id === current.id);
+              current &&
+              candidates.some((question) => question.id === current.id);
             alert(
               currentIsUnanswered
                 ? "Đây là câu chưa làm cuối cùng trong phạm vi hiện tại."
@@ -5516,7 +5521,10 @@
           ),
           (els.practicePartSelect.value = String(state.practicePart)),
           (els.examPartSelect.value = String(state.examPart)));
-        const h = state.examPart === -1 ? Math.min(QUESTIONS_PER_PART, source.length) : getPartQuestions(state.examPart).length;
+        const h =
+          state.examPart === -1
+            ? Math.min(QUESTIONS_PER_PART, source.length)
+            : getPartQuestions(state.examPart).length;
         ((els.startExamBtn.textContent = `Bắt đầu thi thử (${h} câu)`),
           els.submitExamBtn.classList.toggle(
             "hidden",
@@ -5550,18 +5558,18 @@
           (els.sideNextBtn.disabled = els.nextBtn.disabled),
           "exam" === state.mode
             ? (els.modeLabel.textContent = state.examSubmitted
-                ? (state.examPart === -1
-                    ? `Thi thử · Toàn bộ ngân hàng · Đã nộp bài`
-                    : `Thi thử · Part ${state.examPart + 1} · Đã nộp bài`)
-                : (state.examPart === -1
-                    ? `Thi thử · Toàn bộ ngân hàng`
-                    : `Thi thử · Part ${state.examPart + 1}`))
+                ? state.examPart === -1
+                  ? `Thi thử · Toàn bộ ngân hàng · Đã nộp bài`
+                  : `Thi thử · Part ${state.examPart + 1} · Đã nộp bài`
+                : state.examPart === -1
+                  ? `Thi thử · Toàn bộ ngân hàng`
+                  : `Thi thử · Part ${state.examPart + 1}`)
             : "wrong" === state.mode
               ? (els.modeLabel.textContent =
                   "Ôn lại câu sai (toàn bộ ngân hàng)")
               : (els.modeLabel.textContent = state.query.trim()
-                ? "Luyện tập · Tìm kiếm toàn bộ ngân hàng"
-                : `Luyện tập · Part ${state.practicePart + 1}`));
+                  ? "Luyện tập · Tìm kiếm toàn bộ ngân hàng"
+                  : `Luyện tập · Part ${state.practicePart + 1}`));
       }
       function renderEmpty() {
         ((els.questionIndex.textContent = "Không có câu"),
@@ -5657,7 +5665,8 @@
       }
       if (
         ((state.practicePart = clampPartIndex(state.practicePart)),
-        (state.examPart = Number(state.examPart) === -1 ? -1 : clampPartIndex(state.examPart)),
+        (state.examPart =
+          Number(state.examPart) === -1 ? -1 : clampPartIndex(state.examPart)),
         els.practiceModeBtn.addEventListener("click", () =>
           setMode("practice"),
         ),
@@ -5670,7 +5679,10 @@
             render());
         }),
         els.examPartSelect.addEventListener("change", (n) => {
-          ((state.examPart = Number(n.target.value) === -1 ? -1 : clampPartIndex(n.target.value)),
+          ((state.examPart =
+            Number(n.target.value) === -1
+              ? -1
+              : clampPartIndex(n.target.value)),
             makeExam(),
             saveState(),
             render());
@@ -5718,9 +5730,15 @@
         render(),
         "exam" === state.mode)
       ) {
-        const n = (state.examPart === -1 ? source : getPartQuestions(state.examPart)).map((n) => n.id),
+        const n = (
+            state.examPart === -1 ? source : getPartQuestions(state.examPart)
+          ).map((n) => n.id),
           h = state.examIds || [];
-        (h.length === Math.min(state.examPart === -1 ? QUESTIONS_PER_PART : n.length, n.length) &&
+        (h.length ===
+          Math.min(
+            state.examPart === -1 ? QUESTIONS_PER_PART : n.length,
+            n.length,
+          ) &&
           h.every((h) => n.includes(h)) &&
           new Set(h).size === n.length) ||
           (makeExam(), saveState());
