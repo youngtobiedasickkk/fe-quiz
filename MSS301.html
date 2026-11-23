@@ -1057,7 +1057,7 @@
             a: "A",
           },
           {
-            q: 'When modeling, the goal is "high cohesion" and "low coupling." What does "low coupling" mean?',
+            q: 'When modeling services, the goal is "high cohesion" and "low coupling". What does "low coupling" mean?',
             o: [
               "A. Services should have many strong dependencies on each other.",
               "B. Changes in one service should have minimal impact on other services.",
@@ -2808,6 +2808,647 @@
               "B. Easy to use",
               "C. Improved scalability and performance",
               "D. Developers focus on business logic",
+            ],
+            a: "B",
+          },
+          {
+            q: "What is the primary difference between a Monolithic architecture and a Microservices architecture?",
+            o: [
+              "A. Monoliths are always built using Java, while Microservices use Python.",
+              "B. A Monolith is built as a single, unified unit, whereas Microservices are a collection of small, independent services.",
+              "C. Microservices are easier to test than Monoliths.",
+              "D. Monoliths cannot scale under high traffic.",
+            ],
+            a: "B",
+          },
+          {
+            q: "What is a primary advantage of microservices over a monolithic architecture?",
+            o: [
+              "A. Simplified initial development and deployment.",
+              "B. No need for inter-service communication.",
+              "C. Technology heterogeneity and fault isolation.",
+              "D. A single codebase for easier management.",
+            ],
+            a: "C",
+          },
+          {
+            q: "What is a key characteristic of a microservice?",
+            o: [
+              "A. It is tightly coupled with other services.",
+              "B. It is organized around business capabilities.",
+              "C. It shares a database with all other services.",
+              "D. It must be written in the same programming language as other services.",
+            ],
+            a: "B",
+          },
+          {
+            q: "The Sidecar pattern involves deploying application components:",
+            o: [
+              "A. Into a single monolithic binary.",
+              "B. As a helper container alongside the main application container in the same pod or container group.",
+              "C. On a separate, dedicated server.",
+              "D. Directly onto the host operating system.",
+            ],
+            a: "B",
+          },
+          {
+            q: "What is the recommended approach for identifying service boundaries when modeling microservices?",
+            o: [
+              "A. Creating a service for each technical layer (e.g., presentation, business, data).",
+              "B. Decomposing the system based on business capabilities or subdomains, as guided by Domain-Driven Design (DDD).",
+              "C. Creating a new service for every new feature request.",
+              "D. Encapsulating third-party API calls into their own services.",
+            ],
+            a: "B",
+          },
+          {
+            q: "Which annotation in Spring Boot activates Discovery Client for service registration and discovery?",
+            o: [
+              "A. @EnableEurekaServer",
+              "B. @EnableDiscoveryClient",
+              "C. @SpringBootApplication",
+              "D. @RestController",
+            ],
+            a: "B",
+          },
+          {
+            q: "The 'Environment' abstraction in Spring Cloud Config represents:",
+            o: [
+              "A. The physical server hardware.",
+              "B. A collection of property sources for a specific application and profile.",
+              "C. The network location of the Config Server.",
+              "D. The operating system of the client.",
+            ],
+            a: "B",
+          },
+          {
+            q: "What is an advantage of using Spring Cloud Config?",
+            o: [
+              "A. It allows updating application configurations dynamically without restarting the application.",
+              "B. It eliminates the need for Git version control.",
+              "C. It automatically writes unit tests for configuration.",
+              "D. It replaces Spring Boot application properties entirely.",
+            ],
+            a: "A",
+          },
+
+          {
+            q: "To create a basic Spring Cloud Config Server, which annotation must be added to the main application class?",
+            o: [
+              "A. @EnableConfigClient",
+              "B. @EnableEurekaServer",
+              "C. @EnableConfigServer",
+              "D. @EnableConfiguration",
+            ],
+            a: "C",
+          },
+          {
+            q: "Without a centralized configuration system, a common challenge is:",
+            o: [
+              "A. Having a single source of truth for all properties.",
+              "B. The risk of configuration drift, where different instances of the same service run with different settings.",
+              "C. The ease of auditing configuration changes.",
+              "D. The ability to roll back configuration changes quickly.",
+            ],
+            a: "B",
+          },
+          {
+            q: "The \"developer experience\" is improved with Spring Cloud because it:",
+            o: [
+              "A. Reduces the amount of boilerplate code needed to implement common distributed system patterns.",
+              "B. Eliminates the need for testing.",
+              "C. Requires developers to manually configure every aspect of inter-service communication.",
+              "D. Provides a graphical user interface for writing code.",
+            ],
+            a: "A",
+          },
+          {
+            q: "What is the \"Config Client\" in the Spring Cloud Config ecosystem?",
+            o: [
+              "A. A server that stores configuration data.",
+              "B. A user interface for managing configuration properties.",
+              "C. An application (e.g., a microservice) that fetches its configuration from the Config Server on startup.",
+              "D. A command-line tool for interacting with Git.",
+            ],
+            a: "C",
+          },
+          {
+            q: "If you see a dependency like spring-cloud-starter-gateway, what does the starter part signify?",
+            o: [
+              "A. It is an experimental, non-production-ready feature.",
+              "B. It is a convenient dependency descriptor that pulls in all the necessary dependencies for a specific feature.",
+              "C. It is the core kernel of the Spring Cloud project.",
+              "D. It indicates a minimal, lightweight version of the library.",
+            ],
+            a: "B",
+          },
+          {
+            q: "Spring Cloud is primarily designed to solve challenges associated with what type of architecture?",
+            o: [
+              "A. Monolithic architecture",
+              "B. Client-server architecture",
+              "C. Microservices architecture",
+              "D. Layered architecture",
+            ],
+            a: "C",
+          },
+          {
+            q: "What is the purpose of the API Gateway pattern in microservices?",
+            o: [
+              "A. To replace all microservices with a monolith.",
+              "B. To provide a single entry point for clients, encapsulating internal service architecture and handling cross-cutting concerns (auth, rate limiting, routing).",
+              "C. To manage database migrations.",
+              "D. To store user session data.",
+            ],
+            a: "B",
+          },
+          {
+            q: "In Spring Cloud Gateway, what is a Filter used for?",
+            o: [
+              "A. To check if a route matches a request.",
+              "B. To modify incoming requests or outgoing responses (e.g., adding headers, authentication).",
+              "C. To register new services with Eureka.",
+              "D. To compile Java code at runtime.",
+            ],
+            a: "B",
+          },
+          {
+            q: "What is the primary role of a Service Registry (e.g., Netflix Eureka) in a microservices architecture?",
+            o: [
+              "A. To store user credentials securely.",
+              "B. To maintain a dynamic list of available service instances and their network locations.",
+              "C. To route HTTP requests to appropriate microservices.",
+              "D. To balance database load.",
+            ],
+            a: "B",
+          },
+          {
+            q: "What does the 'Half-Open' state of a Circuit Breaker allow?",
+            o: [
+              "A. It blocks all requests to the downstream service.",
+              "B. It allows a limited number of test requests to pass through to check if the downstream service has recovered.",
+              "C. It routes requests to a backup database.",
+              "D. It logs errors without taking any action.",
+            ],
+            a: "B",
+          },
+          {
+            q: "What is the purpose of a Circuit Breaker pattern (e.g., Resilience4j) in microservices?",
+            o: [
+              "A. To encrypt database credentials.",
+              "B. To prevent cascading failures when a downstream service is slow or unresponsive.",
+              "C. To format JSON responses.",
+              "D. To generate JWT tokens.",
+            ],
+            a: "B",
+          },
+          {
+            q: "Which HTTP method is typically used to create a new resource in a RESTful service?",
+            o: [
+              "A. GET",
+              "B. POST",
+              "C. PUT",
+              "D. DELETE",
+            ],
+            a: "B",
+          },
+          {
+            q: "What is the main benefit of asynchronous communication using a message broker (e.g., RabbitMQ, Kafka)?",
+            o: [
+              "A. Low latency for real-time request-response cycles.",
+              "B. Decoupling services, improving resilience, and handling spikes in load.",
+              "C. Guaranteeing immediate transactional consistency.",
+              "D. Eliminating the need for databases.",
+            ],
+            a: "B",
+          },
+          {
+            q: "What triggers the transition from the 'Closed' to the 'Open' state in a Circuit Breaker?",
+            o: [
+              "A. A predefined period of inactivity.",
+              "B. The number of consecutive or recent failures exceeding a configured threshold.",
+              "C. A successful response from the downstream service.",
+              "D. A manual command from an administrator.",
+            ],
+            a: "B",
+          },
+          {
+            q: "Which Spring Cloud component provides an intelligent, programmable API Gateway?",
+            o: [
+              "A. Spring Cloud Gateway",
+              "B. Spring Cloud Security",
+              "C. Spring Cloud Bus",
+              "D. Spring Cloud Task",
+            ],
+            a: "A",
+          },
+          {
+            q: "In a Java microservices ecosystem, a tool like Spring Cloud Gateway provides what functionality?",
+            o: [
+              "A. It acts as a Service Registry for discovering other services.",
+              "B. It provides a centralized configuration server.",
+              "C. It serves as an API Gateway to handle and route incoming requests to the appropriate services.",
+              "D. It helps in writing unit tests for services.",
+            ],
+            a: "C",
+          },
+          {
+            q: "For handling asynchronous communication and decoupling services, which component is often used?",
+            o: [
+              "A. A direct, synchronous REST call.",
+              "B. A message broker or event bus (e.g., RabbitMQ, Kafka).",
+              "C. A shared file system.",
+              "D. A centralized configuration server.",
+            ],
+            a: "B",
+          },
+          {
+            q: "What is the main purpose of the Circuit Breaker pattern?",
+            o: [
+              "A. To secure communication between services with encryption.",
+              "B. To manage distributed transactions across multiple services.",
+              "C. To prevent an application from repeatedly trying to execute an operation that is likely to fail.",
+              "D. To provide a single entry point for all incoming client requests.",
+            ],
+            a: "C",
+          },
+          {
+            q: "Why is Service Discovery essential in a modern microservices architecture?",
+            o: [
+              "A. Because service instances have static, unchanging network locations.",
+              "B. Because clients need a mechanism to find the dynamic network locations of service instances.",
+              "C. Because it provides a way to manage database connections.",
+              "D. Because it handles user authentication and authorization.",
+            ],
+            a: "B",
+          },
+          {
+            q: "An API Gateway can handle \"request composition,\" which means:",
+            o: [
+              "A. It forwards a single client request to a single microservice.",
+              "B. It breaks down a client request into smaller, independent requests.",
+              "C. It invokes multiple microservices and aggregates the results to fulfill a single client request.",
+              "D. It validates the data format of every incoming request.",
+            ],
+            a: "C",
+          },
+          {
+            q: "What is the primary benefit of using a message broker (asynchronous communication) like Apache Kafka or RabbitMQ?",
+            o: [
+              "A. It guarantees an immediate response for every request.",
+              "B. It simplifies debugging by making the flow of a request easy to trace.",
+              "C. It increases system resilience and decouples services, as the producer and consumer do not need to be available at the same time.",
+              "D. It reduces network latency between services.",
+            ],
+            a: "C",
+          },
+          {
+            q: "In a Saga pattern for managing distributed transactions, how is consistency achieved across multiple services?",
+            o: [
+              "A. By using a single global database lock.",
+              "B. Through a sequence of local transactions, where each local transaction updates the database and triggers the next step or compensating transaction.",
+              "C. By reverting all database changes automatically using SQL ROLLBACK.",
+              "D. By enforcing 2PC across all services.",
+            ],
+            a: "B",
+          },
+          {
+            q: "In a \"Choreography\"-based saga, how do services coordinate?",
+            o: [
+              "A. A central orchestrator service tells each service what to do",
+              "B. Each service communicates directly with every other service in a synchronous manner",
+              "C. Services coordinate by publishing and subscribing to events from a message broker, without a central controller",
+              "D. All services update a shared state in a centralized database",
+            ],
+            a: "C",
+          },
+          {
+            q: "What is a major drawback of the Two-Phase Commit (2PC) pattern?",
+            o: [
+              "A. It ensures eventual consistency only.",
+              "B. The transaction coordinator is a single point of failure and can cause blocking if it fails.",
+              "C. It is impossible to implement with modern programming languages.",
+              "D. It does not use resource locking, leading to data corruption.",
+            ],
+            a: "B",
+          },
+          {
+            q: "What does \"Atomicity\" in the context of ACID properties guarantee?",
+            o: [
+              "A. All operations within a transaction complete successfully, or none of them are applied.",
+              "B. The transaction brings the database from one valid state to another.",
+              "C. Concurrent transactions do not interfere with each other.",
+              "D. The results of a committed transaction are permanent, even in case of a system failure.",
+            ],
+            a: "A",
+          },
+          {
+            q: "What is a primary challenge of the \"Database per Service\" pattern?",
+            o: [
+              "A. It simplifies database management.",
+              "B. It makes it easier to enforce data consistency across services.",
+              "C. It can be complex to query data that spans multiple services or to implement transactions across them.",
+              "D. It reduces the number of databases that need to be managed.",
+            ],
+            a: "C",
+          },
+          {
+            q: "When implementing an Orchestration-based Saga in Spring Boot, the orchestrator service would likely contain:",
+            o: [
+              "A. Only domain entities and repositories.",
+              "B. The core business logic for the entire workflow, deciding which service to call next based on events received.",
+              "C. Only configuration properties for other services.",
+              "D. The user interface components.",
+            ],
+            a: "B",
+          },
+          {
+            q: "What does \"decentralized data management\" imply in a microservices architecture?",
+            o: [
+              "A. All services share a single, large database.",
+              "B. There is no database in the entire system.",
+              "C. Each microservice owns and manages its own database.",
+              "D. Data is randomly stored across different servers.",
+            ],
+            a: "C",
+          },
+          {
+            q: "How are transactions typically managed in a traditional monolithic architecture with a single database?",
+            o: [
+              "A. Through complex, event-driven sagas across different modules.",
+              "B. Using local database transactions with ACID guarantees provided by the database system.",
+              "C. By manually implementing compensating transactions for every operation.",
+              "D. Transactions are not possible in monolithic architectures.",
+            ],
+            a: "B",
+          },
+          {
+            q: "What is the role of an Access Token in OAuth 2.0?",
+            o: [
+              "A. It proves the identity of the user to the client application.",
+              "B. It is a credential used by the client to access protected resources on behalf of the resource owner.",
+              "C. It is used to request a refresh token.",
+              "D. It is the user's plain text password.",
+            ],
+            a: "B",
+          },
+          {
+            q: "Which security token format is commonly used in microservices authentication, containing JSON-encoded claims signed digitally?",
+            o: [
+              "A. SAML",
+              "B. JWT (JSON Web Token)",
+              "C. OAuth 1.0",
+              "D. Cookie",
+            ],
+            a: "B",
+          },
+          {
+            q: "In an OAuth 2.0 'Login with Google' flow for your e-commerce site, what is the role of the 'scope' parameter?",
+            o: [
+              "A. To define the CSS styles for the login button.",
+              "B. To request specific permissions from the user to access their Google email and profile information.",
+              "C. To limit how many times a user can log in per day.",
+              "D. To tell Google which microservice the user should be redirected to.",
+            ],
+            a: "B",
+          },
+          {
+            q: "What is the main security advantage of using an API Gateway in front of your e-commerce microservices?",
+            o: [
+              "A. It eliminates the need to write unit tests for individual services.",
+              "B. It centralizes cross-cutting security concerns like user authentication, rate limiting, and logging, preventing this logic from being duplicated in every service.",
+              "C. It makes all services publicly accessible without any security.",
+              "D. It combines all microservices into a single deployable unit.",
+            ],
+            a: "B",
+          },
+          {
+            q: "An e-commerce application uses an API Gateway as the single entry point. What is a key security benefit of this pattern?",
+            o: [
+              "A. It eliminates the need for individual services to handle their own security.",
+              "B. It allows for centralized handling of authentication, rate limiting, and logging for all external requests.",
+              "C. It makes direct service-to-service communication faster.",
+              "D. It removes the need to secure the individual microservices behind the gateway.",
+            ],
+            a: "B",
+          },
+          {
+            q: "To avoid storing database credentials directly in a microservice's source code, what is the best practice?",
+            o: [
+              "A. Pass the credentials as plain text environment variables.",
+              "B. Hardcode them in the application.properties file.",
+              "C. Use a secret management tool like HashiCorp Vault or Spring Cloud Config with encrypted properties.",
+              "D. Store them in a properties file in the root directory of the server.",
+            ],
+            a: "C",
+          },
+          {
+            q: "Which statement best defines microservice security?",
+            o: [
+              "A. A process of securing only the external entry points of an application.",
+              "B. A comprehensive approach to securing each individual service, their communication, and the data they handle in a distributed system.",
+              "C. A method that relies entirely on a single firewall to protect all services.",
+              "D. The practice of writing all microservices in a memory-safe programming language.",
+            ],
+            a: "B",
+          },
+          {
+            q: "Securing data \"at rest\" in a microservices context typically involves:",
+            o: [
+              "A. Encrypting data only while it is being transmitted over the network.",
+              "B. Encrypting the database files and storage volumes where service data is persisted.",
+              "C. Using secure communication protocols like HTTPS.",
+              "D. Removing all data from the services.",
+            ],
+            a: "B",
+          },
+          {
+            q: "When an admin user updates a product's price, the Product service receives a PUT /products/456 request with the new price data. Which security principle is most critical to apply here?",
+            o: [
+              "A. Rate Limiting - to prevent the admin from updating prices too quickly.",
+              "B. Input Validation - to ensure the price is a positive number.",
+              "C. Authorization - to confirm that the user making the request has the necessary 'ADMIN' or 'UPDATE_PRODUCT' permissions.",
+              "D. Data Encryption - to encrypt the price while it is in transit.",
+            ],
+            a: "C",
+          },
+          {
+            q: "In Docker, what is an image?",
+            o: [
+              "A. A running instance of an application.",
+              "B. A lightweight, standalone, executable package of software that includes everything needed to run an application.",
+              "C. A virtual machine disk drive file (.vhdx).",
+              "D. A source code repository.",
+            ],
+            a: "B",
+          },
+          {
+            q: "What is a key advantage of using Docker containers?",
+            o: [
+              "A. Containers require a full virtual machine OS for each application.",
+              "B. Containers share the host OS kernel, making them lightweight and fast to start.",
+              "C. Containers can only run on Linux servers.",
+              "D. Containers eliminate the need for networking configuration.",
+            ],
+            a: "B",
+          },
+          {
+            q: "When you type a command like docker run hello-world, what component are you directly interacting with?",
+            o: [
+              "A. The Docker Daemon",
+              "B. The Docker Registry",
+              "C. The Docker Client (the docker CLI)",
+              "D. The container itself",
+            ],
+            a: "C",
+          },
+          {
+            q: "Docker's use of layered filesystems allows for which key feature?",
+            o: [
+              "A. It makes containers more secure by default.",
+              "B. It enables fast and efficient image builds by caching unchanged layers.",
+              "C. It automatically translates code from one language to another.",
+              "D. It guarantees zero-downtime deployments.",
+            ],
+            a: "B",
+          },
+          {
+            q: "Before you can push a Docker image to GCR, what must you do first?",
+            o: [
+              "A. Create a Kubernetes cluster.",
+              "B. Configure the Docker command-line tool to authenticate with GCR.",
+              "C. Delete all existing images from your local machine.",
+              "D. Start the container locally to ensure it works.",
+            ],
+            a: "B",
+          },
+          {
+            q: "What is the purpose of a Dockerfile when deploying a Spring Boot application to a container-based GCP service like GKE or Cloud Run?",
+            o: [
+              "A. It defines the application's runtime environment for App Engine.",
+              "B. It contains the instructions to build a portable container image that includes the Java runtime and the application JAR file.",
+              "C. It is a YAML file used to configure network settings.",
+              "D. It is a script for managing database migrations.",
+            ],
+            a: "B",
+          },
+          {
+            q: "Which of the following best defines Docker?",
+            o: [
+              "A. A cloud computing platform that provides virtual machines.",
+              "B. An open platform for developing, shipping, and running applications inside lightweight, portable containers.",
+              "C. A programming language specifically designed for microservices.",
+              "D. A build automation tool similar to Maven or Gradle.",
+            ],
+            a: "B",
+          },
+          {
+            q: "What is a significant performance benefit of Docker containers compared to traditional virtual machines (VMs)?",
+            o: [
+              "A. Containers share the host operating system's kernel, leading to faster startup times and lower resource overhead.",
+              "B. Containers provide better hardware-level isolation than VMs.",
+              "C. Containers can run on any operating system without modification, unlike VMs.",
+              "D. Containers have built-in graphical user interfaces.",
+            ],
+            a: "A",
+          },
+          {
+            q: "What is the purpose of a Dockerfile?",
+            o: [
+              "A. It is a script that runs inside a container to start an application.",
+              "B. It is a configuration file for the Docker daemon.",
+              "C. It is a text file that contains a series of instructions on how to build a Docker image.",
+              "D. It is a log file that records all container activity.",
+            ],
+            a: "C",
+          },
+          {
+            q: "Which Google Cloud Platform (GCP) service is ideal for deploying a simple Spring Boot microservice that needs to scale to zero when not in use, making it very cost-effective?",
+            o: [
+              "A. Google Compute Engine (GCE)",
+              "B. Google Kubernetes Engine (GKE)",
+              "C. Google Cloud Functions",
+              "D. Google Cloud Run",
+            ],
+            a: "D",
+          },
+          {
+            q: "What is the main role of Google Kubernetes Engine (GKE)?",
+            o: [
+              "A. A managed service for deploying, managing, and scaling containerized applications using Kubernetes.",
+              "B. A domain name registration service.",
+              "C. A static site hosting platform.",
+              "D. An email sending service.",
+            ],
+            a: "A",
+          },
+          {
+            q: "Which Google Cloud Platform (GCP) service provides a fully managed relational database compatible with MySQL, PostgreSQL, and SQL Server?",
+            o: [
+              "A. Cloud Spanner",
+              "B. Firestore",
+              "C. Cloud SQL",
+              "D. Bigtable",
+            ],
+            a: "C",
+          },
+          {
+            q: "Why is Google Kubernetes Engine (GKE) a popular choice for deploying microservices on GCP?",
+            o: [
+              "A. It provides a managed environment for deploying, managing, and scaling containerized applications using Kubernetes.",
+              "B. It is a serverless platform that automatically builds code from source.",
+              "C. It is a relational database service designed for microservices.",
+              "D. It simplifies the process of creating virtual machines.",
+            ],
+            a: "A",
+          },
+          {
+            q: "In Google Kubernetes Engine (GKE), what is a \"Node\"?",
+            o: [
+              "A. A container running a single microservice.",
+              "B. The master component that controls the entire cluster.",
+              "C. A worker machine, typically a Compute Engine virtual machine, that runs the containerized applications.",
+              "D. A networking rule that allows traffic into the cluster.",
+            ],
+            a: "C",
+          },
+          {
+            q: "Which statement best describes Google Cloud Run?",
+            o: [
+              "A. A service for managing virtual machines with full OS access.",
+              "B. A fully managed, serverless platform that enables you to run stateless containers that are invocable via web requests or Pub/Sub events.",
+              "C. A managed Kubernetes service for orchestrating large clusters.",
+              "D. A block storage service for virtual machine instances.",
+            ],
+            a: "B",
+          },
+          {
+            q: "What is Google Cloud Platform (GCP)?",
+            o: [
+              "A. A desktop operating system developed by Google.",
+              "B. A suite of cloud computing services that runs on the same infrastructure that Google uses internally for its end-user products.",
+              "C. A programming language for building web applications.",
+              "D. A physical server that you can purchase from Google.",
+            ],
+            a: "B",
+          },
+          {
+            q: "After creating a Deployment for your Spring Boot app on GKE, how do you expose it to receive traffic from the internet?",
+            o: [
+              "A. By creating a Service object of type LoadBalancer.",
+              "B. By manually configuring the firewall on each GKE node.",
+              "C. The Deployment object automatically handles external traffic.",
+              "D. By creating a PersistentVolume object.",
+            ],
+            a: "A",
+          },
+          {
+            q: "The \"pay-as-you-go\" model in cloud computing means:",
+            o: [
+              "A. You pay a large, fixed fee upfront for a long-term contract.",
+              "B. You are billed only for the resources you consume for the duration you use them.",
+              "C. You pay for the physical servers, regardless of whether you use them.",
+              "D. Cloud computing is free for all users",
             ],
             a: "B",
           },
